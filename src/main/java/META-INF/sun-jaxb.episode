@@ -1,0 +1,2369 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bindings xmlns="http://java.sun.com/xml/ns/jaxb" if-exists="true" version="2.1">
+      
+    <!--
+
+Questo file è stato generato dall'architettura JavaTM per XML Binding (JAXB) Reference Implementation, v2.3.0 
+Vedere <a href="https://javaee.github.io/jaxb-v2/">https://javaee.github.io/jaxb-v2/</a> 
+Qualsiasi modifica a questo file andrà persa durante la ricompilazione dello schema di origine. 
+Generato il: 2022.06.07 alle 02:08:52 PM CEST 
+
+  -->
+      
+    <bindings xmlns:tns="http://www.omg.org/spec/CTS2/1.1/CoreService" if-exists="true" scd="x-schema::tns">
+            
+        <schemaBindings map="false">
+                  
+            <package name="org.omg.spec.cts2._1_1.coreservice"/>
+                
+        </schemaBindings>
+            
+        <bindings if-exists="true" scd="~tns:UpdateChangeSetMetadataRequest">
+                  
+            <class ref="org.omg.spec.cts2._1_1.coreservice.UpdateChangeSetMetadataRequest"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:UpdateChangeableMetadataRequest">
+                  
+            <class ref="org.omg.spec.cts2._1_1.coreservice.UpdateChangeableMetadataRequest"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:UpdateResourceDescription">
+                  
+            <class ref="org.omg.spec.cts2._1_1.coreservice.UpdateResourceDescription"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:UpdateResourceVersionDescription">
+                  
+            <class ref="org.omg.spec.cts2._1_1.coreservice.UpdateResourceVersionDescription"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:UpdateAbstractResourceDescription">
+                  
+            <class ref="org.omg.spec.cts2._1_1.coreservice.UpdateAbstractResourceDescription"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:Query">
+                  
+            <class ref="org.omg.spec.cts2._1_1.coreservice.Query"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:BaseService">
+                  
+            <class ref="org.omg.spec.cts2._1_1.coreservice.BaseService"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:BaseMaintenanceService">
+                  
+            <class ref="org.omg.spec.cts2._1_1.coreservice.BaseMaintenanceService"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:HistoryService">
+                  
+            <class ref="org.omg.spec.cts2._1_1.coreservice.HistoryService"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:BaseExportService">
+                  
+            <class ref="org.omg.spec.cts2._1_1.coreservice.BaseExportService"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:ExportStatus">
+                  
+            <class ref="org.omg.spec.cts2._1_1.coreservice.ExportStatus"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:ImportExportBase">
+                  
+            <class ref="org.omg.spec.cts2._1_1.coreservice.ImportExportBase"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:BaseImportService">
+                  
+            <class ref="org.omg.spec.cts2._1_1.coreservice.BaseImportService"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:ImportStatus">
+                  
+            <class ref="org.omg.spec.cts2._1_1.coreservice.ImportStatus"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:LogEntries">
+                  
+            <class ref="org.omg.spec.cts2._1_1.coreservice.LogEntries"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:LogEntry">
+                  
+            <class ref="org.omg.spec.cts2._1_1.coreservice.LogEntry"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:ProcessStatus">
+                  
+            <class ref="org.omg.spec.cts2._1_1.coreservice.ProcessStatus"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:BaseQueryService">
+                  
+            <class ref="org.omg.spec.cts2._1_1.coreservice.BaseQueryService"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:BaseReadService">
+                  
+            <class ref="org.omg.spec.cts2._1_1.coreservice.BaseReadService"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:BaseUpdateService">
+                  
+            <class ref="org.omg.spec.cts2._1_1.coreservice.BaseUpdateService"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:EntityNameOrURI">
+                  
+            <class ref="org.omg.spec.cts2._1_1.coreservice.EntityNameOrURI"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:EntityNameOrURIList">
+                  
+            <class ref="org.omg.spec.cts2._1_1.coreservice.EntityNameOrURIList"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:NameOrURI">
+                  
+            <class ref="org.omg.spec.cts2._1_1.coreservice.NameOrURI"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:NameOrURIList">
+                  
+            <class ref="org.omg.spec.cts2._1_1.coreservice.NameOrURIList"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:QueryControl">
+                  
+            <class ref="org.omg.spec.cts2._1_1.coreservice.QueryControl"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:ReadContext">
+                  
+            <class ref="org.omg.spec.cts2._1_1.coreservice.ReadContext"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:SortCriteria">
+                  
+            <class ref="org.omg.spec.cts2._1_1.coreservice.SortCriteria"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:SortCriterion">
+                  
+            <class ref="org.omg.spec.cts2._1_1.coreservice.SortCriterion"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:URIResolutionService">
+                  
+            <class ref="org.omg.spec.cts2._1_1.coreservice.URIResolutionService"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:VersionResolutionService">
+                  
+            <class ref="org.omg.spec.cts2._1_1.coreservice.VersionResolutionService"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:FunctionalProfileEntry">
+                  
+            <class ref="org.omg.spec.cts2._1_1.coreservice.FunctionalProfileEntry"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:ProfileElement">
+                  
+            <class ref="org.omg.spec.cts2._1_1.coreservice.ProfileElement"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:DocumentedNamespaceReference">
+                  
+            <class ref="org.omg.spec.cts2._1_1.coreservice.DocumentedNamespaceReference"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:ValidationResponse">
+                  
+            <class ref="org.omg.spec.cts2._1_1.coreservice.ValidationResponse"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:SuccessIndicator">
+                  
+            <class ref="org.omg.spec.cts2._1_1.coreservice.SuccessIndicator"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:ChangeSetEntry">
+                  
+            <class ref="org.omg.spec.cts2._1_1.coreservice.ChangeSetEntry"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:ChangeSetEntryList">
+                  
+            <class ref="org.omg.spec.cts2._1_1.coreservice.ChangeSetEntryList"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:URIList">
+                  
+            <class ref="org.omg.spec.cts2._1_1.coreservice.URIList"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:LoggingLevel">
+                  
+            <typesafeEnumClass ref="org.omg.spec.cts2._1_1.coreservice.LoggingLevel"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:StructuralProfile">
+                  
+            <typesafeEnumClass ref="org.omg.spec.cts2._1_1.coreservice.StructuralProfile"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:FunctionalProfile">
+                  
+            <typesafeEnumClass ref="org.omg.spec.cts2._1_1.coreservice.FunctionalProfile"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:ImplementationProfile">
+                  
+            <typesafeEnumClass ref="org.omg.spec.cts2._1_1.coreservice.ImplementationProfile"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:OverwriteRule">
+                  
+            <typesafeEnumClass ref="org.omg.spec.cts2._1_1.coreservice.OverwriteRule"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:ErrorResponse">
+                  
+            <typesafeEnumClass ref="org.omg.spec.cts2._1_1.coreservice.ErrorResponse"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:SyncOrAsync">
+                  
+            <typesafeEnumClass ref="org.omg.spec.cts2._1_1.coreservice.SyncOrAsync"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:ValidationLevel">
+                  
+            <typesafeEnumClass ref="org.omg.spec.cts2._1_1.coreservice.ValidationLevel"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:RestrictionType">
+                  
+            <typesafeEnumClass ref="org.omg.spec.cts2._1_1.coreservice.RestrictionType"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:ActiveOrAll">
+                  
+            <typesafeEnumClass ref="org.omg.spec.cts2._1_1.coreservice.ActiveOrAll"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:SortDirection">
+                  
+            <typesafeEnumClass ref="org.omg.spec.cts2._1_1.coreservice.SortDirection"/>
+                
+        </bindings>
+          
+    </bindings>
+      
+    <bindings xmlns:tns="http://www.omg.org/spec/CTS2/1.1/CodeSystemVersion" if-exists="true" scd="x-schema::tns">
+            
+        <schemaBindings map="false">
+                  
+            <package name="org.omg.spec.cts2._1_1.codesystemversion"/>
+                
+        </schemaBindings>
+            
+        <bindings if-exists="true" scd="~tns:CodeSystemVersionCatalogEntry">
+                  
+            <class ref="org.omg.spec.cts2._1_1.codesystemversion.CodeSystemVersionCatalogEntry"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:CodeSystemVersionCatalogEntryMsg">
+                  
+            <class ref="org.omg.spec.cts2._1_1.codesystemversion.CodeSystemVersionCatalogEntryMsg"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:CodeSystemVersionCatalogEntryDirectory">
+                  
+            <class ref="org.omg.spec.cts2._1_1.codesystemversion.CodeSystemVersionCatalogEntryDirectory"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:CodeSystemVersionCatalogEntryList">
+                  
+            <class ref="org.omg.spec.cts2._1_1.codesystemversion.CodeSystemVersionCatalogEntryList"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:CodeSystemVersionCatalogEntrySummary">
+                  
+            <class ref="org.omg.spec.cts2._1_1.codesystemversion.CodeSystemVersionCatalogEntrySummary"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:CodeSystemVersionCatalogEntryListEntry">
+                  
+            <class ref="org.omg.spec.cts2._1_1.codesystemversion.CodeSystemVersionCatalogEntryListEntry"/>
+                
+        </bindings>
+          
+    </bindings>
+      
+    <bindings xmlns:tns="http://www.omg.org/spec/CTS2/1.1/Core" if-exists="true" scd="x-schema::tns">
+            
+        <schemaBindings map="false">
+                  
+            <package name="org.omg.spec.cts2._1_1.core"/>
+                
+        </schemaBindings>
+            
+        <bindings if-exists="true" scd="~tns:EntityExpression">
+                  
+            <class ref="org.omg.spec.cts2._1_1.core.EntityExpression"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:tsAnyType">
+                  
+            <class ref="org.omg.spec.cts2._1_1.core.TsAnyType"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:OpaqueData">
+                  
+            <class ref="org.omg.spec.cts2._1_1.core.OpaqueData"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:EntryDescription">
+                  
+            <class ref="org.omg.spec.cts2._1_1.core.EntryDescription"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:Changeable">
+                  
+            <class ref="org.omg.spec.cts2._1_1.core.Changeable"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:ChangeDescription">
+                  
+            <class ref="org.omg.spec.cts2._1_1.core.ChangeDescription"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:ChangeSetBase">
+                  
+            <class ref="org.omg.spec.cts2._1_1.core.ChangeSetBase"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:Finalizable">
+                  
+            <class ref="org.omg.spec.cts2._1_1.core.Finalizable"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:Directory">
+                  
+            <class ref="org.omg.spec.cts2._1_1.core.Directory"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:DirectoryEntry">
+                  
+            <class ref="org.omg.spec.cts2._1_1.core.DirectoryEntry"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:EntityReference">
+                  
+            <class ref="org.omg.spec.cts2._1_1.core.EntityReference"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:DescriptionInCodeSystem">
+                  
+            <class ref="org.omg.spec.cts2._1_1.core.DescriptionInCodeSystem"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:EntityReferenceList">
+                  
+            <class ref="org.omg.spec.cts2._1_1.core.EntityReferenceList"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:AnonymousEntityReference">
+                  
+            <class ref="org.omg.spec.cts2._1_1.core.AnonymousEntityReference"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:NamedEntityReference">
+                  
+            <class ref="org.omg.spec.cts2._1_1.core.NamedEntityReference"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:ScopedEntityName">
+                  
+            <class ref="org.omg.spec.cts2._1_1.core.ScopedEntityName"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:URIAndEntityName">
+                  
+            <class ref="org.omg.spec.cts2._1_1.core.URIAndEntityName"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:AssociationReference">
+                  
+            <class ref="org.omg.spec.cts2._1_1.core.AssociationReference"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:OntologyEngineeringToolReference">
+                  
+            <class ref="org.omg.spec.cts2._1_1.core.OntologyEngineeringToolReference"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:OntologyEngineeringMethodologyReference">
+                  
+            <class ref="org.omg.spec.cts2._1_1.core.OntologyEngineeringMethodologyReference"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:NameAndMeaningReference">
+                  
+            <class ref="org.omg.spec.cts2._1_1.core.NameAndMeaningReference"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:BindingQualifierReference">
+                  
+            <class ref="org.omg.spec.cts2._1_1.core.BindingQualifierReference"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:FormalityLevelReference">
+                  
+            <class ref="org.omg.spec.cts2._1_1.core.FormalityLevelReference"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:CaseSignificanceReference">
+                  
+            <class ref="org.omg.spec.cts2._1_1.core.CaseSignificanceReference"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:CodeSystemCategoryReference">
+                  
+            <class ref="org.omg.spec.cts2._1_1.core.CodeSystemCategoryReference"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:CodeSystemReference">
+                  
+            <class ref="org.omg.spec.cts2._1_1.core.CodeSystemReference"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:CodeSystemVersionReference">
+                  
+            <class ref="org.omg.spec.cts2._1_1.core.CodeSystemVersionReference"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:ConceptDomainReference">
+                  
+            <class ref="org.omg.spec.cts2._1_1.core.ConceptDomainReference"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:ContextReference">
+                  
+            <class ref="org.omg.spec.cts2._1_1.core.ContextReference"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:DesignationFidelityReference">
+                  
+            <class ref="org.omg.spec.cts2._1_1.core.DesignationFidelityReference"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:DesignationTypeReference">
+                  
+            <class ref="org.omg.spec.cts2._1_1.core.DesignationTypeReference"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:FormatReference">
+                  
+            <class ref="org.omg.spec.cts2._1_1.core.FormatReference"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:LanguageReference">
+                  
+            <class ref="org.omg.spec.cts2._1_1.core.LanguageReference"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:MapReference">
+                  
+            <class ref="org.omg.spec.cts2._1_1.core.MapReference"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:MapVersionReference">
+                  
+            <class ref="org.omg.spec.cts2._1_1.core.MapVersionReference"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:MapCorrelationReference">
+                  
+            <class ref="org.omg.spec.cts2._1_1.core.MapCorrelationReference"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:MatchAlgorithmReference">
+                  
+            <class ref="org.omg.spec.cts2._1_1.core.MatchAlgorithmReference"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:ModelAttributeReference">
+                  
+            <class ref="org.omg.spec.cts2._1_1.core.ModelAttributeReference"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:NamespaceReference">
+                  
+            <class ref="org.omg.spec.cts2._1_1.core.NamespaceReference"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:OntologyDomainReference">
+                  
+            <class ref="org.omg.spec.cts2._1_1.core.OntologyDomainReference"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:OntologyLanguageReference">
+                  
+            <class ref="org.omg.spec.cts2._1_1.core.OntologyLanguageReference"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:OntologySyntaxReference">
+                  
+            <class ref="org.omg.spec.cts2._1_1.core.OntologySyntaxReference"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:OntologyTaskReference">
+                  
+            <class ref="org.omg.spec.cts2._1_1.core.OntologyTaskReference"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:OntologyTypeReference">
+                  
+            <class ref="org.omg.spec.cts2._1_1.core.OntologyTypeReference"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:PredicateReference">
+                  
+            <class ref="org.omg.spec.cts2._1_1.core.PredicateReference"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:ReasoningAlgorithmReference">
+                  
+            <class ref="org.omg.spec.cts2._1_1.core.ReasoningAlgorithmReference"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:RoleReference">
+                  
+            <class ref="org.omg.spec.cts2._1_1.core.RoleReference"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:SourceReference">
+                  
+            <class ref="org.omg.spec.cts2._1_1.core.SourceReference"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:SourceAndRoleReference">
+                  
+            <class ref="org.omg.spec.cts2._1_1.core.SourceAndRoleReference"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:StatusReference">
+                  
+            <class ref="org.omg.spec.cts2._1_1.core.StatusReference"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:ValueSetReference">
+                  
+            <class ref="org.omg.spec.cts2._1_1.core.ValueSetReference"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:ValueSetDefinitionReference">
+                  
+            <class ref="org.omg.spec.cts2._1_1.core.ValueSetDefinitionReference"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:VersionTagReference">
+                  
+            <class ref="org.omg.spec.cts2._1_1.core.VersionTagReference"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:Filter">
+                  
+            <class ref="org.omg.spec.cts2._1_1.core.Filter"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:FilterComponent">
+                  
+            <class ref="org.omg.spec.cts2._1_1.core.FilterComponent"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:SortCriterion">
+                  
+            <class ref="org.omg.spec.cts2._1_1.core.SortCriterion"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:SortCriteria">
+                  
+            <class ref="org.omg.spec.cts2._1_1.core.SortCriteria"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:ComponentReference">
+                  
+            <class ref="org.omg.spec.cts2._1_1.core.ComponentReference"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:ComponentReferenceList">
+                  
+            <class ref="org.omg.spec.cts2._1_1.core.ComponentReferenceList"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:Note">
+                  
+            <class ref="org.omg.spec.cts2._1_1.core.Note"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:Definition">
+                  
+            <class ref="org.omg.spec.cts2._1_1.core.Definition"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:Example">
+                  
+            <class ref="org.omg.spec.cts2._1_1.core.Example"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:Comment">
+                  
+            <class ref="org.omg.spec.cts2._1_1.core.Comment"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:OntologyLanguageAndSyntax">
+                  
+            <class ref="org.omg.spec.cts2._1_1.core.OntologyLanguageAndSyntax"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:ResourceDescription">
+                  
+            <class ref="org.omg.spec.cts2._1_1.core.ResourceDescription"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:ResourceDescriptionDirectoryEntry">
+                  
+            <class ref="org.omg.spec.cts2._1_1.core.ResourceDescriptionDirectoryEntry"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:AbstractResourceDescriptionDirectoryEntry">
+                  
+            <class ref="org.omg.spec.cts2._1_1.core.AbstractResourceDescriptionDirectoryEntry"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:ResourceVersionDescriptionDirectoryEntry">
+                  
+            <class ref="org.omg.spec.cts2._1_1.core.ResourceVersionDescriptionDirectoryEntry"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:AbstractResourceDescription">
+                  
+            <class ref="org.omg.spec.cts2._1_1.core.AbstractResourceDescription"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:ResourceVersionDescription">
+                  
+            <class ref="org.omg.spec.cts2._1_1.core.ResourceVersionDescription"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:SourceAndNotation">
+                  
+            <class ref="org.omg.spec.cts2._1_1.core.SourceAndNotation"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:StatementTarget">
+                  
+            <class ref="org.omg.spec.cts2._1_1.core.StatementTarget"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:AnonymousStatement">
+                  
+            <class ref="org.omg.spec.cts2._1_1.core.AnonymousStatement"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:Property">
+                  
+            <class ref="org.omg.spec.cts2._1_1.core.Property"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:Parameter">
+                  
+            <class ref="org.omg.spec.cts2._1_1.core.Parameter"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:RESTResource">
+                  
+            <class ref="org.omg.spec.cts2._1_1.core.RESTResource"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:Message">
+                  
+            <class ref="org.omg.spec.cts2._1_1.core.Message"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:EntryState">
+                  
+            <typesafeEnumClass ref="org.omg.spec.cts2._1_1.core.EntryState"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:ChangeType">
+                  
+            <typesafeEnumClass ref="org.omg.spec.cts2._1_1.core.ChangeType"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:ChangeCommitted">
+                  
+            <typesafeEnumClass ref="org.omg.spec.cts2._1_1.core.ChangeCommitted"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:FinalizableState">
+                  
+            <typesafeEnumClass ref="org.omg.spec.cts2._1_1.core.FinalizableState"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:CompleteDirectory">
+                  
+            <typesafeEnumClass ref="org.omg.spec.cts2._1_1.core.CompleteDirectory"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:CodeSystemRole">
+                  
+            <typesafeEnumClass ref="org.omg.spec.cts2._1_1.core.CodeSystemRole"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:SetOperator">
+                  
+            <typesafeEnumClass ref="org.omg.spec.cts2._1_1.core.SetOperator"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:SortDirection">
+                  
+            <typesafeEnumClass ref="org.omg.spec.cts2._1_1.core.SortDirection"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:AssociationDirection">
+                  
+            <typesafeEnumClass ref="org.omg.spec.cts2._1_1.core.AssociationDirection"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:NoteType">
+                  
+            <typesafeEnumClass ref="org.omg.spec.cts2._1_1.core.NoteType"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:DefinitionRole">
+                  
+            <typesafeEnumClass ref="org.omg.spec.cts2._1_1.core.DefinitionRole"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:CTS2ResourceType">
+                  
+            <typesafeEnumClass ref="org.omg.spec.cts2._1_1.core.CTS2ResourceType"/>
+                
+        </bindings>
+          
+    </bindings>
+      
+    <bindings xmlns:tns="http://www.omg.org/spec/CTS2/1.1/Association" if-exists="true" scd="x-schema::tns">
+            
+        <schemaBindings map="false">
+                  
+            <package name="org.omg.spec.cts2._1_1.association"/>
+                
+        </schemaBindings>
+            
+        <bindings if-exists="true" scd="~tns:Association">
+                  
+            <class ref="org.omg.spec.cts2._1_1.association.Association"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:AssociationMsg">
+                  
+            <class ref="org.omg.spec.cts2._1_1.association.AssociationMsg"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:AssociationDirectory">
+                  
+            <class ref="org.omg.spec.cts2._1_1.association.AssociationDirectory"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:AssociationList">
+                  
+            <class ref="org.omg.spec.cts2._1_1.association.AssociationList"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:AssociationGraph">
+                  
+            <class ref="org.omg.spec.cts2._1_1.association.AssociationGraph"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:AssociationRendering">
+                  
+            <class ref="org.omg.spec.cts2._1_1.association.AssociationRendering"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:AssociationDirectoryEntry">
+                  
+            <class ref="org.omg.spec.cts2._1_1.association.AssociationDirectoryEntry"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:AssociationListEntry">
+                  
+            <class ref="org.omg.spec.cts2._1_1.association.AssociationListEntry"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:GraphNode">
+                  
+            <class ref="org.omg.spec.cts2._1_1.association.GraphNode"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:AssociationDerivation">
+                  
+            <typesafeEnumClass ref="org.omg.spec.cts2._1_1.association.AssociationDerivation"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:GraphDirection">
+                  
+            <typesafeEnumClass ref="org.omg.spec.cts2._1_1.association.GraphDirection"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:GraphFocus">
+                  
+            <typesafeEnumClass ref="org.omg.spec.cts2._1_1.association.GraphFocus"/>
+                
+        </bindings>
+          
+    </bindings>
+      
+    <bindings xmlns:tns="http://www.omg.org/spec/CTS2/1.1/Exceptions" if-exists="true" scd="x-schema::tns">
+            
+        <schemaBindings map="false">
+                  
+            <package name="org.omg.spec.cts2._1_1.exceptions"/>
+                
+        </schemaBindings>
+            
+        <bindings if-exists="true" scd="~tns:CTS2Exception">
+                  
+            <class ref="org.omg.spec.cts2._1_1.exceptions.CTS2Exception"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="tns:UnknownValueSet">
+                  
+            <class ref="org.omg.spec.cts2._1_1.exceptions.UnknownValueSet"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:UnknownResourceReference">
+                  
+            <class ref="org.omg.spec.cts2._1_1.exceptions.UnknownResourceReference"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="tns:UnknownCodeSystemVersion">
+                  
+            <class ref="org.omg.spec.cts2._1_1.exceptions.UnknownCodeSystemVersion"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:UnknownEntity">
+                  
+            <class ref="org.omg.spec.cts2._1_1.exceptions.UnknownEntity"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="tns:UnknownCodeSystem">
+                  
+            <class ref="org.omg.spec.cts2._1_1.exceptions.UnknownCodeSystem"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="tns:UnknownStatement">
+                  
+            <class ref="org.omg.spec.cts2._1_1.exceptions.UnknownStatement"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="tns:UnknownChangeSet">
+                  
+            <class ref="org.omg.spec.cts2._1_1.exceptions.UnknownChangeSet"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="tns:UnknownAssociation">
+                  
+            <class ref="org.omg.spec.cts2._1_1.exceptions.UnknownAssociation"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="tns:UnknownConceptDomain">
+                  
+            <class ref="org.omg.spec.cts2._1_1.exceptions.UnknownConceptDomain"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="tns:UnknownConceptDomainBinding">
+                  
+            <class ref="org.omg.spec.cts2._1_1.exceptions.UnknownConceptDomainBinding"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="tns:UnknownMap">
+                  
+            <class ref="org.omg.spec.cts2._1_1.exceptions.UnknownMap"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="tns:UnknownMapVersion">
+                  
+            <class ref="org.omg.spec.cts2._1_1.exceptions.UnknownMapVersion"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="tns:UnknownValueSetDefinition">
+                  
+            <class ref="org.omg.spec.cts2._1_1.exceptions.UnknownValueSetDefinition"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="tns:UnsupportedBindingQualifier">
+                  
+            <class ref="org.omg.spec.cts2._1_1.exceptions.UnsupportedBindingQualifier"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:UnsupportedNameOrURI">
+                  
+            <class ref="org.omg.spec.cts2._1_1.exceptions.UnsupportedNameOrURI"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="tns:UnsupportedStatus">
+                  
+            <class ref="org.omg.spec.cts2._1_1.exceptions.UnsupportedStatus"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="tns:UnsupportedRole">
+                  
+            <class ref="org.omg.spec.cts2._1_1.exceptions.UnsupportedRole"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:UnsupportedNamespaceName">
+                  
+            <class ref="org.omg.spec.cts2._1_1.exceptions.UnsupportedNamespaceName"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="tns:UnsupportedLanguage">
+                  
+            <class ref="org.omg.spec.cts2._1_1.exceptions.UnsupportedLanguage"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="tns:UnsupportedContext">
+                  
+            <class ref="org.omg.spec.cts2._1_1.exceptions.UnsupportedContext"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="tns:UnsupportedVersionTag">
+                  
+            <class ref="org.omg.spec.cts2._1_1.exceptions.UnsupportedVersionTag"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="tns:UnsupportedMatchAlgorithm">
+                  
+            <class ref="org.omg.spec.cts2._1_1.exceptions.UnsupportedMatchAlgorithm"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="tns:MatchValueFormatException">
+                  
+            <class ref="org.omg.spec.cts2._1_1.exceptions.MatchValueFormatException"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="tns:UnsupportedOntologyLanguage">
+                  
+            <class ref="org.omg.spec.cts2._1_1.exceptions.UnsupportedOntologyLanguage"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="tns:UnsupportedOntologySyntax">
+                  
+            <class ref="org.omg.spec.cts2._1_1.exceptions.UnsupportedOntologySyntax"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="tns:UnsupportedSource">
+                  
+            <class ref="org.omg.spec.cts2._1_1.exceptions.UnsupportedSource"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="tns:UnsupportedCaseSignificance">
+                  
+            <class ref="org.omg.spec.cts2._1_1.exceptions.UnsupportedCaseSignificance"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="tns:UnsupportedDesignationFidelity">
+                  
+            <class ref="org.omg.spec.cts2._1_1.exceptions.UnsupportedDesignationFidelity"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="tns:UnsupportedDesignationType">
+                  
+            <class ref="org.omg.spec.cts2._1_1.exceptions.UnsupportedDesignationType"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="tns:UnsupportedFormat">
+                  
+            <class ref="org.omg.spec.cts2._1_1.exceptions.UnsupportedFormat"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="tns:UnsupportedFormalityLevel">
+                  
+            <class ref="org.omg.spec.cts2._1_1.exceptions.UnsupportedFormalityLevel"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="tns:UnsupportedMapCorrelation">
+                  
+            <class ref="org.omg.spec.cts2._1_1.exceptions.UnsupportedMapCorrelation"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="tns:UnsupportedModelAttribute">
+                  
+            <class ref="org.omg.spec.cts2._1_1.exceptions.UnsupportedModelAttribute"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="tns:UnsupportedOntologyEngineeringMethodology">
+                  
+            <class ref="org.omg.spec.cts2._1_1.exceptions.UnsupportedOntologyEngineeringMethodology"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="tns:UnsupportedOntologyEngineeringTool">
+                  
+            <class ref="org.omg.spec.cts2._1_1.exceptions.UnsupportedOntologyEngineeringTool"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="tns:UnsupportedOntologyDomain">
+                  
+            <class ref="org.omg.spec.cts2._1_1.exceptions.UnsupportedOntologyDomain"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="tns:UnsupportedOntologyTask">
+                  
+            <class ref="org.omg.spec.cts2._1_1.exceptions.UnsupportedOntologyTask"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="tns:UnsupportedOntologyType">
+                  
+            <class ref="org.omg.spec.cts2._1_1.exceptions.UnsupportedOntologyType"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:UnsupportedPredicate">
+                  
+            <class ref="org.omg.spec.cts2._1_1.exceptions.UnsupportedPredicate"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="tns:EntityExpressionSyntaxError">
+                  
+            <class ref="org.omg.spec.cts2._1_1.exceptions.EntityExpressionSyntaxError"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="tns:ChangeSetIsNotOpen">
+                  
+            <class ref="org.omg.spec.cts2._1_1.exceptions.ChangeSetIsNotOpen"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="tns:ResourceURIAlreadyExists">
+                  
+            <class ref="org.omg.spec.cts2._1_1.exceptions.ResourceURIAlreadyExists"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="tns:AlternateURINotUnique">
+                  
+            <class ref="org.omg.spec.cts2._1_1.exceptions.AlternateURINotUnique"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="tns:UnknownEntryID">
+                  
+            <class ref="org.omg.spec.cts2._1_1.exceptions.UnknownEntryID"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="tns:WrongPredecessorType">
+                  
+            <class ref="org.omg.spec.cts2._1_1.exceptions.WrongPredecessorType"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:ResourceNameAlreadyExists">
+                  
+            <class ref="org.omg.spec.cts2._1_1.exceptions.ResourceNameAlreadyExists"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="tns:CycleInPredecessor">
+                  
+            <class ref="org.omg.spec.cts2._1_1.exceptions.CycleInPredecessor"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="tns:ResourceIsNotOpen">
+                  
+            <class ref="org.omg.spec.cts2._1_1.exceptions.ResourceIsNotOpen"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="tns:ResourceStateMismatch">
+                  
+            <class ref="org.omg.spec.cts2._1_1.exceptions.ResourceStateMismatch"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="tns:InvalidDirectoryType">
+                  
+            <class ref="org.omg.spec.cts2._1_1.exceptions.InvalidDirectoryType"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="tns:UnsupportedPropertyReferenceTarget">
+                  
+            <class ref="org.omg.spec.cts2._1_1.exceptions.UnsupportedPropertyReferenceTarget"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="tns:QueryTimeout">
+                  
+            <class ref="org.omg.spec.cts2._1_1.exceptions.QueryTimeout"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="tns:InvalidDirectoryURI">
+                  
+            <class ref="org.omg.spec.cts2._1_1.exceptions.InvalidDirectoryURI"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="tns:EntityIDMustBeSupplied">
+                  
+            <class ref="org.omg.spec.cts2._1_1.exceptions.EntityIDMustBeSupplied"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="tns:EntityIDMustBeGeneratedByService">
+                  
+            <class ref="org.omg.spec.cts2._1_1.exceptions.EntityIDMustBeGeneratedByService"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="tns:EntityAlreadyExists">
+                  
+            <class ref="org.omg.spec.cts2._1_1.exceptions.EntityAlreadyExists"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="tns:DuplicateCodeSystemVersionURI">
+                  
+            <class ref="org.omg.spec.cts2._1_1.exceptions.DuplicateCodeSystemVersionURI"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="tns:DuplicateCodeSystemVersionName">
+                  
+            <class ref="org.omg.spec.cts2._1_1.exceptions.DuplicateCodeSystemVersionName"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="tns:UnsupportedSubjectNamespaceName">
+                  
+            <class ref="org.omg.spec.cts2._1_1.exceptions.UnsupportedSubjectNamespaceName"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="tns:UnsupportedAssociationQualifier">
+                  
+            <class ref="org.omg.spec.cts2._1_1.exceptions.UnsupportedAssociationQualifier"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="tns:UnknownTargetEntity">
+                  
+            <class ref="org.omg.spec.cts2._1_1.exceptions.UnknownTargetEntity"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="tns:UnknownAssociationQualifierNamespaceName">
+                  
+            <class ref="org.omg.spec.cts2._1_1.exceptions.UnknownAssociationQualifierNamespaceName"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:UnknownPredicateNamespaceName">
+                  
+            <class ref="org.omg.spec.cts2._1_1.exceptions.UnknownPredicateNamespaceName"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="tns:AssociationAlreadyExists">
+                  
+            <class ref="org.omg.spec.cts2._1_1.exceptions.AssociationAlreadyExists"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="tns:UnknownFocusEntity">
+                  
+            <class ref="org.omg.spec.cts2._1_1.exceptions.UnknownFocusEntity"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="tns:UnknownSubjectEntity">
+                  
+            <class ref="org.omg.spec.cts2._1_1.exceptions.UnknownSubjectEntity"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="tns:UnknownTargetNamespaceName">
+                  
+            <class ref="org.omg.spec.cts2._1_1.exceptions.UnknownTargetNamespaceName"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="tns:MapCatalogToReferenceException">
+                  
+            <class ref="org.omg.spec.cts2._1_1.exceptions.MapCatalogToReferenceException"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="tns:MapCatalogFromReferenceException">
+                  
+            <class ref="org.omg.spec.cts2._1_1.exceptions.MapCatalogFromReferenceException"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="tns:DuplicateMapName">
+                  
+            <class ref="org.omg.spec.cts2._1_1.exceptions.DuplicateMapName"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="tns:MapVersionToReferenceException">
+                  
+            <class ref="org.omg.spec.cts2._1_1.exceptions.MapVersionToReferenceException"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="tns:MapVersionFromReferenceException">
+                  
+            <class ref="org.omg.spec.cts2._1_1.exceptions.MapVersionFromReferenceException"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="tns:DuplicateMapVersionName">
+                  
+            <class ref="org.omg.spec.cts2._1_1.exceptions.DuplicateMapVersionName"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="tns:DuplicateDefiningEntity">
+                  
+            <class ref="org.omg.spec.cts2._1_1.exceptions.DuplicateDefiningEntity"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="tns:NoCatalogEntryForDefiningEntity">
+                  
+            <class ref="org.omg.spec.cts2._1_1.exceptions.NoCatalogEntryForDefiningEntity"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="tns:DuplicateConceptDomainURI">
+                  
+            <class ref="org.omg.spec.cts2._1_1.exceptions.DuplicateConceptDomainURI"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="tns:DuplicateConceptDomainName">
+                  
+            <class ref="org.omg.spec.cts2._1_1.exceptions.DuplicateConceptDomainName"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="tns:DuplicateValueSetURI">
+                  
+            <class ref="org.omg.spec.cts2._1_1.exceptions.DuplicateValueSetURI"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="tns:DuplicateValueSetName">
+                  
+            <class ref="org.omg.spec.cts2._1_1.exceptions.DuplicateValueSetName"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="tns:InvalidIndexNumber">
+                  
+            <class ref="org.omg.spec.cts2._1_1.exceptions.InvalidIndexNumber"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="tns:ValueSetDefinitionMismatch">
+                  
+            <class ref="org.omg.spec.cts2._1_1.exceptions.ValueSetDefinitionMismatch"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="tns:CodeSystemVersionMismatch">
+                  
+            <class ref="org.omg.spec.cts2._1_1.exceptions.CodeSystemVersionMismatch"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="tns:InferenceNotSupported">
+                  
+            <class ref="org.omg.spec.cts2._1_1.exceptions.InferenceNotSupported"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="tns:ResourceAlreadyExists">
+                  
+            <class ref="org.omg.spec.cts2._1_1.exceptions.ResourceAlreadyExists"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="tns:UnknownProcessId">
+                  
+            <class ref="org.omg.spec.cts2._1_1.exceptions.UnknownProcessId"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="tns:UnableToOpenDocument">
+                  
+            <class ref="org.omg.spec.cts2._1_1.exceptions.UnableToOpenDocument"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="tns:ResourceWriteError">
+                  
+            <class ref="org.omg.spec.cts2._1_1.exceptions.ResourceWriteError"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="tns:UnsupportedResourceType">
+                  
+            <class ref="org.omg.spec.cts2._1_1.exceptions.UnsupportedResourceType"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="tns:UnableToOpenMetadataDocument">
+                  
+            <class ref="org.omg.spec.cts2._1_1.exceptions.UnableToOpenMetadataDocument"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="tns:MetadataError">
+                  
+            <class ref="org.omg.spec.cts2._1_1.exceptions.MetadataError"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="tns:UnableToOpenOrCreateTargetDirectory">
+                  
+            <class ref="org.omg.spec.cts2._1_1.exceptions.UnableToOpenOrCreateTargetDirectory"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="tns:MetadataDocumentRequired">
+                  
+            <class ref="org.omg.spec.cts2._1_1.exceptions.MetadataDocumentRequired"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="tns:ToEntityNotValid">
+                  
+            <class ref="org.omg.spec.cts2._1_1.exceptions.ToEntityNotValid"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="tns:IllegalEntryOrder">
+                  
+            <class ref="org.omg.spec.cts2._1_1.exceptions.IllegalEntryOrder"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="tns:FromEntityNotValid">
+                  
+            <class ref="org.omg.spec.cts2._1_1.exceptions.FromEntityNotValid"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="tns:InvalidMapRule">
+                  
+            <class ref="org.omg.spec.cts2._1_1.exceptions.InvalidMapRule"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="tns:CannotDeleteOnlyTarget">
+                  
+            <class ref="org.omg.spec.cts2._1_1.exceptions.CannotDeleteOnlyTarget"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="tns:DuplicateMapEntry">
+                  
+            <class ref="org.omg.spec.cts2._1_1.exceptions.DuplicateMapEntry"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="tns:FromEntryNotInMap">
+                  
+            <class ref="org.omg.spec.cts2._1_1.exceptions.FromEntryNotInMap"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="tns:IllegalTargetSlot">
+                  
+            <class ref="org.omg.spec.cts2._1_1.exceptions.IllegalTargetSlot"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="tns:UnrecognizedResolvedValueSet">
+                  
+            <class ref="org.omg.spec.cts2._1_1.exceptions.UnrecognizedResolvedValueSet"/>
+                
+        </bindings>
+          
+    </bindings>
+      
+    <bindings xmlns:tns="http://www.omg.org/spec/CTS2/1.1/extensions/ChangeSetQueryExtension" if-exists="true" scd="x-schema::tns">
+            
+        <schemaBindings map="false">
+                  
+            <package name="org.omg.spec.cts2._1_1.extensions.changesetqueryextension"/>
+                
+        </schemaBindings>
+            
+        <bindings if-exists="true" scd="tns:ChangeSetDirectory">
+                  
+            <class ref="org.omg.spec.cts2._1_1.extensions.changesetqueryextension.ChangeSetDirectory"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:ChangeSetDirectoryEntry">
+                  
+            <class ref="org.omg.spec.cts2._1_1.extensions.changesetqueryextension.ChangeSetDirectoryEntry"/>
+                
+        </bindings>
+          
+    </bindings>
+      
+    <bindings xmlns:tns="http://www.omg.org/spec/CTS2/1.1/Updates" if-exists="true" scd="x-schema::tns">
+            
+        <schemaBindings map="false">
+                  
+            <package name="org.omg.spec.cts2._1_1.updates"/>
+                
+        </schemaBindings>
+            
+        <bindings if-exists="true" scd="~tns:ChangeSet">
+                  
+            <class ref="org.omg.spec.cts2._1_1.updates.ChangeSet"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:ChangeSetMsg">
+                  
+            <class ref="org.omg.spec.cts2._1_1.updates.ChangeSetMsg"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:IteratableChangeSet">
+                  
+            <class ref="org.omg.spec.cts2._1_1.updates.IteratableChangeSet"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:ChangeableResource">
+                  
+            <class ref="org.omg.spec.cts2._1_1.updates.ChangeableResource"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:ChangeableAsDirectoryEntry">
+                  
+            <class ref="org.omg.spec.cts2._1_1.updates.ChangeableAsDirectoryEntry"/>
+                
+        </bindings>
+          
+    </bindings>
+      
+    <bindings xmlns:tns="http://www.omg.org/spec/CTS2/1.1/CodeSystem" if-exists="true" scd="x-schema::tns">
+            
+        <schemaBindings map="false">
+                  
+            <package name="org.omg.spec.cts2._1_1.codesystem"/>
+                
+        </schemaBindings>
+            
+        <bindings if-exists="true" scd="~tns:CodeSystemCatalogEntry">
+                  
+            <class ref="org.omg.spec.cts2._1_1.codesystem.CodeSystemCatalogEntry"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:CodeSystemCatalogEntryMsg">
+                  
+            <class ref="org.omg.spec.cts2._1_1.codesystem.CodeSystemCatalogEntryMsg"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:CodeSystemCatalogEntryDirectory">
+                  
+            <class ref="org.omg.spec.cts2._1_1.codesystem.CodeSystemCatalogEntryDirectory"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:CodeSystemCatalogEntryList">
+                  
+            <class ref="org.omg.spec.cts2._1_1.codesystem.CodeSystemCatalogEntryList"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:CodeSystemCatalogEntrySummary">
+                  
+            <class ref="org.omg.spec.cts2._1_1.codesystem.CodeSystemCatalogEntrySummary"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:CodeSystemCatalogEntryListEntry">
+                  
+            <class ref="org.omg.spec.cts2._1_1.codesystem.CodeSystemCatalogEntryListEntry"/>
+                
+        </bindings>
+          
+    </bindings>
+      
+    <bindings xmlns:tns="http://www.omg.org/spec/CTS2/1.1/ConceptDomain" if-exists="true" scd="x-schema::tns">
+            
+        <schemaBindings map="false">
+                  
+            <package name="org.omg.spec.cts2._1_1.conceptdomain"/>
+                
+        </schemaBindings>
+            
+        <bindings if-exists="true" scd="~tns:ConceptDomainCatalogEntry">
+                  
+            <class ref="org.omg.spec.cts2._1_1.conceptdomain.ConceptDomainCatalogEntry"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:ConceptDomainCatalogEntryMsg">
+                  
+            <class ref="org.omg.spec.cts2._1_1.conceptdomain.ConceptDomainCatalogEntryMsg"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:ConceptDomainCatalogEntryDirectory">
+                  
+            <class ref="org.omg.spec.cts2._1_1.conceptdomain.ConceptDomainCatalogEntryDirectory"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:ConceptDomainCatalogEntryList">
+                  
+            <class ref="org.omg.spec.cts2._1_1.conceptdomain.ConceptDomainCatalogEntryList"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:ConceptDomainCatalogEntrySummary">
+                  
+            <class ref="org.omg.spec.cts2._1_1.conceptdomain.ConceptDomainCatalogEntrySummary"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:ConceptDomainCatalogEntryListEntry">
+                  
+            <class ref="org.omg.spec.cts2._1_1.conceptdomain.ConceptDomainCatalogEntryListEntry"/>
+                
+        </bindings>
+          
+    </bindings>
+      
+    <bindings xmlns:tns="http://www.omg.org/spec/CTS2/1.1/ConceptDomainBinding" if-exists="true" scd="x-schema::tns">
+            
+        <schemaBindings map="false">
+                  
+            <package name="org.omg.spec.cts2._1_1.conceptdomainbinding"/>
+                
+        </schemaBindings>
+            
+        <bindings if-exists="true" scd="~tns:ConceptDomainBinding">
+                  
+            <class ref="org.omg.spec.cts2._1_1.conceptdomainbinding.ConceptDomainBinding"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:ConceptDomainBindingMsg">
+                  
+            <class ref="org.omg.spec.cts2._1_1.conceptdomainbinding.ConceptDomainBindingMsg"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:ConceptDomainBindingDirectory">
+                  
+            <class ref="org.omg.spec.cts2._1_1.conceptdomainbinding.ConceptDomainBindingDirectory"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:ConceptDomainBindingList">
+                  
+            <class ref="org.omg.spec.cts2._1_1.conceptdomainbinding.ConceptDomainBindingList"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:ConceptDomainBindingDirectoryEntry">
+                  
+            <class ref="org.omg.spec.cts2._1_1.conceptdomainbinding.ConceptDomainBindingDirectoryEntry"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:ConceptDomainBindingListEntry">
+                  
+            <class ref="org.omg.spec.cts2._1_1.conceptdomainbinding.ConceptDomainBindingListEntry"/>
+                
+        </bindings>
+          
+    </bindings>
+      
+    <bindings xmlns:tns="http://www.omg.org/spec/CTS2/1.1/Entity" if-exists="true" scd="x-schema::tns">
+            
+        <schemaBindings map="false">
+                  
+            <package name="org.omg.spec.cts2._1_1.entity"/>
+                
+        </schemaBindings>
+            
+        <bindings if-exists="true" scd="~tns:EntityDescription">
+                  
+            <class ref="org.omg.spec.cts2._1_1.entity.EntityDescription"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:EntityDescriptionMsg">
+                  
+            <class ref="org.omg.spec.cts2._1_1.entity.EntityDescriptionMsg"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:EntityReferenceMsg">
+                  
+            <class ref="org.omg.spec.cts2._1_1.entity.EntityReferenceMsg"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:EntityDirectory">
+                  
+            <class ref="org.omg.spec.cts2._1_1.entity.EntityDirectory"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:EntityList">
+                  
+            <class ref="org.omg.spec.cts2._1_1.entity.EntityList"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:EntityDescriptionBase">
+                  
+            <class ref="org.omg.spec.cts2._1_1.entity.EntityDescriptionBase"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:NamedEntityDescription">
+                  
+            <class ref="org.omg.spec.cts2._1_1.entity.NamedEntityDescription"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:AnonymousEntityDescription">
+                  
+            <class ref="org.omg.spec.cts2._1_1.entity.AnonymousEntityDescription"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:Designation">
+                  
+            <class ref="org.omg.spec.cts2._1_1.entity.Designation"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:ClassDescription">
+                  
+            <class ref="org.omg.spec.cts2._1_1.entity.ClassDescription"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:NamedIndividualDescription">
+                  
+            <class ref="org.omg.spec.cts2._1_1.entity.NamedIndividualDescription"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:AnonymousIndividualDescription">
+                  
+            <class ref="org.omg.spec.cts2._1_1.entity.AnonymousIndividualDescription"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:DataTypeDescription">
+                  
+            <class ref="org.omg.spec.cts2._1_1.entity.DataTypeDescription"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:PredicateDescription">
+                  
+            <class ref="org.omg.spec.cts2._1_1.entity.PredicateDescription"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:AnnotationPropertyDescription">
+                  
+            <class ref="org.omg.spec.cts2._1_1.entity.AnnotationPropertyDescription"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:DataPropertyDescription">
+                  
+            <class ref="org.omg.spec.cts2._1_1.entity.DataPropertyDescription"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:ObjectPropertyDescription">
+                  
+            <class ref="org.omg.spec.cts2._1_1.entity.ObjectPropertyDescription"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:EntityDirectoryEntry">
+                  
+            <class ref="org.omg.spec.cts2._1_1.entity.EntityDirectoryEntry"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:EntityListEntry">
+                  
+            <class ref="org.omg.spec.cts2._1_1.entity.EntityListEntry"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:DesignationRole">
+                  
+            <typesafeEnumClass ref="org.omg.spec.cts2._1_1.entity.DesignationRole"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:ClassDescriptionType">
+                  
+            <typesafeEnumClass ref="org.omg.spec.cts2._1_1.entity.ClassDescriptionType"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:ClassDescriptionState">
+                  
+            <typesafeEnumClass ref="org.omg.spec.cts2._1_1.entity.ClassDescriptionState"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:Transitivity">
+                  
+            <typesafeEnumClass ref="org.omg.spec.cts2._1_1.entity.Transitivity"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:ObjectPropertyDirectionality">
+                  
+            <typesafeEnumClass ref="org.omg.spec.cts2._1_1.entity.ObjectPropertyDirectionality"/>
+                
+        </bindings>
+          
+    </bindings>
+      
+    <bindings xmlns:tns="http://www.omg.org/spec/CTS2/1.1/MapCatalog" if-exists="true" scd="x-schema::tns">
+            
+        <schemaBindings map="false">
+                  
+            <package name="org.omg.spec.cts2._1_1.mapcatalog"/>
+                
+        </schemaBindings>
+            
+        <bindings if-exists="true" scd="~tns:MapCatalogEntry">
+                  
+            <class ref="org.omg.spec.cts2._1_1.mapcatalog.MapCatalogEntry"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:MapCatalogEntryMsg">
+                  
+            <class ref="org.omg.spec.cts2._1_1.mapcatalog.MapCatalogEntryMsg"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:MapCatalogEntryDirectory">
+                  
+            <class ref="org.omg.spec.cts2._1_1.mapcatalog.MapCatalogEntryDirectory"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:MapCatalogEntryList">
+                  
+            <class ref="org.omg.spec.cts2._1_1.mapcatalog.MapCatalogEntryList"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:MapCatalogEntrySummary">
+                  
+            <class ref="org.omg.spec.cts2._1_1.mapcatalog.MapCatalogEntrySummary"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:MapCatalogEntryListEntry">
+                  
+            <class ref="org.omg.spec.cts2._1_1.mapcatalog.MapCatalogEntryListEntry"/>
+                
+        </bindings>
+          
+    </bindings>
+      
+    <bindings xmlns:tns="http://www.omg.org/spec/CTS2/1.1/MapVersion" if-exists="true" scd="x-schema::tns">
+            
+        <schemaBindings map="false">
+                  
+            <package name="org.omg.spec.cts2._1_1.mapversion"/>
+                
+        </schemaBindings>
+            
+        <bindings if-exists="true" scd="~tns:MapVersion">
+                  
+            <class ref="org.omg.spec.cts2._1_1.mapversion.MapVersion"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:MapVersionMsg">
+                  
+            <class ref="org.omg.spec.cts2._1_1.mapversion.MapVersionMsg"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:MapVersionDirectory">
+                  
+            <class ref="org.omg.spec.cts2._1_1.mapversion.MapVersionDirectory"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:MapVersionList">
+                  
+            <class ref="org.omg.spec.cts2._1_1.mapversion.MapVersionList"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:MapEntry">
+                  
+            <class ref="org.omg.spec.cts2._1_1.mapversion.MapEntry"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:MapEntryMsg">
+                  
+            <class ref="org.omg.spec.cts2._1_1.mapversion.MapEntryMsg"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:MapEntryDirectory">
+                  
+            <class ref="org.omg.spec.cts2._1_1.mapversion.MapEntryDirectory"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:MapEntryList">
+                  
+            <class ref="org.omg.spec.cts2._1_1.mapversion.MapEntryList"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:MapVersionDirectoryEntry">
+                  
+            <class ref="org.omg.spec.cts2._1_1.mapversion.MapVersionDirectoryEntry"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:MapVersionListEntry">
+                  
+            <class ref="org.omg.spec.cts2._1_1.mapversion.MapVersionListEntry"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:MapSet">
+                  
+            <class ref="org.omg.spec.cts2._1_1.mapversion.MapSet"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:MapTarget">
+                  
+            <class ref="org.omg.spec.cts2._1_1.mapversion.MapTarget"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:MapRule">
+                  
+            <class ref="org.omg.spec.cts2._1_1.mapversion.MapRule"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:MapEntryDirectoryEntry">
+                  
+            <class ref="org.omg.spec.cts2._1_1.mapversion.MapEntryDirectoryEntry"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:MapEntryListEntry">
+                  
+            <class ref="org.omg.spec.cts2._1_1.mapversion.MapEntryListEntry"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:MapProcessingRule">
+                  
+            <typesafeEnumClass ref="org.omg.spec.cts2._1_1.mapversion.MapProcessingRule"/>
+                
+        </bindings>
+          
+    </bindings>
+      
+    <bindings xmlns:tns="http://www.omg.org/spec/CTS2/1.1/Statement" if-exists="true" scd="x-schema::tns">
+            
+        <schemaBindings map="false">
+                  
+            <package name="org.omg.spec.cts2._1_1.statement"/>
+                
+        </schemaBindings>
+            
+        <bindings if-exists="true" scd="~tns:Statement">
+                  
+            <class ref="org.omg.spec.cts2._1_1.statement.Statement"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:StatementMsg">
+                  
+            <class ref="org.omg.spec.cts2._1_1.statement.StatementMsg"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:StatementDirectory">
+                  
+            <class ref="org.omg.spec.cts2._1_1.statement.StatementDirectory"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:StatementList">
+                  
+            <class ref="org.omg.spec.cts2._1_1.statement.StatementList"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:StatementSubject">
+                  
+            <class ref="org.omg.spec.cts2._1_1.statement.StatementSubject"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:StatementQualifier">
+                  
+            <class ref="org.omg.spec.cts2._1_1.statement.StatementQualifier"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:StatementDirectoryEntry">
+                  
+            <class ref="org.omg.spec.cts2._1_1.statement.StatementDirectoryEntry"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:StatementListEntry">
+                  
+            <class ref="org.omg.spec.cts2._1_1.statement.StatementListEntry"/>
+                
+        </bindings>
+          
+    </bindings>
+      
+    <bindings xmlns:tns="http://www.omg.org/spec/CTS2/1.1/ValueSet" if-exists="true" scd="x-schema::tns">
+            
+        <schemaBindings map="false">
+                  
+            <package name="org.omg.spec.cts2._1_1.valueset"/>
+                
+        </schemaBindings>
+            
+        <bindings if-exists="true" scd="~tns:ValueSetCatalogEntry">
+                  
+            <class ref="org.omg.spec.cts2._1_1.valueset.ValueSetCatalogEntry"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:ValueSetCatalogEntryMsg">
+                  
+            <class ref="org.omg.spec.cts2._1_1.valueset.ValueSetCatalogEntryMsg"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:ValueSetCatalogEntryDirectory">
+                  
+            <class ref="org.omg.spec.cts2._1_1.valueset.ValueSetCatalogEntryDirectory"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:ValueSetCatalogEntryList">
+                  
+            <class ref="org.omg.spec.cts2._1_1.valueset.ValueSetCatalogEntryList"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:ValueSetCatalogEntrySummary">
+                  
+            <class ref="org.omg.spec.cts2._1_1.valueset.ValueSetCatalogEntrySummary"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:ValueSetCatalogEntryListEntry">
+                  
+            <class ref="org.omg.spec.cts2._1_1.valueset.ValueSetCatalogEntryListEntry"/>
+                
+        </bindings>
+          
+    </bindings>
+      
+    <bindings xmlns:tns="http://www.omg.org/spec/CTS2/1.1/ValueSetDefinition" if-exists="true" scd="x-schema::tns">
+            
+        <schemaBindings map="false">
+                  
+            <package name="org.omg.spec.cts2._1_1.valuesetdefinition"/>
+                
+        </schemaBindings>
+            
+        <bindings if-exists="true" scd="~tns:ValueSetDefinition">
+                  
+            <class ref="org.omg.spec.cts2._1_1.valuesetdefinition.ValueSetDefinition"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:ValueSetDefinitionEntry">
+                  
+            <class ref="org.omg.spec.cts2._1_1.valuesetdefinition.ValueSetDefinitionEntry"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:ValueSetDefinitionMsg">
+                  
+            <class ref="org.omg.spec.cts2._1_1.valuesetdefinition.ValueSetDefinitionMsg"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:ValueSetDefinitionDirectory">
+                  
+            <class ref="org.omg.spec.cts2._1_1.valuesetdefinition.ValueSetDefinitionDirectory"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:ValueSetDefinitionList">
+                  
+            <class ref="org.omg.spec.cts2._1_1.valuesetdefinition.ValueSetDefinitionList"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:ResolvedValueSet">
+                  
+            <class ref="org.omg.spec.cts2._1_1.valuesetdefinition.ResolvedValueSet"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:IteratableResolvedValueSet">
+                  
+            <class ref="org.omg.spec.cts2._1_1.valuesetdefinition.IteratableResolvedValueSet"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:ResolvedValueSetSummary">
+                  
+            <class ref="org.omg.spec.cts2._1_1.valuesetdefinition.ResolvedValueSetSummary"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:ResolvedValueSetDirectory">
+                  
+            <class ref="org.omg.spec.cts2._1_1.valuesetdefinition.ResolvedValueSetDirectory"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:ResolvedValueSetMsg">
+                  
+            <class ref="org.omg.spec.cts2._1_1.valuesetdefinition.ResolvedValueSetMsg"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:AssociatedEntitiesReference">
+                  
+            <class ref="org.omg.spec.cts2._1_1.valuesetdefinition.AssociatedEntitiesReference"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:CompleteCodeSystemReference">
+                  
+            <class ref="org.omg.spec.cts2._1_1.valuesetdefinition.CompleteCodeSystemReference"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:CompleteValueSetReference">
+                  
+            <class ref="org.omg.spec.cts2._1_1.valuesetdefinition.CompleteValueSetReference"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:ExternalValueSetDefinition">
+                  
+            <class ref="org.omg.spec.cts2._1_1.valuesetdefinition.ExternalValueSetDefinition"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:PropertyQueryReference">
+                  
+            <class ref="org.omg.spec.cts2._1_1.valuesetdefinition.PropertyQueryReference"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:SpecificEntityList">
+                  
+            <class ref="org.omg.spec.cts2._1_1.valuesetdefinition.SpecificEntityList"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:ValueSetDefinitionDirectoryEntry">
+                  
+            <class ref="org.omg.spec.cts2._1_1.valuesetdefinition.ValueSetDefinitionDirectoryEntry"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:ValueSetDefinitionListEntry">
+                  
+            <class ref="org.omg.spec.cts2._1_1.valuesetdefinition.ValueSetDefinitionListEntry"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:ResolvedValueSetHeader">
+                  
+            <class ref="org.omg.spec.cts2._1_1.valuesetdefinition.ResolvedValueSetHeader"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:ResolvedValueSetDirectoryEntry">
+                  
+            <class ref="org.omg.spec.cts2._1_1.valuesetdefinition.ResolvedValueSetDirectoryEntry"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:SetOperator">
+                  
+            <typesafeEnumClass ref="org.omg.spec.cts2._1_1.valuesetdefinition.SetOperator"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:LeafOrAll">
+                  
+            <typesafeEnumClass ref="org.omg.spec.cts2._1_1.valuesetdefinition.LeafOrAll"/>
+                
+        </bindings>
+            
+        <bindings if-exists="true" scd="~tns:TransitiveClosure">
+                  
+            <typesafeEnumClass ref="org.omg.spec.cts2._1_1.valuesetdefinition.TransitiveClosure"/>
+                
+        </bindings>
+          
+    </bindings>
+    
+</bindings>
