@@ -2,7 +2,7 @@ package it.finanze.sanita.fse2.ms.edssrvdictionary.service;
 
 import org.springframework.lang.Nullable;
 
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.ChangeSetDTO;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes.ChangeSetDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.OperationException;
 
 import java.util.Date;

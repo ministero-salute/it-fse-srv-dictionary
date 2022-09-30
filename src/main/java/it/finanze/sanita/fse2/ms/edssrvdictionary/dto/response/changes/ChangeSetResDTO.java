@@ -1,4 +1,4 @@
-package it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response;
+package it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes;
 
 import static it.finanze.sanita.fse2.ms.edssrvdictionary.utility.ValidationUtility.DEFAULT_ARRAY_MAX_SIZE;
 import static it.finanze.sanita.fse2.ms.edssrvdictionary.utility.ValidationUtility.DEFAULT_ARRAY_MIN_SIZE;
@@ -9,7 +9,7 @@ import java.util.List;
 
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Schema;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.ChangeSetDTO;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.ResponseDTO;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -22,7 +22,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ChangeSetResDTO extends ResponseDTO {
-
 
 	/**
 	 * Serial Version UID 
@@ -56,16 +55,6 @@ public class ChangeSetResDTO extends ResponseDTO {
 
 	public ChangeSetResDTO() {
 		super();
-	}
-
-
-	public ChangeSetResDTO(final LogTraceInfoDTO traceInfo, final Date inLastUpdate, final Date inTimestamp, final List<ChangeSetDTO> inInsertions, final List<ChangeSetDTO> inDeletions, final int inTotalNumberOfElements) {
-		super(traceInfo);
-		this.lastUpdate = inLastUpdate;
-		this.timestamp = inTimestamp;
-		this.insertions = inInsertions;
-		this.deletions = inDeletions;
-		this.totalNumberOfElements = inTotalNumberOfElements;
 	}
 	
 }

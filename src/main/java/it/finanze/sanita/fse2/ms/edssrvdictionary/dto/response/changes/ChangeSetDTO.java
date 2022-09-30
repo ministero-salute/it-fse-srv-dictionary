@@ -1,4 +1,4 @@
-package it.finanze.sanita.fse2.ms.edssrvdictionary.dto;
+package it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes;
 
 import static it.finanze.sanita.fse2.ms.edssrvdictionary.utility.ValidationUtility.DEFAULT_STRING_MAX_SIZE;
 import static it.finanze.sanita.fse2.ms.edssrvdictionary.utility.ValidationUtility.DEFAULT_STRING_MIN_SIZE;
@@ -37,9 +37,9 @@ public class ChangeSetDTO implements Serializable {
 		 */
 		private static final long serialVersionUID = -525579157952607584L; 
 		
-		@Size(min = DEFAULT_STRING_MIN_SIZE, max = DEFAULT_STRING_MAX_SIZE)
+		@Size(max = DEFAULT_STRING_MAX_SIZE)
         String system;
-        @Size(min = DEFAULT_STRING_MIN_SIZE, max = DEFAULT_STRING_MAX_SIZE)
+        @Size(max = DEFAULT_STRING_MAX_SIZE)
         String code;
     }
 

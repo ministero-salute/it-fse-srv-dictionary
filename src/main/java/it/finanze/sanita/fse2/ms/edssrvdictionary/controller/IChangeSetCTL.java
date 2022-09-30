@@ -3,7 +3,7 @@ package it.finanze.sanita.fse2.ms.edssrvdictionary.controller;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.controller.operation.changeset.GetChangeSet;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.ChangeSetResDTO;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes.ChangeSetResDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.OperationException;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.validators.NoFutureDate;
 import org.springframework.format.annotation.DateTimeFormat;
