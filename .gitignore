@@ -20,3 +20,4 @@ target/classes/META-INF/maven/it.finanze.sanita.fse2/eds-srv-dictionary-ms/pom.x
 target/classes/META-INF/sun-jaxb.episode
 target/test-classes/application-test.properties
 target/test-classes/Files/vocabulary/LoincTableCore.csv
+.idea
