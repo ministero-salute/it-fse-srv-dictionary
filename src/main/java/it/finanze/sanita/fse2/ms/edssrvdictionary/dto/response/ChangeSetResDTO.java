@@ -21,7 +21,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public class ChangeSetResponseDTO extends ResponseDTO {
+public class ChangeSetResDTO extends ResponseDTO {
 
 
 	/**
@@ -54,12 +54,12 @@ public class ChangeSetResponseDTO extends ResponseDTO {
 	@Schema(minimum = DEFAULT_ARRAY_MIN_SIZE + "", maximum = DEFAULT_ARRAY_MAX_SIZE + "")
 	private int totalNumberOfElements;
 
-	public ChangeSetResponseDTO() {
+	public ChangeSetResDTO() {
 		super();
 	}
 
 
-	public ChangeSetResponseDTO(final LogTraceInfoDTO traceInfo, final Date inLastUpdate, final Date inTimestamp, final List<ChangeSetDTO> inInsertions, final List<ChangeSetDTO> inDeletions, final int inTotalNumberOfElements) {
+	public ChangeSetResDTO(final LogTraceInfoDTO traceInfo, final Date inLastUpdate, final Date inTimestamp, final List<ChangeSetDTO> inInsertions, final List<ChangeSetDTO> inDeletions, final int inTotalNumberOfElements) {
 		super(traceInfo);
 		this.lastUpdate = inLastUpdate;
 		this.timestamp = inTimestamp;

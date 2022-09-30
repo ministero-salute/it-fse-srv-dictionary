@@ -3,15 +3,13 @@ package it.finanze.sanita.fse2.ms.edssrvdictionary.controller.impl;
 import java.util.Date;
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
 
 import it.finanze.sanita.fse2.ms.edssrvdictionary.controller.AbstractCTL;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.controller.IChangeSetCTL;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.ChangeSetDTO;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.ChangeSetResponseDTO;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.ChangeSetResDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.LogTraceInfoDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.OperationException;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.service.ITerminologySRV;
@@ -31,15 +29,13 @@ public class ChangeSetCTL extends AbstractCTL implements IChangeSetCTL{
     @Autowired
     private transient ITerminologySRV terminologySRV;
 
-
     @Override
-    public Object getTerminologyChangeSet(HttpServletRequest httpServletRequest, Date lastUpdate) throws OperationException {
+    public ChangeSetResDTO changeSet(Date lastUpdate) throws OperationException {
 
         List<ChangeSetDTO> insertions = terminologySRV.getInsertions(lastUpdate);
         List<ChangeSetDTO> deletions = terminologySRV.getDeletions(lastUpdate);
-        
 
-        ChangeSetResponseDTO response = new ChangeSetResponseDTO();
+        ChangeSetResDTO response = new ChangeSetResDTO();
         LogTraceInfoDTO info = getLogTraceInfo();
         response.setSpanID(info.getSpanID());
         response.setTraceID(info.getTraceID());
