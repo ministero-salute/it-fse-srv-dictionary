@@ -74,7 +74,7 @@ public class TerminologyControllerTest extends AbstractTest {
 	    mvc.perform(builder
 	            .file(new MockMultipartFile("file", multipartFile.getBytes()))
 	            .contentType(MediaType.MULTIPART_FORM_DATA))
-	            .andExpect(MockMvcResultMatchers.status().isOk()); 
+	            .andExpect(MockMvcResultMatchers.status().is(201)); 
 	}
     
 

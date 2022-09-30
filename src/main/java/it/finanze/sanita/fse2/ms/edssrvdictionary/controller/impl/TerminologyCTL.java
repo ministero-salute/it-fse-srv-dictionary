@@ -5,7 +5,9 @@ import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -47,20 +49,19 @@ public class TerminologyCTL extends AbstractCTL implements ITerminologyCTL{
 
 
     @Override
-	public GetTerminologyResDTO getTerminologyById(HttpServletRequest request,  String id) throws OperationException, DocumentNotFoundException {
+	public ResponseEntity<GetTerminologyResDTO> getTerminologyById(HttpServletRequest request,  String id) throws OperationException, DocumentNotFoundException {
 		log.info(Constants.Logs.CALLED_GET_TERMINOLOGY_BY_ID); 
 		elasticLogger.info(Constants.Logs.CALLED_GET_TERMINOLOGY_BY_ID, OperationLogEnum.QUERY_TERMINOLOGY_BY_ID, ResultLogEnum.OK, new Date()); 
 		TerminologyDocumentDTO doc = terminologySRV.findById(id); 
-		return new GetTerminologyResDTO(getLogTraceInfo(), doc);
+		return new ResponseEntity<GetTerminologyResDTO>(new GetTerminologyResDTO(getLogTraceInfo(), doc), null, HttpStatus.SC_OK); 
 
 	}
 
 
 	@Override
-	public TerminologyResponseDTO uploadTerminologyFile(HttpServletRequest request, MultipartFile file) throws IOException, OperationException, DocumentAlreadyPresentException, DocumentNotFoundException {
+	public ResponseEntity<TerminologyResponseDTO> uploadTerminologyFile(HttpServletRequest request, MultipartFile file) throws IOException, OperationException, DocumentAlreadyPresentException, DocumentNotFoundException {
 		terminologySRV.uploadTerminologyFile(file);
-		return new TerminologyResponseDTO(getLogTraceInfo());
-		
+		return new ResponseEntity<TerminologyResponseDTO>(new TerminologyResponseDTO(getLogTraceInfo()), null, HttpStatus.SC_CREATED); 
 	}
     
 

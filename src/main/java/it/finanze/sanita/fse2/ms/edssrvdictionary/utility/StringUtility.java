@@ -32,41 +32,5 @@ public final class StringUtility {
 		}
 		return out;
 	} 
-	
-	public static String generateTransactionUID(final UIDModeEnum mode) {
-	    
-		String uid = null;
-
-		if (!Arrays.asList(UIDModeEnum.values()).contains(mode)) {
-			uid = UUID.randomUUID().toString().replace("-", "");
-		} else {
-			switch (mode) {
-				case HOSTNAME_UUID:
-					try {
-						InetAddress ip = InetAddress.getLocalHost();
-						uid = ip.getHostName() + UUID.randomUUID().toString().replace("-", "");
-					} catch (Exception e) {
-						log.error(Constants.Logs.ERROR_RETRIEVING_HOST_INFO, e);
-						throw new BusinessException(Constants.Logs.ERROR_RETRIEVING_HOST_INFO, e);
-					}
-					break;
-				case IP_UUID:
-					try {
-						InetAddress ip = InetAddress.getLocalHost();
-						uid = ip.toString().replace(ip.getHostName() + "/", "")
-								+ UUID.randomUUID().toString().replace("-", "");
-					} catch (Exception e) {
-						log.error(Constants.Logs.ERROR_RETRIEVING_HOST_INFO, e);
-						throw new BusinessException(Constants.Logs.ERROR_RETRIEVING_HOST_INFO, e);
-					}
-					break;
-				case UUID_UUID:
-					uid = UUID.randomUUID().toString().replace("-", "") + UUID.randomUUID().toString().replace("-", "");
-					break;
-			}
-		}
-
-		return uid;
-	}
 
 }
