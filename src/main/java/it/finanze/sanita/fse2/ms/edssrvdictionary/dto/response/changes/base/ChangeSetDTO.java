@@ -1,4 +1,4 @@
-package it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes;
+package it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes.base;
 
 import static it.finanze.sanita.fse2.ms.edssrvdictionary.utility.ValidationUtility.DEFAULT_STRING_MAX_SIZE;
 import static it.finanze.sanita.fse2.ms.edssrvdictionary.utility.ValidationUtility.DEFAULT_STRING_MIN_SIZE;

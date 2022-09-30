@@ -4,6 +4,7 @@ package it.finanze.sanita.fse2.ms.edssrvdictionary.repository.impl;
 import java.util.Date;
 import java.util.List;
 
+import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.snapshot.SnapshotETY;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -167,6 +168,29 @@ public class TerminologyRepo extends AbstractMongoRepo<TerminologyETY, String> i
         }
         return objects;
     }
+
+	/**
+	 * Retrieves a snapshot instance according to the given id
+	 *
+	 * @param id The snapshot id
+	 * @return The snapshot instance
+	 * @throws OperationException If a data-layer error occurs
+	 */
+	@Override
+	public SnapshotETY getSnapshot(String id) throws OperationException {
+		throw new UnsupportedOperationException("Not implemented yet");
+	}
+
+	@Override
+	public SnapshotETY insertSnapshot(SnapshotETY entity) throws OperationException {
+		SnapshotETY obj;
+		try {
+			obj = mongoTemplate.insert(entity);
+		} catch (MongoException e) {
+			throw new OperationException("Unable to insert the given snapshot document", e);
+		}
+		return obj;
+	}
 
 	/**
      * Retrieves all the not-deleted extensions with their data

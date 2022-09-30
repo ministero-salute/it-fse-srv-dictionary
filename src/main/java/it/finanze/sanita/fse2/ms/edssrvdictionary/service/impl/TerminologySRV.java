@@ -10,6 +10,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.*;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.snapshot.ChunksETY;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.snapshot.SnapshotETY;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -17,11 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.opencsv.bean.CsvToBeanBuilder;
 
 import it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes.ChangeSetDTO;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.TerminologyBuilderDTO;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.TerminologyDocumentDTO;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.TerminologyFileEntryDTO;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.VocabularyDTO;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes.base.ChangeSetDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.BusinessException;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DocumentNotFoundException;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.OperationException;
@@ -30,6 +29,9 @@ import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.TerminologyE
 import it.finanze.sanita.fse2.ms.edssrvdictionary.service.ITerminologySRV;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.utility.ChangeSetUtility;
 import lombok.extern.slf4j.Slf4j;
+
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.dto.ChunksDTO.*;
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.utility.ChangeSetUtility.*;
 
 /**
  *	@author vincenzoingenito
@@ -154,6 +156,50 @@ public class TerminologySRV implements ITerminologySRV {
 			log.error(Constants.Logs.ERROR_UNABLE_FIND_DELETIONS, e); 
 			throw new BusinessException(Constants.Logs.ERROR_UNABLE_FIND_DELETIONS, e); 
 		}
+	}
+
+	/**
+	 * Creates an insertion/deletion snapshot according to the given timeframe
+	 *
+	 * @param lastUpdate The timeframe to consider while calculating
+	 * @return The chunks instance
+	 * @throws OperationException If a data-layer error occurs
+	 */
+	@Override
+	public ChunksDTO createSnapshot(Date lastUpdate) throws OperationException {
+		// Working var
+		ChunksDTO chunks = ChunksDTO.empty();
+		// Retrieve data
+		List<ChangeSetDTO> insertions = getInsertions(lastUpdate);
+		List<ChangeSetDTO> deletions = getDeletions(lastUpdate);
+		// Checks insertions and deletions are not-empty
+		if(!insertions.isEmpty() || !deletions.isEmpty()) {
+			// Create snapshot instance
+			SnapshotETY snapshot = SnapshotETY.empty();
+			// Check emptiness on payloads
+			if(!insertions.isEmpty()) {
+				// Create entity
+				ChunksETY in = chunks(insertions, CHUNKS_SIZE);
+				// Set into snapshot instance
+				snapshot.setInsertions(in);
+				// Convert to DTO
+				chunks.setInsertions(new Payload(in));
+			}
+			if(!deletions.isEmpty()) {
+				// Create entity
+				ChunksETY out = chunks(deletions, CHUNKS_SIZE);
+				// Set into snapshot instance
+				snapshot.setDeletions(out);
+				// Convert to DTO
+				chunks.setDeletions(new Payload(out));
+			}
+			// Insert into database
+			snapshot = terminologyRepo.insertSnapshot(snapshot);
+			// Aggregate
+			chunks = new ChunksDTO(snapshot.getId(), chunks.getInsertions(), chunks.getDeletions());
+		}
+
+		return chunks;
 	}
 
 

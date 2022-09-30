@@ -5,7 +5,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes.base.ChangeSetResDTO;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes.chunks.ChangeSetChunkDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.error.base.ErrorResponseDTO;
 import org.springframework.http.MediaType;
 
@@ -17,8 +17,8 @@ import static java.lang.annotation.ElementType.METHOD;
 
 // OpenAPI descriptor
 @Operation(
-    summary = "Retrieve changeset by last-update",
-    description = "Returns an on-the-fly snapshot status for the given timeframe"
+    summary = "Retrieve changeset by last-update (chunked)",
+    description = "Returns an on-the-fly snapshot identifier for the given timeframe"
 )
 @ApiResponses(
     value = {
@@ -27,7 +27,7 @@ import static java.lang.annotation.ElementType.METHOD;
             description = "Status retrieved",
             content = @Content(
                 mediaType = MediaType.APPLICATION_JSON_VALUE,
-                schema = @Schema(implementation = ChangeSetResDTO.class))
+                schema = @Schema(implementation = ChangeSetChunkDTO.class))
         ),
         @ApiResponse(
             responseCode = "400",
@@ -47,5 +47,5 @@ import static java.lang.annotation.ElementType.METHOD;
 )
 @Target(METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface GetChangeSet {
+public @interface GetChangeSetChunks {
 }
