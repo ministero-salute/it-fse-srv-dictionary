@@ -27,7 +27,6 @@ import it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.controller.impl.TerminologyCTL;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.TerminologyETY;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.service.ITerminologySRV;
-import lombok.extern.slf4j.Slf4j;
 
 
 
@@ -37,7 +36,6 @@ import lombok.extern.slf4j.Slf4j;
 @ComponentScan
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @ActiveProfiles(Constants.Profile.TEST)
-@Slf4j
 public class TerminologyControllerTest extends AbstractTest {
 
     private final String TEST_SYSTEM = "System_A"; 

@@ -1,15 +1,5 @@
 package it.finanze.sanita.fse2.ms.edssrvdictionary.utility;
 
-import java.net.InetAddress;
-import java.util.Arrays;
-import java.util.UUID;
-
-import it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.enums.UIDModeEnum;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.BusinessException;
-import lombok.extern.slf4j.Slf4j;
-
-@Slf4j
 public final class StringUtility {
 
 	/**
