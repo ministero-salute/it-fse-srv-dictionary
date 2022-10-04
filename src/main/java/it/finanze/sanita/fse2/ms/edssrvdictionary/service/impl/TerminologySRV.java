@@ -11,8 +11,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.*;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.enums.ChunksTypeEnum;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.*;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.snapshot.ChunksETY;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.snapshot.SnapshotETY;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -21,9 +24,6 @@ import com.opencsv.bean.CsvToBeanBuilder;
 
 import it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes.base.ChangeSetDTO;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.BusinessException;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DocumentNotFoundException;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.OperationException;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.ITerminologyRepo;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.TerminologyETY;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.service.ITerminologySRV;
@@ -32,6 +32,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import static it.finanze.sanita.fse2.ms.edssrvdictionary.dto.ChunksDTO.*;
 import static it.finanze.sanita.fse2.ms.edssrvdictionary.utility.ChangeSetUtility.*;
+import static java.lang.String.*;
 
 /**
  *	@author vincenzoingenito
@@ -166,7 +167,7 @@ public class TerminologySRV implements ITerminologySRV {
 	 * @throws OperationException If a data-layer error occurs
 	 */
 	@Override
-	public ChunksDTO createSnapshot(Date lastUpdate) throws OperationException {
+	public ChunksDTO createChunks(Date lastUpdate) throws OperationException {
 		// Working var
 		ChunksDTO chunks = ChunksDTO.empty();
 		// Retrieve data
@@ -183,7 +184,7 @@ public class TerminologySRV implements ITerminologySRV {
 				// Set into snapshot instance
 				snapshot.setInsertions(in);
 				// Convert to DTO
-				chunks.setInsertions(new Payload(in));
+				chunks.setInsertions(new Chunk(in));
 			}
 			if(!deletions.isEmpty()) {
 				// Create entity
@@ -191,7 +192,7 @@ public class TerminologySRV implements ITerminologySRV {
 				// Set into snapshot instance
 				snapshot.setDeletions(out);
 				// Convert to DTO
-				chunks.setDeletions(new Payload(out));
+				chunks.setDeletions(new Chunk(out));
 			}
 			// Insert into database
 			snapshot = terminologyRepo.insertSnapshot(snapshot);
@@ -200,6 +201,25 @@ public class TerminologySRV implements ITerminologySRV {
 		}
 
 		return chunks;
+	}
+
+	/**
+	 * Retrieves the snapshot document according to the given id
+	 *
+	 * @param id The document identifier
+	 * @return The chunks instance
+	 * @throws OperationException        If a data-layer error occurs
+	 * @throws DocumentNotFoundException If no snapshot exists matching the identifier
+	 */
+	@Override
+	public SnapshotETY getChunks(String id) throws OperationException, DocumentNotFoundException {
+		// Retrieve document
+		SnapshotETY doc = terminologyRepo.getSnapshot(id);
+		// Verify existence
+		if(doc == null) {
+			throw new DocumentNotFoundException(Constants.Logs.ERROR_REQUESTED_DOCUMENT_DOES_NOT_EXIST);
+		}
+		return doc;
 	}
 
 
@@ -242,6 +262,41 @@ public class TerminologySRV implements ITerminologySRV {
 		terminologyRepo.insertAll(listToSave);
 
 		log.info("Successfully inserted " + listToSave.size() + " Termonologies");
+	}
+
+	@Override
+	public List<TerminologyDocumentDTO> getDocsByChunk(String id, ChunksTypeEnum type, int index) throws DocumentNotFoundException, OperationException, ChunkOutOfRangeException, DataIntegrityException {
+		// Retrieve document chunks
+		SnapshotETY chunks = getChunks(id);
+		// Get chunk according to type
+		List<List<ObjectId>> ids;
+		List<ObjectId> chunk;
+		switch (type) {
+			case ins:
+				ids = chunks.getInsertions().getIds();
+				break;
+			case del:
+				ids = chunks.getDeletions().getIds();
+				break;
+			default:
+				throw new IllegalArgumentException("No chunk type exists: " + type);
+		}
+		// Verify index
+		try {
+			chunk = ids.get(index);
+		}catch (IndexOutOfBoundsException e) {
+			throw new ChunkOutOfRangeException("The chunk index is out of range: " + index);
+		}
+		// Retrieve documents
+		List<TerminologyETY> docs = terminologyRepo.findByIds(chunk);
+		// Verify it matches the expected size
+		if(chunk.size() != docs.size()) {
+			throw new DataIntegrityException(
+				format("The expected document size <%s> does not match the returned one <%s>", chunk.size(), docs.size())
+			);
+		}
+		// Return mapping back to DTO type
+		return docs.stream().map(TerminologyDocumentDTO::fromEntity).collect(Collectors.toList());
 	}
 
 	private List<TerminologyBuilderDTO> buildDTOFromCsv(Reader reader){

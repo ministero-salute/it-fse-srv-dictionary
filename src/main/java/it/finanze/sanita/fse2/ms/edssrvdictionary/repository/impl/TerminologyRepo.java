@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.snapshot.SnapshotETY;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -178,7 +179,13 @@ public class TerminologyRepo extends AbstractMongoRepo<TerminologyETY, String> i
 	 */
 	@Override
 	public SnapshotETY getSnapshot(String id) throws OperationException {
-		throw new UnsupportedOperationException("Not implemented yet");
+		SnapshotETY obj;
+		try {
+			obj = mongoTemplate.findById(new ObjectId(id), SnapshotETY.class);
+		} catch (MongoException e) {
+			throw new OperationException("Unable to retrieve the requested snapshot document", e);
+		}
+		return obj;
 	}
 
 	@Override
@@ -210,6 +217,18 @@ public class TerminologyRepo extends AbstractMongoRepo<TerminologyETY, String> i
         }
         return objects;
     }
+
+	@Override
+	public List<TerminologyETY> findByIds(List<ObjectId> ids) throws OperationException {
+		List<TerminologyETY> objects;
+		Query q = Query.query(Criteria.where(FIELD_ID).in(ids));
+		try {
+			objects = mongoTemplate.find(q, TerminologyETY.class);
+		}catch (MongoException e) {
+			throw new OperationException("Unable to retrieve documents by multiple ids", e);
+		}
+		return objects;
+	}
 
 	public String getCollectionName() {
 		return profileUtility.isTestProfile() ?  Constants.Profile.TEST_PREFIX + Constants.ComponentScan.Collections.TERMINOLOGY : Constants.ComponentScan.Collections.TERMINOLOGY; 

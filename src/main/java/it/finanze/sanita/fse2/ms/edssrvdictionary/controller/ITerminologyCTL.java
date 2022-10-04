@@ -9,6 +9,9 @@ import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.Size;
 
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.*;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.enums.ChunksTypeEnum;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.*;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,14 +28,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.TerminologyDTO;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.GetTerminologyResDTO;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.ResponseDTO;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.TerminologyErrorResponseDTO;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.TerminologyResponseDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.error.base.ErrorResponseDTO;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DocumentAlreadyPresentException;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DocumentNotFoundException;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.OperationException;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.validators.ValidObjectId;
 
 /**
@@ -45,7 +41,10 @@ import it.finanze.sanita.fse2.ms.edssrvdictionary.validators.ValidObjectId;
 @Validated
 public interface ITerminologyCTL {
 
-	@GetMapping(value = "/id/{id}", produces = {MediaType.APPLICATION_JSON_VALUE })
+    @GetMapping(value = "/chunks/{id}/{type}/{idx}", produces = {MediaType.APPLICATION_JSON_VALUE })
+    GetTerminologiesResDTO getTerminologiesByChunk(@PathVariable @ValidObjectId String id, @PathVariable ChunksTypeEnum type, @PathVariable int idx) throws ChunkOutOfRangeException, DocumentNotFoundException, DataIntegrityException, OperationException;
+
+    @GetMapping(value = "/id/{id}", produces = {MediaType.APPLICATION_JSON_VALUE })
     @Operation(summary = "Returns a Terminology from MongoDB, given its ID", description = "Servizio che consente di ritornare un Terminology dalla base dati dati il suo ID.")
     @ApiResponse(content = @Content(mediaType = MediaType.APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = TerminologyResponseDTO.class)))
     @ApiResponses(value = {

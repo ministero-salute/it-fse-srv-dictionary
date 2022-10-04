@@ -53,7 +53,7 @@ public class ChangeSetCTL extends AbstractCTL implements IChangeSetCTL{
     @Override
     public ChangeSetChunkDTO changeSetChunks(Date lastUpdate) throws OperationException {
 
-        ChunksDTO chunks = terminologySRV.createSnapshot(lastUpdate);
+        ChunksDTO chunks = terminologySRV.createChunks(lastUpdate);
 
         ChangeSetChunkDTO response = new ChangeSetChunkDTO();
         LogTraceInfoDTO info = getLogTraceInfo();

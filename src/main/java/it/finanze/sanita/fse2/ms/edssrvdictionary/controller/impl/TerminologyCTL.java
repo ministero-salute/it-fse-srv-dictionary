@@ -2,9 +2,13 @@ package it.finanze.sanita.fse2.ms.edssrvdictionary.controller.impl;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.GetTerminologiesResDTO;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.enums.ChunksTypeEnum;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -17,9 +21,6 @@ import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.GetTerminologyRes
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.TerminologyResponseDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.enums.OperationLogEnum;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.enums.ResultLogEnum;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DocumentAlreadyPresentException;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DocumentNotFoundException;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.OperationException;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.logging.ElasticLoggerHelper;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.service.ITerminologySRV;
 import lombok.extern.slf4j.Slf4j;
@@ -45,8 +46,13 @@ public class TerminologyCTL extends AbstractCTL implements ITerminologyCTL{
     @Autowired
     private ITerminologySRV terminologySRV;
 
+	@Override
+	public GetTerminologiesResDTO getTerminologiesByChunk(String id, ChunksTypeEnum type, int idx) throws ChunkOutOfRangeException, DocumentNotFoundException, DataIntegrityException, OperationException {
+		List<TerminologyDocumentDTO> chunk = terminologySRV.getDocsByChunk(id, type, idx);
+		return new GetTerminologiesResDTO(getLogTraceInfo(), chunk);
+	}
 
-    @Override
+	@Override
 	public GetTerminologyResDTO getTerminologyById(HttpServletRequest request,  String id) throws OperationException, DocumentNotFoundException {
 		log.info(Constants.Logs.CALLED_GET_TERMINOLOGY_BY_ID); 
 		elasticLogger.info(Constants.Logs.CALLED_GET_TERMINOLOGY_BY_ID, OperationLogEnum.QUERY_TERMINOLOGY_BY_ID, ResultLogEnum.OK, new Date()); 

@@ -1,6 +1,8 @@
 package it.finanze.sanita.fse2.ms.edssrvdictionary.service;
 
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.ChunksDTO;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DocumentNotFoundException;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.snapshot.SnapshotETY;
 import org.springframework.lang.Nullable;
 
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes.base.ChangeSetDTO;
@@ -32,5 +34,14 @@ public interface IChangeSetSRV {
      * @return The chunks instance
      * @throws OperationException If a data-layer error occurs
      */
-    ChunksDTO createSnapshot(@Nullable Date lastUpdate) throws OperationException;
+    ChunksDTO createChunks(@Nullable Date lastUpdate) throws OperationException;
+
+    /**
+     * Retrieves the snapshot document according to the given id
+     * @param id The document identifier
+     * @return The chunks instance
+     * @throws OperationException If a data-layer error occurs
+     * @throws DocumentNotFoundException If no snapshot exists matching the identifier
+     */
+    SnapshotETY getChunks(String id) throws OperationException, DocumentNotFoundException;
 }

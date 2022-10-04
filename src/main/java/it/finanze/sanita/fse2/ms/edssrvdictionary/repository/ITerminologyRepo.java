@@ -1,9 +1,10 @@
 package it.finanze.sanita.fse2.ms.edssrvdictionary.repository;
 
-import java.util.List;
-
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.OperationException;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.TerminologyETY;
+import org.bson.types.ObjectId;
+
+import java.util.List;
 
 /**
  *	@author vincenzoingenito
@@ -56,5 +57,7 @@ public interface ITerminologyRepo extends IChangeSetRepo<TerminologyETY> {
      * @throws OperationException If a data-layer error occurs
      */
     List<TerminologyETY> getEveryActiveTerminology() throws OperationException;
-	
+
+	List<TerminologyETY> findByIds(List<ObjectId> ids) throws OperationException;
+
 }

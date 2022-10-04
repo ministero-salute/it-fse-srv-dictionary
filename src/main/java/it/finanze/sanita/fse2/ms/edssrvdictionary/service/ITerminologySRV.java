@@ -1,16 +1,18 @@
 package it.finanze.sanita.fse2.ms.edssrvdictionary.service;
 
 
-import java.io.IOException;
-import java.util.List;
-
-import org.springframework.web.multipart.MultipartFile;
-
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.TerminologyDocumentDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.VocabularyDTO;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.enums.ChunksTypeEnum;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.ChunkOutOfRangeException;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DataIntegrityException;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DocumentNotFoundException;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.OperationException;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.TerminologyETY;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.util.List;
 
 /**
  *	@author vincenzoingenito
@@ -46,7 +48,6 @@ public interface ITerminologySRV extends IChangeSetSRV {
 	 * @return TerminologyDocumentDTO
 	 * @throws OperationException
 	 * @throws DocumentNotFoundException
-	 * @throws ObjectIdNotValidException
 	 */
 	TerminologyDocumentDTO findById(String id) throws OperationException, DocumentNotFoundException;
 
@@ -56,6 +57,17 @@ public interface ITerminologySRV extends IChangeSetSRV {
 	 * @param file
 	 */
 	void uploadTerminologyFile(MultipartFile file) throws IOException;
-	
 
+	/**
+	 * Aggregates and return documents by chunk
+	 * @param id The snapshot instance
+	 * @param type The chunk type (insert/delete)
+	 * @param index The chunk index
+	 * @return The terminologies associated with the chunk
+	 * @throws OperationException If a data-layer error occurs
+	 * @throws DocumentNotFoundException If no snapshot matching the given id exists
+	 * @throws ChunkOutOfRangeException If no chunk matching the given index exists
+	 * @throws DataIntegrityException If the database output does not match with the requested ids
+	 */
+	List<TerminologyDocumentDTO> getDocsByChunk(String id, ChunksTypeEnum type, int index) throws DocumentNotFoundException, OperationException, ChunkOutOfRangeException, DataIntegrityException;
 }

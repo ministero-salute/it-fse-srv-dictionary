@@ -15,15 +15,15 @@ public class ChunksDTO {
     public static final String EMPTY_ID = null;
 
     String snapshotID;
-    Payload insertions;
-    Payload deletions;
+    Chunk insertions;
+    Chunk deletions;
 
     public static ChunksDTO empty() {
-        return new ChunksDTO(EMPTY_ID, Payload.empty(), Payload.empty());
+        return new ChunksDTO(EMPTY_ID, Chunk.empty(), Chunk.empty());
     }
 
     @Value
-    public static class Payload {
+    public static class Chunk {
         /**
          * The chunks available from the snapshot
          */
@@ -37,13 +37,13 @@ public class ChunksDTO {
          */
         int chunksItems;
 
-        public Payload(ChunksETY chunk) {
+        public Chunk(ChunksETY chunk) {
             this.chunksCount = chunk.getCount();
             this.chunksAvgSize = chunk.getAvgSize();
             this.chunksItems = chunk.getItems();
         }
 
-        public Payload(int count, int size, int items) {
+        public Chunk(int count, int size, int items) {
             this.chunksCount = count;
             this.chunksAvgSize = size;
             this.chunksItems = items;
@@ -52,8 +52,8 @@ public class ChunksDTO {
         /**
          * An empty instance
          */
-        public static Payload empty() {
-            return new Payload(0,0,0);
+        public static Chunk empty() {
+            return new Chunk(0,0,0);
         }
     }
 }
