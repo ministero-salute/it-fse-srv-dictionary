@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServletRequest;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.GetTerminologiesResDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.enums.ChunksTypeEnum;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.*;
+
+import org.springframework.beans.TypeMismatchException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -47,9 +49,11 @@ public class TerminologyCTL extends AbstractCTL implements ITerminologyCTL{
     private ITerminologySRV terminologySRV;
 
 	@Override
-	public GetTerminologiesResDTO getTerminologiesByChunk(String id, ChunksTypeEnum type, int idx) throws ChunkOutOfRangeException, DocumentNotFoundException, DataIntegrityException, OperationException {
-		List<TerminologyDocumentDTO> chunk = terminologySRV.getDocsByChunk(id, type, idx);
-		return new GetTerminologiesResDTO(getLogTraceInfo(), chunk);
+	public GetTerminologiesResDTO getTerminologiesByChunk(String id, String type, int idx) throws TypeMismatchException, ChunkOutOfRangeException, DocumentNotFoundException, DataIntegrityException, OperationException {
+		
+		List<TerminologyDocumentDTO> chunk = terminologySRV.getDocsByChunk(id, ChunksTypeEnum.valueOf(type), idx);
+			return new GetTerminologiesResDTO(getLogTraceInfo(), chunk);
+			
 	}
 
 	@Override

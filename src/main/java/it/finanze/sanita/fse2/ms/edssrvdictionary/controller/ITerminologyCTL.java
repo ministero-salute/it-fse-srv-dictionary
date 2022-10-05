@@ -12,6 +12,8 @@ import javax.validation.constraints.Size;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.*;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.enums.ChunksTypeEnum;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.*;
+
+import org.springframework.beans.TypeMismatchException;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,6 +31,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.TerminologyDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.error.base.ErrorResponseDTO;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.validators.ValidEnum;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.validators.ValidObjectId;
 
 /**
@@ -42,7 +45,14 @@ import it.finanze.sanita.fse2.ms.edssrvdictionary.validators.ValidObjectId;
 public interface ITerminologyCTL {
 
     @GetMapping(value = "/chunks/{id}/{type}/{idx}", produces = {MediaType.APPLICATION_JSON_VALUE })
-    GetTerminologiesResDTO getTerminologiesByChunk(@PathVariable @ValidObjectId String id, @PathVariable ChunksTypeEnum type, @PathVariable int idx) throws ChunkOutOfRangeException, DocumentNotFoundException, DataIntegrityException, OperationException;
+    @Operation(summary = "Returns a Terminology chunk from MongoDB, given its ID, either as inserted or deleted items", description = "Servizio che consente di ritornare un Terminology dalla base dati dati il suo ID.")
+    @ApiResponse(content = @Content(mediaType = MediaType.APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = TerminologyResponseDTO.class)))
+    @ApiResponses(value = {
+                    @ApiResponse(responseCode = "200", description = "Richiesta terminology avvenuta con successo", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = TerminologyDTO.class))),
+                    @ApiResponse(responseCode = "400", description = "I parametri forniti non sono validi", content = @Content(mediaType = MediaType.APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = TerminologyErrorResponseDTO.class))),
+                    @ApiResponse(responseCode = "404", description = "terminology non trovato sul database", content = @Content(mediaType = MediaType.APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = TerminologyErrorResponseDTO.class))),
+                    @ApiResponse(responseCode = "500", description = "Internal Server Error", content = @Content(mediaType = MediaType.APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = TerminologyErrorResponseDTO.class))) })
+    GetTerminologiesResDTO getTerminologiesByChunk(@PathVariable @ValidObjectId String id, @PathVariable @ValidEnum String type, @PathVariable int idx) throws TypeMismatchException, ChunkOutOfRangeException, DocumentNotFoundException, DataIntegrityException, OperationException;
 
     @GetMapping(value = "/id/{id}", produces = {MediaType.APPLICATION_JSON_VALUE })
     @Operation(summary = "Returns a Terminology from MongoDB, given its ID", description = "Servizio che consente di ritornare un Terminology dalla base dati dati il suo ID.")
