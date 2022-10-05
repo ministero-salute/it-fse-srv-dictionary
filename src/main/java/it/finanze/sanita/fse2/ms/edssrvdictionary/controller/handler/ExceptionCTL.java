@@ -13,6 +13,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import brave.Tracer;
@@ -53,8 +54,8 @@ public class ExceptionCTL extends ResponseEntityExceptionHandler {
  * @param ex  exception to catch
  * 
  */
-    @ExceptionHandler(TypeMismatchException.class)
-    protected ResponseEntity<ErrorResponseDTO> handleTypeMismatchException(TypeMismatchException ex){
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    protected ResponseEntity<ErrorResponseDTO> handleTypeMismatchException(MethodArgumentTypeMismatchException ex){
         log.warn("Handler handleTypeMismatchException()");
         log.error("Handler handleTypeMismatchException()",ex);
         // Create error DTO

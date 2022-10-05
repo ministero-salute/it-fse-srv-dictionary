@@ -10,6 +10,7 @@ import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 
 import org.springframework.beans.TypeMismatchException;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.LogTraceInfoDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.error.ErrorInstance.Resource;
@@ -91,9 +92,9 @@ public final class ErrorBuilderDTO {
     } 
    
 
+    
 
-
-    public static ErrorResponseDTO createTypeMismatchError(LogTraceInfoDTO trace, TypeMismatchException ex){
+    public static ErrorResponseDTO createTypeMismatchError(LogTraceInfoDTO trace, MethodArgumentTypeMismatchException ex){
        
         String field = ex.getRequiredType().toString();
         return new ErrorResponseDTO(
