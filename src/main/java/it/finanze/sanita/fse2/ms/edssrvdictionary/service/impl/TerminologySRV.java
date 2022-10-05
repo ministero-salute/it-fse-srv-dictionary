@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.*;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.enums.ChunksTypeEnum;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.*;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.snapshot.ChunksETY;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.snapshot.SnapshotETY;

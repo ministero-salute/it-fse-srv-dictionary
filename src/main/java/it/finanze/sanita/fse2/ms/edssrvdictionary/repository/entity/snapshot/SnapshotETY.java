@@ -1,6 +1,5 @@
 package it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.snapshot;
 
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.ChunksDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
@@ -9,7 +8,6 @@ import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.util.Date;
 
-import static it.finanze.sanita.fse2.ms.edssrvdictionary.dto.ChunksDTO.*;
 
 @Document(collection = "#{@snapshotBean}")
 @Data

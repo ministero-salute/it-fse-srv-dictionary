@@ -9,11 +9,14 @@ import static org.apache.http.HttpStatus.SC_NOT_FOUND;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 
+import org.springframework.beans.TypeMismatchException;
+
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.LogTraceInfoDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.error.ErrorInstance.Resource;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.error.ErrorInstance.Server;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.error.ErrorInstance.Validation;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.error.base.ErrorResponseDTO;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DataIntegrityException;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DocumentAlreadyPresentException;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DocumentNotFoundException;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.OperationException;
@@ -88,6 +91,34 @@ public final class ErrorBuilderDTO {
     } 
    
 
+
+
+    public static ErrorResponseDTO createTypeMismatchError(LogTraceInfoDTO trace, TypeMismatchException ex){
+       
+        String field = ex.getRequiredType().toString();
+        return new ErrorResponseDTO(
+            trace,
+            ErrorType.VALIDATION.getType(),
+            ErrorType.VALIDATION.getTitle(),
+            ex.getMessage(),
+            SC_CONFLICT,
+            ErrorType.VALIDATION.toInstance(Validation.CONSTRAINT_FIELD, field)
+        );
+    }
+
+
+    public static ErrorResponseDTO createDataIntegrityError(LogTraceInfoDTO trace, DataIntegrityException ex){
+        String field = ex.getCause().toString();
+        
+        return new ErrorResponseDTO(
+            trace,
+            ErrorType.VALIDATION.getType(),
+            ErrorType.VALIDATION.getTitle(),
+            ex.getMessage(),
+            SC_CONFLICT,
+            ErrorType.VALIDATION.toInstance(Validation.CONSTRAINT_FIELD, field)
+        );
+    }
 
 
 }

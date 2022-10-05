@@ -13,7 +13,7 @@ import org.bson.types.ObjectId;
 import java.util.List;
 
 /**
- * DTO use to return a document as response to getDocumentByChunk request
+ * DTO use to return a document as response to getDocumentByChunk and getTerminologyById request
  */
 @Data
 @EqualsAndHashCode(callSuper = true)

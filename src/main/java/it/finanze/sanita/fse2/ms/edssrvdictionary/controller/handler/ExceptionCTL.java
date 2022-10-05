@@ -1,7 +1,12 @@
 package it.finanze.sanita.fse2.ms.edssrvdictionary.controller.handler;
 
 import static it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.error.ErrorBuilderDTO.createGenericError;
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.error.ErrorBuilderDTO.createTypeMismatchError;
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.error.ErrorBuilderDTO.createDataIntegrityError;
 
+
+
+import org.springframework.beans.TypeMismatchException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -13,6 +18,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import brave.Tracer;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.LogTraceInfoDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.error.base.ErrorResponseDTO;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DataIntegrityException;
 import lombok.extern.slf4j.Slf4j;
 
 @ControllerAdvice
@@ -25,7 +31,6 @@ public class ExceptionCTL extends ResponseEntityExceptionHandler {
 	
 	/**
      * Handle generic exception.
-     *
      * @param ex		exception
      */
     @ExceptionHandler(value = {Exception.class})
@@ -40,9 +45,47 @@ public class ExceptionCTL extends ResponseEntityExceptionHandler {
         headers.setContentType(MediaType.APPLICATION_PROBLEM_JSON);
         // Bye bye
         return new ResponseEntity<>(out, headers, out.getStatus());
-    } 
-
+    }
     
+
+/**
+ * Handles Possible Mismatch in input fields
+ * @param ex  exception to catch
+ * 
+ */
+    @ExceptionHandler(TypeMismatchException.class)
+    protected ResponseEntity<ErrorResponseDTO> handleTypeMismatchException(TypeMismatchException ex){
+        log.warn("Handler handleTypeMismatchException()");
+        log.error("Handler handleTypeMismatchException()",ex);
+        // Create error DTO
+        ErrorResponseDTO out = createTypeMismatchError(getLogTraceInfo(),ex);
+        // set HTTP headers
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_PROBLEM_JSON);
+        // Bye bye
+        return new ResponseEntity<>(out,headers,out.getStatus());
+    }
+
+
+    /**
+     * Handles Exception thrown when a request violates an integrity Constraint
+     * @param ex : DataIntegrityException
+     * 
+     * 
+     */
+    @ExceptionHandler(DataIntegrityException.class)
+    protected ResponseEntity<ErrorResponseDTO> handleDataIntegrityException(DataIntegrityException ex){
+        log.warn("Handler handleDataIntegrityException()");
+        log.error("Handler handleDataIntegrityException()",ex);
+        // Create error DTO
+        ErrorResponseDTO out = createDataIntegrityError(getLogTraceInfo(),ex);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_PROBLEM_JSON);
+
+        return new ResponseEntity<>(out,headers,out.getStatus());
+    }
+
     
     /**
      * Generate a new {@link LogTraceInfoDTO} instance
