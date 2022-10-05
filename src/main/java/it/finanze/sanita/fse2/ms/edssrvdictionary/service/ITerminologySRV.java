@@ -3,14 +3,13 @@ package it.finanze.sanita.fse2.ms.edssrvdictionary.service;
 
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.TerminologyDocumentDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.VocabularyDTO;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.enums.ChunksTypeEnum;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.ChunkOutOfRangeException;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DataIntegrityException;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DocumentNotFoundException;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.OperationException;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.TerminologyETY;
 
-import org.springframework.beans.TypeMismatchException;
+import org.bson.types.ObjectId;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -63,14 +62,25 @@ public interface ITerminologySRV extends IChangeSetSRV {
 	/**
 	 * Aggregates and return documents by chunk
 	 * @param id The snapshot instance
-	 * @param type The chunk type (insert/delete)
 	 * @param index The chunk index
 	 * @return The terminologies associated with the chunk
-	 * @throws TypeMismatchException if the enom type il mispelled
  	 * @throws OperationException If a data-layer error occurs
 	 * @throws DocumentNotFoundException If no snapshot matching the given id exists
 	 * @throws ChunkOutOfRangeException If no chunk matching the given index exists
 	 * @throws DataIntegrityException If the database output does not match with the requested ids
 	 */
-	List<TerminologyDocumentDTO> getDocsByChunk(String id, ChunksTypeEnum type, int index) throws TypeMismatchException,  DocumentNotFoundException, OperationException, ChunkOutOfRangeException, DataIntegrityException;
+	List<TerminologyDocumentDTO> getTermsByChunkIns(String id, int index) throws  DocumentNotFoundException, OperationException, ChunkOutOfRangeException, DataIntegrityException;
+
+	/**
+	 * Aggregates and return documents by chunk
+	 * @param id The snapshot instance
+	 * @param index The chunk index
+	 * @return The terminologies associated with the chunk
+	 * @throws OperationException If a data-layer error occurs
+	 * @throws DocumentNotFoundException If no snapshot matching the given id exists
+	 * @throws ChunkOutOfRangeException If no chunk matching the given index exists
+	 * @throws DataIntegrityException If the database output does not match with the requested ids
+	 */
+	List<ObjectId> getTermsByChunkDel(String id, int index) throws  DocumentNotFoundException, OperationException, ChunkOutOfRangeException, DataIntegrityException;
+
 }

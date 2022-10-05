@@ -37,8 +37,4 @@ public class SnapshotETY {
         return new SnapshotETY(null, ChunksETY.empty(), ChunksETY.empty(), new Date());
     }
 
-    public ChunksDTO toChunks() {
-        return new ChunksDTO(id, new Chunk(insertions), new Chunk(deletions));
-    }
-
 }

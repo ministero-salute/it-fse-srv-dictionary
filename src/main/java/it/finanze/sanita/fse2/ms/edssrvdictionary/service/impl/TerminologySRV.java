@@ -265,22 +265,12 @@ public class TerminologySRV implements ITerminologySRV {
 	}
 
 	@Override
-	public List<TerminologyDocumentDTO> getDocsByChunk(String id, ChunksTypeEnum type, int index) throws DocumentNotFoundException, OperationException, ChunkOutOfRangeException, DataIntegrityException {
+	public List<TerminologyDocumentDTO> getTermsByChunkIns(String id, int index) throws DocumentNotFoundException, OperationException, ChunkOutOfRangeException, DataIntegrityException {
 		// Retrieve document chunks
 		SnapshotETY chunks = getChunks(id);
 		// Get chunk according to type
-		List<List<ObjectId>> ids;
+		List<List<ObjectId>> ids = chunks.getInsertions().getIds();
 		List<ObjectId> chunk;
-		switch (type) {
-			case ins:
-				ids = chunks.getInsertions().getIds();
-				break;
-			case del:
-				ids = chunks.getDeletions().getIds();
-				break;
-			default:
-				throw new IllegalArgumentException("No chunk type exists: " + type);
-		}
 		// Verify index
 		try {
 			chunk = ids.get(index);
@@ -297,6 +287,33 @@ public class TerminologySRV implements ITerminologySRV {
 		}
 		// Return mapping back to DTO type
 		return docs.stream().map(TerminologyDocumentDTO::fromEntity).collect(Collectors.toList());
+	}
+
+	/**
+	 * Aggregates and return documents by chunk
+	 *
+	 * @param id    The snapshot instance
+	 * @param index The chunk index
+	 * @return The terminologies associated with the chunk
+	 * @throws OperationException        If a data-layer error occurs
+	 * @throws DocumentNotFoundException If no snapshot matching the given id exists
+	 * @throws ChunkOutOfRangeException  If no chunk matching the given index exists
+	 * @throws DataIntegrityException    If the database output does not match with the requested ids
+	 */
+	@Override
+	public List<ObjectId> getTermsByChunkDel(String id, int index) throws DocumentNotFoundException, OperationException, ChunkOutOfRangeException, DataIntegrityException {
+		// Retrieve document chunks
+		SnapshotETY chunks = getChunks(id);
+		// Get chunk according to type
+		List<List<ObjectId>> ids = chunks.getDeletions().getIds();
+		List<ObjectId> chunk;
+		// Verify index
+		try {
+			chunk = ids.get(index);
+		}catch (IndexOutOfBoundsException e) {
+			throw new ChunkOutOfRangeException("The chunk index is out of range: " + index);
+		}
+		return chunk;
 	}
 
 	private List<TerminologyBuilderDTO> buildDTOFromCsv(Reader reader){
