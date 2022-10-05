@@ -31,7 +31,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.TerminologyDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.error.base.ErrorResponseDTO;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.validators.ValidEnum;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.validators.ValidObjectId;
 
 /**
@@ -52,7 +51,7 @@ public interface ITerminologyCTL {
                     @ApiResponse(responseCode = "400", description = "I parametri forniti non sono validi", content = @Content(mediaType = MediaType.APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = TerminologyErrorResponseDTO.class))),
                     @ApiResponse(responseCode = "404", description = "terminology non trovato sul database", content = @Content(mediaType = MediaType.APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = TerminologyErrorResponseDTO.class))),
                     @ApiResponse(responseCode = "500", description = "Internal Server Error", content = @Content(mediaType = MediaType.APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = TerminologyErrorResponseDTO.class))) })
-    GetTerminologiesResDTO getTerminologiesByChunk(@PathVariable @ValidObjectId String id, @PathVariable @ValidEnum String type, @PathVariable int idx) throws TypeMismatchException, ChunkOutOfRangeException, DocumentNotFoundException, DataIntegrityException, OperationException;
+    GetTerminologiesResDTO getTerminologiesByChunk(@PathVariable @ValidObjectId String id, @PathVariable String type, @PathVariable int idx) throws TypeMismatchException, ChunkOutOfRangeException, DocumentNotFoundException, DataIntegrityException, OperationException;
 
     @GetMapping(value = "/id/{id}", produces = {MediaType.APPLICATION_JSON_VALUE })
     @Operation(summary = "Returns a Terminology from MongoDB, given its ID", description = "Servizio che consente di ritornare un Terminology dalla base dati dati il suo ID.")
