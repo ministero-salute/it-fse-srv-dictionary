@@ -80,10 +80,10 @@ public class ExceptionCTL extends ResponseEntityExceptionHandler {
         log.error("Handler handleDataIntegrityException()",ex);
         // Create error DTO
         ErrorResponseDTO out = createDataIntegrityError(getLogTraceInfo(),ex);
-
+        // Set HTTP headers
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_PROBLEM_JSON);
-
+        // Bye bye
         return new ResponseEntity<>(out,headers,out.getStatus());
     }
 

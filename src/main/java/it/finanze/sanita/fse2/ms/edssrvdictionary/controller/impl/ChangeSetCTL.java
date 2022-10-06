@@ -31,6 +31,14 @@ public class ChangeSetCTL extends AbstractCTL implements IChangeSetCTL{
     @Autowired
     private transient ITerminologySRV terminologySRV;
 
+
+
+
+    /**
+     * @param lastUpdate The last update date
+     * @return The changeset for the current time according to the last update
+     * @throws OperationException If a data-layer error occurs
+     */
     @Override
     public ChangeSetResDTO changeSet(Date lastUpdate) throws OperationException {
 
@@ -53,7 +61,10 @@ public class ChangeSetCTL extends AbstractCTL implements IChangeSetCTL{
 
 
     /**
+     * @param lastUpdate the last updated date
      * 
+     * @return the changeset chunks of the current time according to the last update
+     * @throws OperationException If a data-layer error occurs
      */
     @Override
     public ChangeSetChunkDTO changeSetChunks(Date lastUpdate) throws OperationException {

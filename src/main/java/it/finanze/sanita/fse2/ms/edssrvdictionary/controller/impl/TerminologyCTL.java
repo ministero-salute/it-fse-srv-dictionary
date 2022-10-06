@@ -44,16 +44,30 @@ public class TerminologyCTL extends AbstractCTL implements ITerminologyCTL{
 
 
 	/**
-	 * @id : identifier of the target snapshot
-	 * @idx : int identifying a chunk
+	 * Get last inserted elements by chunks
+	 * @id identifier of the target snapshot
+	 * @idx int identifying a chunk
+	 * @return a DTo containing the last updated elements
 	 * @throws ChunkOutOfRangeException if idx represent a non-existing chunk
 	 * @throws DataIntegrityException if the request violates Integrity Constraint
+	 * @throws DocumentNotFoundException 
+	 * @throws OperationException If a data-layer error occurs
 	 */
 	@Override
 	public GetTermsInsDTO getTermsByChunkIns(String id, int idx) throws ChunkOutOfRangeException, DocumentNotFoundException, DataIntegrityException, OperationException {
 		return new GetTermsInsDTO(getLogTraceInfo(), terminologySRV.getTermsByChunkIns(id, idx));
 	}
 
+	
+	/**
+	 * Get ids of deleted items of a chunk
+	 * @id : identifier of the target snapshot
+	 * @idx : int identifying a chunk
+	 * @throws ChunkOutOfRangeException if idx represent a non-existing chunk
+	 * @throws DataIntegrityException if the request violates Integrity Constraint
+	 * @throws DocumentNotFoundException 
+	 * @throws OperationException
+	 */
 	@Override
 	public GetTermsDelDTO getTermsByChunkDel(String id, int idx) throws ChunkOutOfRangeException, DocumentNotFoundException, DataIntegrityException, OperationException {
 		return new GetTermsDelDTO(getLogTraceInfo(), terminologySRV.getTermsByChunkDel(id, idx));

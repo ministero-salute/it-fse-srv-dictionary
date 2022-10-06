@@ -110,7 +110,6 @@ public final class ErrorBuilderDTO {
 
     public static ErrorResponseDTO createDataIntegrityError(LogTraceInfoDTO trace, DataIntegrityException ex){
         String field = ex.getCause().toString();
-        
         return new ErrorResponseDTO(
             trace,
             ErrorType.VALIDATION.getType(),

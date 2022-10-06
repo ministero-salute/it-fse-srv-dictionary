@@ -25,6 +25,11 @@ public class TerminologyResponseDTO extends ResponseDTO {
 		super();
 	}
 
+
+	/**
+	 *  DTO used to return log relative to upload terminolpgy files in uploadTerminologyFile
+	 * @param traceInfo
+	 */
 	public TerminologyResponseDTO(final LogTraceInfoDTO traceInfo) {
 		super(traceInfo);
 	}
