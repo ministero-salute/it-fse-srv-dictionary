@@ -52,8 +52,12 @@ public class TerminologyCTL extends AbstractCTL implements ITerminologyCTL{
 
 	@Override
 	public ResponseEntity<TerminologyResponseDTO> uploadTerminologyFile(HttpServletRequest request, MultipartFile file) throws IOException, OperationException, DocumentAlreadyPresentException, DocumentNotFoundException {
-		terminologySRV.uploadTerminologyFile(file);
-		return new ResponseEntity<TerminologyResponseDTO>(new TerminologyResponseDTO(getLogTraceInfo()), null, HttpStatus.SC_CREATED); 
+		Integer uploadItems = terminologySRV.uploadTerminologyFile(file);
+		if(uploadItems!=0) {
+			return new ResponseEntity<TerminologyResponseDTO>(new TerminologyResponseDTO(getLogTraceInfo(),uploadItems), null, HttpStatus.SC_CREATED); 
+		} else {
+			return new ResponseEntity<TerminologyResponseDTO>(new TerminologyResponseDTO(getLogTraceInfo(),uploadItems), null, HttpStatus.SC_OK); 
+		}
 	}
     
 
