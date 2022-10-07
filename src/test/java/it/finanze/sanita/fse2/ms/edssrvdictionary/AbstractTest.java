@@ -14,7 +14,13 @@ import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.TerminologyE
 public class AbstractTest {
 
 	@Autowired
-    private MongoTemplate mongoTemplate;
+    public MongoTemplate mongoTemplate;
+
+
+
+
+	public static final String INVALID_SNAPSHOT_ID ="invalid_id";
+
 
 	protected void dropVocabularyCollection() {
     	mongoTemplate.dropCollection(TerminologyETY.class);
