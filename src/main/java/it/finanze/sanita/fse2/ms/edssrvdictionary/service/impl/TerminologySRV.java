@@ -264,6 +264,14 @@ public class TerminologySRV implements ITerminologySRV {
 	}
 
 	@Override
+	public void deleteTerminologyById(String id) throws DocumentNotFoundException, OperationException {
+		TerminologyETY out = terminologyRepo.deleteById(id);
+		if (out == null) {
+			throw new DocumentNotFoundException(Constants.Logs.ERROR_REQUESTED_DOCUMENT_DOES_NOT_EXIST);
+		}
+	}
+
+	@Override
 	public List<TerminologyDocumentDTO> getTermsByChunkIns(String id, int index) throws DocumentNotFoundException, OperationException, ChunkOutOfRangeException, DataIntegrityException {
 		// Retrieve document chunks
 		SnapshotETY chunks = getChunks(id);

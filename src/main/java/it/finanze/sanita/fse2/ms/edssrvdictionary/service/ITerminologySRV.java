@@ -59,6 +59,8 @@ public interface ITerminologySRV extends IChangeSetSRV {
 	 */
 	void uploadTerminologyFile(MultipartFile file) throws IOException;
 
+	void deleteTerminologyById(String id) throws DocumentNotFoundException, OperationException;
+
 	/**
 	 * Aggregates and return documents by chunk
 	 * @param id The snapshot instance

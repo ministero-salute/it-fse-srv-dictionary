@@ -89,7 +89,12 @@ public class TerminologyCTL extends AbstractCTL implements ITerminologyCTL{
 		return new TerminologyResponseDTO(getLogTraceInfo());
 		
 	}
-    
 
-    
+	@Override
+	public TerminologyResponseDTO deleteTerminologyById(String id) throws DocumentNotFoundException, OperationException {
+		terminologySRV.deleteTerminologyById(id);
+		return new TerminologyResponseDTO(getLogTraceInfo());
+	}
+
+
 }

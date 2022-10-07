@@ -60,4 +60,6 @@ public interface ITerminologyRepo extends IChangeSetRepo<TerminologyETY> {
 
 	List<TerminologyETY> findByIds(List<ObjectId> ids) throws OperationException;
 
+	TerminologyETY deleteById(String id) throws OperationException;
+
 }

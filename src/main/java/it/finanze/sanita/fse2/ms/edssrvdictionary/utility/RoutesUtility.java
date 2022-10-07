@@ -18,4 +18,6 @@ public final class RoutesUtility {
 
     public static final String API_CHANGESET_TAG = "ChangeSet";
 
+    public static final String API_TEST_TAG = "Test";
+
 }

@@ -24,6 +24,8 @@ import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.TerminologyE
 import it.finanze.sanita.fse2.ms.edssrvdictionary.utility.ProfileUtility;
 import lombok.extern.slf4j.Slf4j;
 
+import static org.springframework.data.mongodb.core.query.Criteria.where;
+
 /**
  *	@author vincenzoingenito
 	@author Riccardo Bonesi
@@ -228,6 +230,26 @@ public class TerminologyRepo extends AbstractMongoRepo<TerminologyETY, String> i
 			throw new OperationException("Unable to retrieve documents by multiple ids", e);
 		}
 		return objects;
+	}
+
+	@Override
+	public TerminologyETY deleteById(String id) throws OperationException {
+		// Create query
+		Query query = new Query();
+		query.addCriteria(where(FIELD_ID).is(id));
+		query.addCriteria(where(FIELD_DELETED).is(false));
+		// Create update definition
+		Update update = new Update();
+		update.set(FIELD_LAST_UPDATE, new Date());
+		update.set(FIELD_DELETED, true);
+		// Execute
+		try {
+			mongoTemplate.updateFirst(query, update, TerminologyETY.class);
+		}catch (MongoException ex) {
+			throw new OperationException("Unable to delete document", ex);
+		}
+		// Retrieve update entity
+		return findById(id);
 	}
 
 	public String getCollectionName() {
