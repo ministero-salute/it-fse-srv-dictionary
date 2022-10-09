@@ -55,7 +55,6 @@ public class OpenApiCFG {
 						if(((Schema) property).getName().equalsIgnoreCase("type")){
 							((Schema<Object>) property).setMaxLength(DEFAULT_BINARY_MAX_SIZE);
 							((Schema<Object>) property).setMinLength(DEFAULT_BINARY_MIN_SIZE);
-							System.out.println("Binary type setted");
 						} else if(((Schema) property).getName().equalsIgnoreCase("data")){
 							((Schema<Object>) property).setMaxItems(DEFAULT_ARRAY_MAX_SIZE);
 							((Schema<Object>) property).setMinItems(DEFAULT_ARRAY_MIN_SIZE);
@@ -64,7 +63,6 @@ public class OpenApiCFG {
 							System.out.println("Binary data setted");
 						}
 					});
-					System.out.println("End binary");
 				}
 			});
 }
