@@ -20,13 +20,15 @@ public class TerminologyResponseDTO extends ResponseDTO {
 	 */
 	private static final long serialVersionUID = 5857199886068379718L;
 
+	private Integer insertedTerminology;
 
 	public TerminologyResponseDTO() {
 		super();
 	}
 
-	public TerminologyResponseDTO(final LogTraceInfoDTO traceInfo) {
+	public TerminologyResponseDTO(final LogTraceInfoDTO traceInfo, final Integer inInsertedTerminology) {
 		super(traceInfo);
+		insertedTerminology = inInsertedTerminology;
 	}
 	
 }

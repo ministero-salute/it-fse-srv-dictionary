@@ -44,8 +44,6 @@ public class TerminologySRV implements ITerminologySRV {
 	@Autowired
 	private ITerminologyRepo terminologyRepo;
 	
-//	@Autowired
-//	private IDictionaryRepo dictionaryRepo;
 	
 	@Override
 	public TerminologyETY insert(final TerminologyETY ety) {
@@ -170,32 +168,38 @@ public class TerminologySRV implements ITerminologySRV {
 	}
 
 	@Override
-	public void uploadTerminologyFile(MultipartFile file) throws IOException {
-
-		byte [] byteArr = file.getBytes();
-		InputStream targetStream = new ByteArrayInputStream(byteArr);
-
-		Reader reader = new InputStreamReader(targetStream);
-		List<TerminologyBuilderDTO> vocabularyListDTO = buildDTOFromCsv(reader);
-		vocabularyListDTO.remove(0);
-
-		Date insertionDate = new Date();
-
-		List<TerminologyETY> listToSave = new ArrayList<>();
-		for(TerminologyBuilderDTO vocabularyDTO : vocabularyListDTO) {
-			TerminologyETY ety = new TerminologyETY();
-			ety.setCode(vocabularyDTO.getCode());
-			ety.setDescription(vocabularyDTO.getDescription());
-			ety.setSystem(vocabularyDTO.getSystem());
-			ety.setInsertionDate(insertionDate);
-			ety.setLastUpdateDate(insertionDate);
-			listToSave.add(ety);
+	public Integer uploadTerminologyFile(MultipartFile file) throws IOException {
+		Integer output = 0;
+		try {
+			byte [] byteArr = file.getBytes();
+			InputStream targetStream = new ByteArrayInputStream(byteArr);
 			
+			Reader reader = new InputStreamReader(targetStream);
+			List<TerminologyBuilderDTO> vocabularyListDTO = buildDTOFromCsv(reader);
+			vocabularyListDTO.remove(0);
+			
+			Date insertionDate = new Date();
+			
+			List<TerminologyETY> listToSave = new ArrayList<>();
+			for(TerminologyBuilderDTO vocabularyDTO : vocabularyListDTO) {
+				TerminologyETY ety = new TerminologyETY();
+				ety.setCode(vocabularyDTO.getCode());
+				ety.setDescription(vocabularyDTO.getDescription());
+				ety.setSystem(vocabularyDTO.getSystem());
+				ety.setInsertionDate(insertionDate);
+				ety.setLastUpdateDate(insertionDate);
+				listToSave.add(ety);
+				
+			}
+			
+			terminologyRepo.insertAll(listToSave);
+			output = listToSave.size();
+			log.info("Successfully inserted " + listToSave.size() + " Termonologies");
+		} catch(Exception ex) {
+			log.error("Error while insert csv items :" , ex);
+			throw new BusinessException("Error while insert csv items :" , ex);
 		}
-		
-		terminologyRepo.insertAll(listToSave);
-
-		log.info("Successfully inserted " + listToSave.size() + " Termonologies");
+		return output;
 	}
 
 	private List<TerminologyBuilderDTO> buildDTOFromCsv(Reader reader){
