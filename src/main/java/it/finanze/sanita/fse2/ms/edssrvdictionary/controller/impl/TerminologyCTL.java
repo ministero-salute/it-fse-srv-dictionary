@@ -5,27 +5,25 @@ import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.http.HttpStatus;
-import java.util.Date;
-import javax.servlet.http.HttpServletRequest;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.chunks.GetTermsDelDTO;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.chunks.GetTermsInsDTO;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+
 import it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.controller.AbstractCTL;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.controller.ITerminologyCTL;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.TerminologyDocumentDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.GetTerminologyResDTO;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.TerminologyDeleteResponseDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.TerminologyResponseDTO;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.chunks.GetTermsDelDTO;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.chunks.GetTermsInsDTO;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.ChunkOutOfRangeException;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DataIntegrityException;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DocumentAlreadyPresentException;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DocumentNotFoundException;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.OperationException;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.enums.OperationLogEnum;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.enums.ResultLogEnum;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.logging.ElasticLoggerHelper;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.service.ITerminologySRV;
 import lombok.extern.slf4j.Slf4j;
 
@@ -37,7 +35,7 @@ import lombok.extern.slf4j.Slf4j;
  */
 @RestController
 @Slf4j
-public class TerminologyCTL extends AbstractCTL implements ITerminologyCTL{
+public class TerminologyCTL extends AbstractCTL implements ITerminologyCTL {
 
     /**
 	 * Serial Version UID 
@@ -59,7 +57,7 @@ public class TerminologyCTL extends AbstractCTL implements ITerminologyCTL{
 	 * @throws OperationException If a data-layer error occurs
 	 */
 	@Override
-	public ResponseEntity<GetTerminologyResDTO> getTermsByChunkIns(String id, int idx) throws ChunkOutOfRangeException, DocumentNotFoundException, DataIntegrityException, OperationException {
+	public GetTermsInsDTO getTermsByChunkIns(String id, int idx) throws ChunkOutOfRangeException, DocumentNotFoundException, DataIntegrityException, OperationException {
 		return new GetTermsInsDTO(getLogTraceInfo(), terminologySRV.getTermsByChunkIns(id, idx));
 	}
 
@@ -82,7 +80,7 @@ public class TerminologyCTL extends AbstractCTL implements ITerminologyCTL{
 	public GetTerminologyResDTO getTerminologyById(HttpServletRequest request,  String id) throws OperationException, DocumentNotFoundException {
 		log.info(Constants.Logs.CALLED_GET_TERMINOLOGY_BY_ID); 
 		TerminologyDocumentDTO doc = terminologySRV.findById(id); 
-		return new ResponseEntity<GetTerminologyResDTO>(new GetTerminologyResDTO(getLogTraceInfo(), doc), null, HttpStatus.SC_OK); 
+		return new GetTerminologyResDTO(getLogTraceInfo(), doc);
 
 	}
 
@@ -91,16 +89,16 @@ public class TerminologyCTL extends AbstractCTL implements ITerminologyCTL{
 	public ResponseEntity<TerminologyResponseDTO> uploadTerminologyFile(HttpServletRequest request, MultipartFile file) throws IOException, OperationException, DocumentAlreadyPresentException, DocumentNotFoundException {
 		Integer uploadItems = terminologySRV.uploadTerminologyFile(file);
 		if(uploadItems!=0) {
-			return new ResponseEntity<TerminologyResponseDTO>(new TerminologyResponseDTO(getLogTraceInfo(),uploadItems), null, HttpStatus.SC_CREATED); 
+			return new ResponseEntity<>(new TerminologyResponseDTO(getLogTraceInfo(),uploadItems), null, HttpStatus.SC_CREATED); 
 		} else {
-			return new ResponseEntity<TerminologyResponseDTO>(new TerminologyResponseDTO(getLogTraceInfo(),uploadItems), null, HttpStatus.SC_OK); 
+			return new ResponseEntity<>(new TerminologyResponseDTO(getLogTraceInfo(),uploadItems), null, HttpStatus.SC_OK); 
 		}
 	}
 
 	@Override
-	public TerminologyResponseDTO deleteTerminologyById(String id) throws DocumentNotFoundException, OperationException {
+	public TerminologyDeleteResponseDTO deleteTerminologyById(String id) throws DocumentNotFoundException, OperationException {
 		terminologySRV.deleteTerminologyById(id);
-		return new TerminologyResponseDTO(getLogTraceInfo());
+		return new TerminologyDeleteResponseDTO(getLogTraceInfo());
 	}
 
 

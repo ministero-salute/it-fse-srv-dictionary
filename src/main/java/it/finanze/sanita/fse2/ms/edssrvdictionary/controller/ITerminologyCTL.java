@@ -71,7 +71,7 @@ public interface ITerminologyCTL {
                     @ApiResponse(responseCode = "400", description = "I parametri forniti non sono validi", content = @Content(mediaType = MediaType.APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = TerminologyErrorResponseDTO.class))),
                     @ApiResponse(responseCode = "404", description = "terminology non trovato sul database", content = @Content(mediaType = MediaType.APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = TerminologyErrorResponseDTO.class))),
                     @ApiResponse(responseCode = "500", description = "Internal Server Error", content = @Content(mediaType = MediaType.APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = TerminologyErrorResponseDTO.class))) })
-    ResponseEntity<GetTerminologyResDTO> getTerminologyById(HttpServletRequest request, @PathVariable @Size(min = DEFAULT_STRING_MIN_SIZE, max = DEFAULT_STRING_MAX_SIZE, message = "id does not match the expected size") @ValidObjectId(message = "Document id not valid") String id)
+    GetTerminologyResDTO getTerminologyById(HttpServletRequest request, @PathVariable @Size(min = DEFAULT_STRING_MIN_SIZE, max = DEFAULT_STRING_MAX_SIZE, message = "id does not match the expected size") @ValidObjectId(message = "Document id not valid") String id)
     throws OperationException, DocumentNotFoundException;
 
 
@@ -86,7 +86,7 @@ public interface ITerminologyCTL {
 
     @DeleteMapping(value = "/id/{id}", produces = {MediaType.APPLICATION_JSON_VALUE })
     @Tag(name = RoutesUtility.API_TEST_TAG)
-    TerminologyResponseDTO deleteTerminologyById(
+    TerminologyDeleteResponseDTO deleteTerminologyById(
         @PathVariable
         @ValidObjectId(message = "Document id not valid") String id
     ) throws DocumentNotFoundException, OperationException;

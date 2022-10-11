@@ -57,7 +57,7 @@ public interface ITerminologySRV extends IChangeSetSRV {
 	 * Insert Terminologies in database from file
 	 * @param file
 	 */
-	void uploadTerminologyFile(MultipartFile file) throws IOException;
+	Integer uploadTerminologyFile(MultipartFile file) throws IOException;
 
 	void deleteTerminologyById(String id) throws DocumentNotFoundException, OperationException;
 
