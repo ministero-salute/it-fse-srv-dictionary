@@ -13,5 +13,5 @@ bin/
 .factorypath
 .metadata
 tmp/
-
+.idea
 .vscode/

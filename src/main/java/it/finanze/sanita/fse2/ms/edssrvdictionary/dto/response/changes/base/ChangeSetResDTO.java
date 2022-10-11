@@ -1,4 +1,4 @@
-package it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response;
+package it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes.base;
 
 import static it.finanze.sanita.fse2.ms.edssrvdictionary.utility.ValidationUtility.DEFAULT_ARRAY_MAX_SIZE;
 import static it.finanze.sanita.fse2.ms.edssrvdictionary.utility.ValidationUtility.DEFAULT_ARRAY_MIN_SIZE;
@@ -9,7 +9,7 @@ import java.util.List;
 
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Schema;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.ChangeSetDTO;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.ResponseDTO;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -21,8 +21,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public class ChangeSetResponseDTO extends ResponseDTO {
-
+public class ChangeSetResDTO extends ResponseDTO {
 
 	/**
 	 * Serial Version UID 
@@ -54,18 +53,8 @@ public class ChangeSetResponseDTO extends ResponseDTO {
 	@Schema(minimum = DEFAULT_ARRAY_MIN_SIZE + "", maximum = DEFAULT_ARRAY_MAX_SIZE + "")
 	private int totalNumberOfElements;
 
-	public ChangeSetResponseDTO() {
+	public ChangeSetResDTO() {
 		super();
-	}
-
-
-	public ChangeSetResponseDTO(final LogTraceInfoDTO traceInfo, final Date inLastUpdate, final Date inTimestamp, final List<ChangeSetDTO> inInsertions, final List<ChangeSetDTO> inDeletions, final int inTotalNumberOfElements) {
-		super(traceInfo);
-		this.lastUpdate = inLastUpdate;
-		this.timestamp = inTimestamp;
-		this.insertions = inInsertions;
-		this.deletions = inDeletions;
-		this.totalNumberOfElements = inTotalNumberOfElements;
 	}
 	
 }

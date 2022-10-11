@@ -12,5 +12,15 @@ public final class MockRequests {
     public static MockHttpServletRequestBuilder findTerminologyByIdMockRequest(final String id) {
         return get("http://127.0.0.1:9088/v1/terminology/id/" + id).contentType(MediaType.APPLICATION_JSON_VALUE); 
     } 
+
+    public static MockHttpServletRequestBuilder getTerminologyByChunkInsMockRequest( String snapshotid, int idx){
+        return get("http://127.0.0.1:9088/v1/terminology/chunks/ins/" + snapshotid +"/" + idx).contentType(MediaType.APPLICATION_JSON_VALUE);
+
+    }
+
+    public static MockHttpServletRequestBuilder getTerminologyByChunkDelMockRequest( String snapshotid, int idx){
+        return get("http://127.0.0.1:9088/v1/terminology/chunks/del/" + snapshotid +"/"+ idx).contentType(MediaType.APPLICATION_JSON_VALUE);
+
+    }
     
 }
