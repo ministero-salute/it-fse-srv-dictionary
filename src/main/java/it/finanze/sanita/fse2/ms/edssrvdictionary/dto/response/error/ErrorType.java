@@ -11,7 +11,9 @@ public enum ErrorType {
 
     VALIDATION("/err/validation","Validation error"),
     RESOURCE("/err/resource", "Resource error"),
-    SERVER("/err/server", "Server error");
+    SERVER("/err/server", "Server error"),
+    IO("/err/io", "IO error");
+
 
     private final String type;
     private final String title;

@@ -1,13 +1,19 @@
 package it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity;
 
-import java.util.Date;
-
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Logs;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DataProcessingException;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.utility.StringUtility;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import java.io.IOException;
+import java.util.*;
 
 import static it.finanze.sanita.fse2.ms.edssrvdictionary.repository.IChangeSetRepo.*;
 
@@ -17,6 +23,7 @@ import static it.finanze.sanita.fse2.ms.edssrvdictionary.repository.IChangeSetRe
 @Document(collection = "#{@terminologyBean}")
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class TerminologyETY {
 
 	public static final String FIELD_ID = "_id";
@@ -48,5 +55,36 @@ public class TerminologyETY {
 	
 	@Field(name = FIELD_DELETED)
 	private boolean deleted;
+
+	public static List<TerminologyETY> fromXML(byte[] raw, String system, String version) throws DataProcessingException {
+		// Working var
+		List<TerminologyETY> out = new ArrayList<>();
+		Date current = new Date();
+		// Create xml mapper
+		XmlMapper mapper = new XmlMapper();
+		// Read hierarchy three
+		JsonNode node;
+		try {
+			node = mapper.readTree(raw);
+			// Retrieve field iterator
+			Iterator<Map.Entry<String, JsonNode>> iter = node.fields();
+			// Iterate on each item
+			while(iter.hasNext()) {
+				Map.Entry<String, JsonNode> n = iter.next();
+				Iterator<JsonNode> it = n.getValue().elements();
+				while(it.hasNext()) {
+					JsonNode n1 = it.next();
+					String code = n1.get(FIELD_CODE).asText();
+					String description = n1.get("").asText();
+					if(!StringUtility.isNullOrEmpty(code)) {
+						out.add(new TerminologyETY(null, system, code,description, version, current, current, false));
+					}
+				}
+			}
+		} catch (IOException e) {
+			throw new DataProcessingException(Logs.ERR_ETY_PARSE_XML, e);
+		}
+		return out;
+	}
 	
 }

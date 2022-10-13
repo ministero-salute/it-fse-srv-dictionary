@@ -3,12 +3,8 @@ package it.finanze.sanita.fse2.ms.edssrvdictionary.service;
 
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.TerminologyDocumentDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.VocabularyDTO;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.ChunkOutOfRangeException;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DataIntegrityException;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DocumentNotFoundException;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.OperationException;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.*;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.TerminologyETY;
-
 import org.bson.types.ObjectId;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -41,7 +37,7 @@ public interface ITerminologySRV extends IChangeSetSRV {
 	 * @param vocabulariesDTO
 	 * @return
 	 */
-	Integer saveNewVocabularySystems(List<VocabularyDTO> vocabulariesDTO);
+	Integer saveNewVocabularySystems(List<VocabularyDTO> vocabulariesDTO) throws OperationException;
 
 	/**
 	 * Retrieves the Terminology by identifier
@@ -60,6 +56,8 @@ public interface ITerminologySRV extends IChangeSetSRV {
 	Integer uploadTerminologyFile(MultipartFile file) throws IOException;
 
 	void deleteTerminologyById(String id) throws DocumentNotFoundException, OperationException;
+
+	int uploadTerminologyXml(MultipartFile file, String version) throws DocumentAlreadyPresentException, OperationException, DataProcessingException;
 
 	/**
 	 * Aggregates and return documents by chunk

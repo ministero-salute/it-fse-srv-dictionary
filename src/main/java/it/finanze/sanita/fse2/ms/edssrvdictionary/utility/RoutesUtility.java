@@ -20,4 +20,7 @@ public final class RoutesUtility {
 
     public static final String API_TEST_TAG = "Test";
 
+    public static final String API_CRUD_TAG = "CRUD";
+
+
 }

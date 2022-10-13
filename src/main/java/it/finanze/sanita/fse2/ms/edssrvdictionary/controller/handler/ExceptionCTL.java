@@ -1,11 +1,11 @@
 package it.finanze.sanita.fse2.ms.edssrvdictionary.controller.handler;
 
-import static it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.error.ErrorBuilderDTO.createGenericError;
-import static it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.error.ErrorBuilderDTO.createTypeMismatchError;
-import static it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.error.ErrorBuilderDTO.createDataIntegrityError;
-
-
-
+import brave.Tracer;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.LogTraceInfoDTO;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.error.base.ErrorResponseDTO;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DataIntegrityException;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DataProcessingException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -15,11 +15,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import brave.Tracer;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.LogTraceInfoDTO;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.error.base.ErrorResponseDTO;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DataIntegrityException;
-import lombok.extern.slf4j.Slf4j;
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.error.ErrorBuilderDTO.*;
 
 @ControllerAdvice
 @Slf4j
@@ -86,7 +82,20 @@ public class ExceptionCTL extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(out,headers,out.getStatus());
     }
 
-    
+    @ExceptionHandler(DataProcessingException.class)
+    protected ResponseEntity<ErrorResponseDTO> handleDataProcessingException(DataProcessingException ex) {
+        // Log me
+        log.warn("HANDLER handleDataProcessingException()");
+        log.error("HANDLER handleDataProcessingException()", ex);
+        // Create error DTO
+        ErrorResponseDTO out = createDataProcessingError(getLogTraceInfo(), ex);
+        // Set HTTP headers
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_PROBLEM_JSON);
+        // Bye bye
+        return new ResponseEntity<>(out, headers, out.getStatus());
+    }
+
     /**
      * Generate a new {@link LogTraceInfoDTO} instance
      * @return The new instance

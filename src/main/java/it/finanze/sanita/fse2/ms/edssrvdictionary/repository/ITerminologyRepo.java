@@ -4,6 +4,7 @@ import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.OperationException;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.TerminologyETY;
 import org.bson.types.ObjectId;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -20,7 +21,7 @@ public interface ITerminologyRepo extends IChangeSetRepo<TerminologyETY> {
 	 * @param ety Vocabulary to insert.
 	 * @return Vocabulary inserted.
 	 */
-	TerminologyETY insert(TerminologyETY ety);
+	TerminologyETY insert(TerminologyETY ety) throws OperationException;
 	
 	/**
 	 * Returns a Vcard identified by its {@code pk}.
@@ -28,27 +29,25 @@ public interface ITerminologyRepo extends IChangeSetRepo<TerminologyETY> {
 	 * @param pk Primary key of the Vcard to return.
 	 * @return Vcard identified by its {@code pk}.
 	 */
-	TerminologyETY findById(String pk);
+	TerminologyETY findById(String pk) throws OperationException;
 
 	/**
 	 * Inserts all vocabularies on database.
-	 * 
+	 *
 	 * @param etys List of vocabularies to insert.
+	 * @return
 	 */
-	void insertAll(List<TerminologyETY> etys);
+	Collection<TerminologyETY> insertAll(List<TerminologyETY> etys) throws OperationException;
 
 	/**
-	 * Returns all vocabularies.
-	 * 
-	 * @return List of all vocabularies.
+	 * Check if a given system is already present
+	 * @param system The system parameter
+	 * @return True if exists at least one term with the given system, otherwise false
+	 * @throws OperationException If a data-layer error occurs
 	 */
-	List<TerminologyETY> findAll();
-	
-	Boolean existsBySystem(String system);
+	boolean existsBySystem(String system) throws OperationException;
 	
 	List<TerminologyETY> findByInCodeAndSystem(List<String> codes, String system);
-	
-	void dropCollection();
 
 	/**
      * Retrieves all the not-deleted termonologues

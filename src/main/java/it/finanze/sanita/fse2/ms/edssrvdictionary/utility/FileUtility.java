@@ -1,13 +1,16 @@
 package it.finanze.sanita.fse2.ms.edssrvdictionary.utility;
 
+import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.BusinessException;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DataProcessingException;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.multipart.MultipartFile;
+
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.BusinessException;
-import lombok.extern.slf4j.Slf4j;
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Logs.ERR_UTLS_IO_EMPTY;
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Logs.ERR_UTLS_IO_ERROR;
 
 /**
  * The Class FileUtils.
@@ -28,26 +31,6 @@ public final class FileUtility {
 	 * Constructor.
 	 */
 	private FileUtility() {
-	}
-
-
-	/**
-	 * Method to get the file's content from fs.
-	 *
-	 * @param filename	filename
-	 * @return			content
-	 */
-	public static byte[] getFileFromFS(final String filename) {
-		byte[] b = null;
-		try {
-			File f = new File(filename);
-			InputStream is = new FileInputStream(f);
-			b = getByteFromInputStream(is);
-			is.close();
-		} catch (Exception e) {
-			log.error("FILE UTILS getFileFromFS(): Errore in fase di recupero del contenuto di un file da file system. ", e);
-		}
-		return b;
 	}
 
 	/**
@@ -101,6 +84,19 @@ public final class FileUtility {
 			throw new BusinessException(e);
 		}
 		return b;
+	}
+
+	public static byte[] throwIfEmpty(MultipartFile file) throws DataProcessingException {
+		byte[] raw;
+		// Retrieve byte array
+		try {
+			raw = file.getBytes();
+		}catch (IOException ex) {
+			throw new DataProcessingException(ERR_UTLS_IO_ERROR, ex);
+		}
+		// Check emptiness
+		if(raw.length == 0) throw new DataProcessingException(ERR_UTLS_IO_EMPTY, new IOException());
+		return raw;
 	}
 
 }

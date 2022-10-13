@@ -24,9 +24,9 @@ public final class ErrorInstance {
         }
 
         @NoArgsConstructor(access = AccessLevel.PRIVATE)
-        public static final class Fields {
-                public static final String ID = "id";
-                public static final String LAST_UPDATE = "lastUpdate";
+        public static final class IO {
+                public static final String CONVERSION = "/data-processing";
+                public static final String INTEGRITY = "/data-integrity";
         }
 
 }

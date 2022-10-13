@@ -1,18 +1,12 @@
 package it.finanze.sanita.fse2.ms.edssrvdictionary;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
+import it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.TerminologyBuilderDTO;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.TerminologyFileEntryDTO;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.VocabularyDTO;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.TerminologyETY;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.service.ITerminologySRV;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.utility.FileUtility;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,13 +14,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.context.ActiveProfiles;
 
-import it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.TerminologyBuilderDTO;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.VocabularyDTO;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.TerminologyFileEntryDTO;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.TerminologyETY;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.service.ITerminologySRV;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.utility.FileUtility;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ComponentScan(basePackages = {Constants.ComponentScan.BASE})
@@ -89,9 +82,10 @@ public class PersistenceTest extends AbstractTest {
 		voc.setSystem("2.16.840.1.113883.6.1");
 
 		vocabulariesDTO.add(voc);
-		Integer vocSysSaved = vocabularySRV.saveNewVocabularySystems(vocabulariesDTO);
-		assertNotNull(vocSysSaved); 
-		 
+		assertDoesNotThrow(() -> {
+			Integer vocSysSaved = vocabularySRV.saveNewVocabularySystems(vocabulariesDTO);
+			assertNotNull(vocSysSaved);
+		});
 	}
 	
 	@Test

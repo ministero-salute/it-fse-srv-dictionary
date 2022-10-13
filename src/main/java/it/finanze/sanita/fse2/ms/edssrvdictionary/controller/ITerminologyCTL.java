@@ -1,29 +1,6 @@
 package it.finanze.sanita.fse2.ms.edssrvdictionary.controller;
 
 
-import static it.finanze.sanita.fse2.ms.edssrvdictionary.utility.ValidationUtility.DEFAULT_STRING_MAX_SIZE;
-import static it.finanze.sanita.fse2.ms.edssrvdictionary.utility.ValidationUtility.DEFAULT_STRING_MIN_SIZE;
-
-import java.io.IOException;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.constraints.Size;
-
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.base.ResponseDTO;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.chunks.GetTermsDelDTO;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.chunks.GetTermsInsDTO;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.crud.DelTermsResDTO;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.crud.GetTermsResDTO;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.crud.PostTermsResDTO;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.*;
-
-import it.finanze.sanita.fse2.ms.edssrvdictionary.utility.RoutesUtility;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -31,8 +8,28 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.TerminologyDTO;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.base.ResponseDTO;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.chunks.GetTermsDelDTO;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.chunks.GetTermsInsDTO;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.crud.DelTermsResDTO;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.crud.GetTermsResDTO;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.crud.PostTermsResDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.error.base.ErrorResponseDTO;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.*;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.utility.RoutesUtility;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.validators.ValidObjectId;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.constraints.Size;
+import java.io.IOException;
+
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.utility.ValidationUtility.DEFAULT_STRING_MAX_SIZE;
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.utility.ValidationUtility.DEFAULT_STRING_MIN_SIZE;
 
 /**
  * Terminology controller
@@ -86,6 +83,18 @@ public interface ITerminologyCTL {
             @ApiResponse(responseCode = "201", description = "Creazione Terminologies avvenuta con successo", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ResponseDTO.class))),
             @ApiResponse(responseCode = "500", description = "Internal Server Error", content = @Content(mediaType = MediaType.APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = ErrorResponseDTO.class))) })
     ResponseEntity<PostTermsResDTO> uploadTerminologyFile(HttpServletRequest request, @RequestPart("file") MultipartFile file) throws IOException, OperationException, DocumentAlreadyPresentException, DocumentNotFoundException;
+
+    @PostMapping(
+        produces = {MediaType.APPLICATION_JSON_VALUE },
+        consumes = { MediaType.MULTIPART_FORM_DATA_VALUE }
+    )
+    @Tag(name = RoutesUtility.API_CRUD_TAG)
+    PostTermsResDTO uploadTerminologyXml(
+        @RequestPart
+        MultipartFile file,
+        @RequestPart
+        String version
+    ) throws OperationException, DocumentAlreadyPresentException, DataProcessingException;
 
     @DeleteMapping(value = "/id/{id}", produces = {MediaType.APPLICATION_JSON_VALUE })
     @Tag(name = RoutesUtility.API_TEST_TAG)

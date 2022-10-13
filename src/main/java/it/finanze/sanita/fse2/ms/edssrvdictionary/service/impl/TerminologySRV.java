@@ -1,37 +1,34 @@
 package it.finanze.sanita.fse2.ms.edssrvdictionary.service.impl;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.stream.Collectors;
-
+import com.opencsv.bean.CsvToBeanBuilder;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.*;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes.base.ChangeSetDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.*;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.ITerminologyRepo;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.TerminologyETY;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.snapshot.ChunksETY;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.snapshot.SnapshotETY;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.service.ITerminologySRV;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.utility.ChangeSetUtility;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.utility.FileUtility;
+import lombok.extern.slf4j.Slf4j;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.opencsv.bean.CsvToBeanBuilder;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
-import it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes.base.ChangeSetDTO;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.ITerminologyRepo;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.TerminologyETY;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.service.ITerminologySRV;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.utility.ChangeSetUtility;
-import lombok.extern.slf4j.Slf4j;
-
-import static it.finanze.sanita.fse2.ms.edssrvdictionary.dto.ChunksDTO.*;
-import static it.finanze.sanita.fse2.ms.edssrvdictionary.utility.ChangeSetUtility.*;
-import static java.lang.String.*;
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Logs.*;
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.dto.ChunksDTO.Chunk;
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.utility.ChangeSetUtility.CHUNKS_SIZE;
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.utility.ChangeSetUtility.chunks;
+import static java.lang.String.format;
 
 /**
  *	@author vincenzoingenito
@@ -71,7 +68,7 @@ public class TerminologySRV implements ITerminologySRV {
 
 
 	@Override
-	public Integer saveNewVocabularySystems(final List<VocabularyDTO> vocabulariesDTO) {
+	public Integer saveNewVocabularySystems(final List<VocabularyDTO> vocabulariesDTO) throws OperationException {
 		Integer recordSaved = 0;
 		if(vocabulariesDTO!=null && !vocabulariesDTO.isEmpty()) {
 			for(VocabularyDTO entry : vocabulariesDTO) {
@@ -151,8 +148,8 @@ public class TerminologySRV implements ITerminologySRV {
 			return deletions;
 
 		} catch (Exception e) {
-			log.error(Constants.Logs.ERROR_UNABLE_FIND_DELETIONS, e); 
-			throw new BusinessException(Constants.Logs.ERROR_UNABLE_FIND_DELETIONS, e); 
+			log.error(ERROR_UNABLE_FIND_DELETIONS, e);
+			throw new BusinessException(ERROR_UNABLE_FIND_DELETIONS, e);
 		}
 	}
 
@@ -214,7 +211,7 @@ public class TerminologySRV implements ITerminologySRV {
 		SnapshotETY doc = terminologyRepo.getSnapshot(id);
 		// Verify existence
 		if(doc == null) {
-			throw new DocumentNotFoundException(Constants.Logs.ERROR_REQUESTED_DOCUMENT_DOES_NOT_EXIST);
+			throw new DocumentNotFoundException(ERROR_REQUESTED_DOCUMENT_DOES_NOT_EXIST);
 		}
 		return doc;
 	}
@@ -226,7 +223,7 @@ public class TerminologySRV implements ITerminologySRV {
 		TerminologyETY output = terminologyRepo.findById(id);
 
         if (output == null) {
-            throw new DocumentNotFoundException(Constants.Logs.ERROR_REQUESTED_DOCUMENT_DOES_NOT_EXIST);
+            throw new DocumentNotFoundException(ERROR_REQUESTED_DOCUMENT_DOES_NOT_EXIST);
         }
 		
 		return TerminologyDocumentDTO.fromEntity(output);
@@ -271,8 +268,28 @@ public class TerminologySRV implements ITerminologySRV {
 	public void deleteTerminologyById(String id) throws DocumentNotFoundException, OperationException {
 		TerminologyETY out = terminologyRepo.deleteById(id);
 		if (out == null) {
-			throw new DocumentNotFoundException(Constants.Logs.ERROR_REQUESTED_DOCUMENT_DOES_NOT_EXIST);
+			throw new DocumentNotFoundException(ERROR_REQUESTED_DOCUMENT_DOES_NOT_EXIST);
 		}
+	}
+
+	@Override
+	public int uploadTerminologyXml(MultipartFile file, String version) throws DocumentAlreadyPresentException, OperationException, DataProcessingException {
+		// Extract system from filename
+		String system = file.getOriginalFilename();
+		// Verify this system does not exist
+		if(terminologyRepo.existsBySystem(system)) {
+			throw new DocumentAlreadyPresentException(
+				String.format(ERR_SRV_SYSTEM_ALREADY_EXISTS, system)
+			);
+		}
+		// Extract binary content
+		byte[] raw = FileUtility.throwIfEmpty(file);
+		// Parse entities
+		List<TerminologyETY> entities = TerminologyETY.fromXML(raw, system, version);
+		// Insert
+		Collection<TerminologyETY> insertions = terminologyRepo.insertAll(entities);
+		// Return size
+		return insertions.size();
 	}
 
 	@Override

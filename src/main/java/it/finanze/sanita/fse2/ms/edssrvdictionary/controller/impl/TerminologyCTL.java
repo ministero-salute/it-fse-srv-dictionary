@@ -1,31 +1,25 @@
 package it.finanze.sanita.fse2.ms.edssrvdictionary.controller.impl;
 
-import java.io.IOException;
-
-import javax.servlet.http.HttpServletRequest;
-
+import it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.controller.AbstractCTL;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.controller.ITerminologyCTL;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.TerminologyDocumentDTO;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.chunks.GetTermsDelDTO;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.chunks.GetTermsInsDTO;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.crud.DelTermsResDTO;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.crud.GetTermsResDTO;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.crud.PostTermsResDTO;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.*;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.service.ITerminologySRV;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.controller.AbstractCTL;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.controller.ITerminologyCTL;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.TerminologyDocumentDTO;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.crud.GetTermsResDTO;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.crud.DelTermsResDTO;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.crud.PostTermsResDTO;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.chunks.GetTermsDelDTO;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.chunks.GetTermsInsDTO;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.ChunkOutOfRangeException;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DataIntegrityException;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DocumentAlreadyPresentException;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DocumentNotFoundException;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.OperationException;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.service.ITerminologySRV;
-import lombok.extern.slf4j.Slf4j;
+import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 
 
 
@@ -93,6 +87,11 @@ public class TerminologyCTL extends AbstractCTL implements ITerminologyCTL {
 		} else {
 			return new ResponseEntity<>(new PostTermsResDTO(getLogTraceInfo(),uploadItems), null, HttpStatus.SC_OK);
 		}
+	}
+
+	@Override
+	public PostTermsResDTO uploadTerminologyXml(MultipartFile file, String version) throws OperationException, DocumentAlreadyPresentException, DataProcessingException {
+		return new PostTermsResDTO(getLogTraceInfo(), terminologySRV.uploadTerminologyXml(file, version));
 	}
 
 	@Override

@@ -1,27 +1,20 @@
 package it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.error;
 
 
-import static org.apache.http.HttpStatus.SC_BAD_REQUEST;
-import static org.apache.http.HttpStatus.SC_CONFLICT;
-import static org.apache.http.HttpStatus.SC_INTERNAL_SERVER_ERROR;
-import static org.apache.http.HttpStatus.SC_NOT_FOUND;
-
-import javax.validation.ConstraintViolation;
-import javax.validation.ConstraintViolationException;
-
-import org.springframework.beans.TypeMismatchException;
-import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
-
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.LogTraceInfoDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.error.ErrorInstance.Resource;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.error.ErrorInstance.Server;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.error.ErrorInstance.Validation;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.error.base.ErrorResponseDTO;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DataIntegrityException;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DocumentAlreadyPresentException;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DocumentNotFoundException;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.OperationException;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.*;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.utility.UtilsMisc;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
+
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.error.ErrorInstance.IO;
+import static org.apache.http.HttpStatus.*;
 
 public final class ErrorBuilderDTO {
 
@@ -112,11 +105,22 @@ public final class ErrorBuilderDTO {
         String field = ex.getCause().toString();
         return new ErrorResponseDTO(
             trace,
-            ErrorType.VALIDATION.getType(),
-            ErrorType.VALIDATION.getTitle(),
+            ErrorType.IO.getType(),
+            ErrorType.IO.getTitle(),
             ex.getMessage(),
             SC_CONFLICT,
-            ErrorType.VALIDATION.toInstance(Validation.CONSTRAINT_FIELD, field)
+            ErrorType.IO.toInstance(IO.INTEGRITY, field)
+        );
+    }
+
+    public static ErrorResponseDTO createDataProcessingError(LogTraceInfoDTO trace, DataProcessingException ex) {
+        return new ErrorResponseDTO(
+            trace,
+            ErrorType.IO.getType(),
+            ErrorType.IO.getTitle(),
+            ex.getMessage(),
+            SC_UNPROCESSABLE_ENTITY,
+            ErrorType.IO.toInstance(IO.CONVERSION)
         );
     }
 

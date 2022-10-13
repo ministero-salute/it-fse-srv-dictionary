@@ -1,29 +1,28 @@
 package it.finanze.sanita.fse2.ms.edssrvdictionary.repository.impl;
- 
 
-import java.util.Date;
-import java.util.List;
-
-import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.snapshot.SnapshotETY;
-import org.bson.types.ObjectId;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.data.mongodb.core.query.Update;
-import org.springframework.stereotype.Repository;
 
 import com.mongodb.MongoException;
-import com.mongodb.client.result.UpdateResult;
-
 import it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Logs;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.BusinessException;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.OperationException;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.ITerminologyRepo;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.TerminologyETY;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.snapshot.SnapshotETY;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.utility.ProfileUtility;
 import lombok.extern.slf4j.Slf4j;
+import org.bson.types.ObjectId;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
+import org.springframework.stereotype.Repository;
 
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
+
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.TerminologyETY.FIELD_SYSTEM;
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 
 /**
@@ -34,91 +33,76 @@ import static org.springframework.data.mongodb.core.query.Criteria.where;
  */
 @Slf4j
 @Repository
-public class TerminologyRepo extends AbstractMongoRepo<TerminologyETY, String> implements ITerminologyRepo {
-	
-	private static final String SYSTEM_STRING = "system";
+public class TerminologyRepo implements ITerminologyRepo {
 
 	@Autowired
-	private transient MongoTemplate mongoTemplate;
+	private MongoTemplate mongoTemplate;
 
 	@Autowired
-	private transient ProfileUtility profileUtility; 
+	private ProfileUtility profileUtility;
 	
 	@Override
-	public TerminologyETY insert(final TerminologyETY ety) {
-		return super.insert(ety); 
-	}
-
-	@Override
-	public TerminologyETY findById(String pk) {
-		return super.findByID(pk);
-	}
-
-	@Override
-	public void insertAll(List<TerminologyETY> etys) {
-		super.insertAll(etys);
-	}
-
-	@Override
-	public List<TerminologyETY> findAll() {
-		return super.findAll();
-	}
-
-	public Integer upsertByCode(final TerminologyETY ety) {
-		Integer output = 0;
+	public TerminologyETY insert(final TerminologyETY ety) throws OperationException {
+		TerminologyETY out;
 		try {
-			Query query = new Query();
-			query.addCriteria(Criteria.where("code").is(ety.getCode()).and(SYSTEM_STRING).is(ety.getSystem()));
-			
-			Update update = new Update();
-			update.set(SYSTEM_STRING, ety.getSystem());
-			update.set("description", ety.getDescription());
-			update.set("code", ety.getCode());
-			UpdateResult uResult = mongoTemplate.upsert(query, update, TerminologyETY.class);
-			output = (int)uResult.getModifiedCount();
-		} catch(Exception ex) {
-			log.error("Error upserting ety schema " , ex);
-			throw new BusinessException("Error inserting ety schema ", ex);
+			out = mongoTemplate.insert(ety);
+		}catch (MongoException ex) {
+			throw new OperationException(Logs.ERR_REP_UNABLE_INSERT_ENTITY, ex);
 		}
-		return output;
+		return out;
 	}
 
 	@Override
-	public Boolean existsBySystem(final String system) {
-		boolean output = false;
+	public TerminologyETY findById(String pk) throws OperationException {
+		TerminologyETY out;
 		try {
-			Query query = new Query();
-			query.addCriteria(Criteria.where(SYSTEM_STRING).is(system));
+			out = mongoTemplate.findById(new ObjectId(pk), TerminologyETY.class);
+		}catch (MongoException ex) {
+			throw new OperationException(Logs.ERROR_UNABLE_FIND_TERMINOLOGIES, ex);
+		}
+		return out;
+	}
+
+	@Override
+	public Collection<TerminologyETY> insertAll(List<TerminologyETY> etys) throws OperationException {
+		Collection<TerminologyETY> entities;
+		try {
+			entities = mongoTemplate.insertAll(etys);
+		}catch (MongoException ex) {
+			throw new OperationException(Logs.ERR_REP_UNABLE_INSERT_ENTITY, ex);
+		}
+		return entities;
+	}
+
+	@Override
+	public boolean existsBySystem(final String system) throws OperationException {
+		// Working var
+		boolean output;
+		// Create query
+		Query query = new Query();
+		query.addCriteria(
+			where(FIELD_SYSTEM).is(system).and(FIELD_DELETED).is(false)
+		);
+		try {
 			output = mongoTemplate.exists(query, TerminologyETY.class);
- 		} catch(Exception ex) {
-			log.error("Error while execute exists by system :" , ex);
-			throw new BusinessException("Error while execute exists by system :" , ex);
+ 		} catch(MongoException ex) {
+			throw new OperationException(Logs.ERR_REP_UNABLE_CHECK_SYSTEM, ex);
 		}
 		return output;
 	}
 
 	@Override
 	public List<TerminologyETY> findByInCodeAndSystem(final List<String> codes, final String system) {
-		List<TerminologyETY> output = null;
+		List<TerminologyETY> output;
 		try {
 			Query query = new Query();
-			query.addCriteria(Criteria.where("code").in(codes).and(SYSTEM_STRING).is(system));
+			query.addCriteria(where("code").in(codes).and(FIELD_SYSTEM).is(system));
 			output = mongoTemplate.find(query, TerminologyETY.class);
 		} catch(Exception ex) {
 			log.error("Error while execute find by in code and system :" , ex);
 			throw new BusinessException("Error while execute find by in code and system :" , ex);
 		}
 		return output;
-	}
- 
-	@Override
-	public void dropCollection() {
-		try {
-			mongoTemplate.dropCollection(TerminologyETY.class);
-		} catch(Exception ex) {
-			log.error("Error while execute exists by version query " + getClass() , ex);
-			throw new BusinessException("Error while execute exists by version query " + getClass(), ex);
-		}
 	}
 
 
@@ -135,14 +119,14 @@ public class TerminologyRepo extends AbstractMongoRepo<TerminologyETY, String> i
         List<TerminologyETY> objects;
         // Create query
         Query q = Query.query(
-            Criteria.where(FIELD_INSERTION_DATE).gt(lastUpdate).and(FIELD_DELETED).ne(true)
+            where(FIELD_INSERTION_DATE).gt(lastUpdate).and(FIELD_DELETED).ne(true)
         );
         try {
             // Execute
             objects = mongoTemplate.find(q, TerminologyETY.class, getCollectionName());
         } catch (MongoException e) {
             // Catch data-layer runtime exceptions and turn into a checked exception
-            throw new OperationException(Constants.Logs.ERROR_UNABLE_FIND_INSERTIONS, e);
+            throw new OperationException(Logs.ERROR_UNABLE_FIND_INSERTIONS, e);
         }
         return objects;
     }
@@ -160,14 +144,14 @@ public class TerminologyRepo extends AbstractMongoRepo<TerminologyETY, String> i
         List<TerminologyETY> objects;
         // Create query
         Query q = Query.query(
-            Criteria.where(FIELD_LAST_UPDATE).gt(lastUpdate)
+            where(FIELD_LAST_UPDATE).gt(lastUpdate)
                 .and(FIELD_INSERTION_DATE).lte(lastUpdate)
                 .and(FIELD_DELETED).is(true)
         );
         try {
             objects = mongoTemplate.find(q, TerminologyETY.class, getCollectionName());
         } catch (MongoException e) {
-            throw new OperationException(Constants.Logs.ERROR_UNABLE_FIND_DELETIONS, e);
+            throw new OperationException(Logs.ERROR_UNABLE_FIND_DELETIONS, e);
         }
         return objects;
     }
@@ -210,12 +194,12 @@ public class TerminologyRepo extends AbstractMongoRepo<TerminologyETY, String> i
     @Override
     public List<TerminologyETY> getEveryActiveTerminology() throws OperationException {
         List<TerminologyETY> objects;
-        Query q = Query.query(Criteria.where(FIELD_DELETED).ne(true)); 
+        Query q = Query.query(where(FIELD_DELETED).ne(true));
         
         try {
             objects = mongoTemplate.find(q, TerminologyETY.class, getCollectionName()); 
         } catch (MongoException e) {
-            throw new OperationException(Constants.Logs.ERROR_UNABLE_FIND_TERMINOLOGIES, e);
+            throw new OperationException(Logs.ERROR_UNABLE_FIND_TERMINOLOGIES, e);
         }
         return objects;
     }
@@ -223,7 +207,7 @@ public class TerminologyRepo extends AbstractMongoRepo<TerminologyETY, String> i
 	@Override
 	public List<TerminologyETY> findByIds(List<ObjectId> ids) throws OperationException {
 		List<TerminologyETY> objects;
-		Query q = Query.query(Criteria.where(FIELD_ID).in(ids));
+		Query q = Query.query(where(FIELD_ID).in(ids));
 		try {
 			objects = mongoTemplate.find(q, TerminologyETY.class);
 		}catch (MongoException e) {

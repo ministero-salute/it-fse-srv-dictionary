@@ -92,8 +92,12 @@ public final class Constants {
 
 		public static final String ERROR_RETRIEVING_HOST_INFO = "Error while retrieving host informations"; 
 
-
-
+		public static final String ERR_REP_UNABLE_CHECK_SYSTEM = "Impossibile verificare l'esistenza del system";
+		public static final String ERR_SRV_SYSTEM_ALREADY_EXISTS = "System %s già presente nel database";
+		public static final String ERR_ETY_PARSE_XML = "Impossibile decodificare correttamente XML";
+		public static final String ERR_UTLS_IO_ERROR = "Impossibile estrarre i dati dal file";
+		public static final String ERR_UTLS_IO_EMPTY = "Il file risulta essere vuoto";
+		public static final String ERR_REP_UNABLE_INSERT_ENTITY = "Impossibile caricare l'entità nel database";
 
 		private Logs() {
 			//This method is intentionally left blank. 
