@@ -1,5 +1,7 @@
-package it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response;
+package it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.crud;
 
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.LogTraceInfoDTO;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.base.ResponseDTO;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -13,7 +15,7 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class TerminologyResponseDTO extends ResponseDTO {
+public class PostTermsResDTO extends ResponseDTO {
 
 	/**
 	 * Serial Version UID
@@ -22,11 +24,7 @@ public class TerminologyResponseDTO extends ResponseDTO {
 
 	private Integer insertedTerminology;
 
-	public TerminologyResponseDTO() {
-		super();
-	}
-
-	public TerminologyResponseDTO(final LogTraceInfoDTO traceInfo, final Integer inInsertedTerminology) {
+	public PostTermsResDTO(final LogTraceInfoDTO traceInfo, final Integer inInsertedTerminology) {
 		super(traceInfo);
 		insertedTerminology = inInsertedTerminology;
 	}

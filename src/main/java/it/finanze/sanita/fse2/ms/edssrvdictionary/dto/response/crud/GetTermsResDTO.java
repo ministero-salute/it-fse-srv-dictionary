@@ -1,8 +1,10 @@
-package it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response; 
+package it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.crud;
 
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.TerminologyDocumentDTO;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.LogTraceInfoDTO;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.base.ResponseDTO;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -11,12 +13,12 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class GetTerminologyResDTO extends ResponseDTO {
+public class GetTermsResDTO extends ResponseDTO {
 
     @Schema(implementation = TerminologyDocumentDTO.class)
     private TerminologyDocumentDTO document;
 
-    public GetTerminologyResDTO(LogTraceInfoDTO traceInfo, TerminologyDocumentDTO data) {
+    public GetTermsResDTO(LogTraceInfoDTO traceInfo, TerminologyDocumentDTO data) {
         super(traceInfo);
         this.document = data;
     }

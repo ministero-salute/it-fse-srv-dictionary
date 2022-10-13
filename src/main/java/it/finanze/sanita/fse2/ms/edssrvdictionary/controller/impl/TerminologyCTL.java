@@ -14,9 +14,9 @@ import it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.controller.AbstractCTL;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.controller.ITerminologyCTL;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.TerminologyDocumentDTO;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.GetTerminologyResDTO;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.TerminologyDeleteResponseDTO;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.TerminologyResponseDTO;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.crud.GetTermsResDTO;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.crud.DelTermsResDTO;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.crud.PostTermsResDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.chunks.GetTermsDelDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.chunks.GetTermsInsDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.ChunkOutOfRangeException;
@@ -77,28 +77,28 @@ public class TerminologyCTL extends AbstractCTL implements ITerminologyCTL {
 	}
 
 	@Override
-	public GetTerminologyResDTO getTerminologyById(HttpServletRequest request,  String id) throws OperationException, DocumentNotFoundException {
+	public GetTermsResDTO getTerminologyById(HttpServletRequest request, String id) throws OperationException, DocumentNotFoundException {
 		log.info(Constants.Logs.CALLED_GET_TERMINOLOGY_BY_ID); 
 		TerminologyDocumentDTO doc = terminologySRV.findById(id); 
-		return new GetTerminologyResDTO(getLogTraceInfo(), doc);
+		return new GetTermsResDTO(getLogTraceInfo(), doc);
 
 	}
 
 
 	@Override
-	public ResponseEntity<TerminologyResponseDTO> uploadTerminologyFile(HttpServletRequest request, MultipartFile file) throws IOException, OperationException, DocumentAlreadyPresentException, DocumentNotFoundException {
+	public ResponseEntity<PostTermsResDTO> uploadTerminologyFile(HttpServletRequest request, MultipartFile file) throws IOException, OperationException, DocumentAlreadyPresentException, DocumentNotFoundException {
 		Integer uploadItems = terminologySRV.uploadTerminologyFile(file);
 		if(uploadItems!=0) {
-			return new ResponseEntity<>(new TerminologyResponseDTO(getLogTraceInfo(),uploadItems), null, HttpStatus.SC_CREATED); 
+			return new ResponseEntity<>(new PostTermsResDTO(getLogTraceInfo(),uploadItems), null, HttpStatus.SC_CREATED);
 		} else {
-			return new ResponseEntity<>(new TerminologyResponseDTO(getLogTraceInfo(),uploadItems), null, HttpStatus.SC_OK); 
+			return new ResponseEntity<>(new PostTermsResDTO(getLogTraceInfo(),uploadItems), null, HttpStatus.SC_OK);
 		}
 	}
 
 	@Override
-	public TerminologyDeleteResponseDTO deleteTerminologyById(String id) throws DocumentNotFoundException, OperationException {
+	public DelTermsResDTO deleteTerminologyById(String id) throws DocumentNotFoundException, OperationException {
 		terminologySRV.deleteTerminologyById(id);
-		return new TerminologyDeleteResponseDTO(getLogTraceInfo());
+		return new DelTermsResDTO(getLogTraceInfo());
 	}
 
 

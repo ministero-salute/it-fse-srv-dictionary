@@ -6,7 +6,7 @@ import javax.validation.constraints.Size;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.LogTraceInfoDTO;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.ResponseDTO;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.base.ResponseDTO;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -70,11 +70,6 @@ public class ErrorResponseDTO extends ResponseDTO {
 		detail = inDetail;
 		status = inStatus;
 		instance = inInstance;
-	}
-
-	public ErrorResponseDTO(final LogTraceInfoDTO traceInfo) {
-		traceID = traceInfo.getTraceID();
-		spanID = traceInfo.getSpanID(); 
 	}
 
 }

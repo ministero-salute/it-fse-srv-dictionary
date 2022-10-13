@@ -1,8 +1,9 @@
-package it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response;
+package it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.base;
 
 import javax.validation.constraints.Size;
 
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.AbstractDTO;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.LogTraceInfoDTO;
 import lombok.Getter;
 import lombok.Setter;
 
