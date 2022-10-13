@@ -78,7 +78,7 @@ public interface ITerminologyCTL {
     throws OperationException, DocumentNotFoundException;
 
 
-    @PostMapping(produces = {MediaType.APPLICATION_JSON_VALUE }, consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
+    @PostMapping(value = "/csv", produces = {MediaType.APPLICATION_JSON_VALUE }, consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
     @Tag(name = RoutesUtility.API_TEST_TAG)
     @Operation(summary = "Add terminologies to MongoDB", description = "Servizio che consente di aggiungere terminologes alla base dati caricando un file csv.")
     @ApiResponse(content = @Content(mediaType = MediaType.APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = ResponseDTO.class)))
