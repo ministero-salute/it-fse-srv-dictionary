@@ -22,8 +22,11 @@ public class DelTermsResDTO extends ResponseDTO {
 	 */
 	private static final long serialVersionUID = 5857199886068379718L;
 
-	public DelTermsResDTO(final LogTraceInfoDTO traceInfo) {
+	private Integer deletedTerminologies;
+
+	public DelTermsResDTO(final LogTraceInfoDTO traceInfo, final Integer deletedTerminologies) {
 		super(traceInfo);
+		this.deletedTerminologies = deletedTerminologies;
 	}
 	
 }

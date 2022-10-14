@@ -56,7 +56,7 @@ public class PersistenceTest extends AbstractTest {
 		
 				
 		assertNotNull(listToSave);
-		vocabularySRV.insertAll(listToSave);
+		mongoTemplate.insertAll(listToSave);
 
 		
 		List<VocabularyDTO> vocabulariesDTO = new ArrayList<>();
@@ -141,7 +141,7 @@ public class PersistenceTest extends AbstractTest {
 		ety.setInsertionDate(insertionDate);
 		ety.setLastUpdateDate(insertionDate);
 		
-		TerminologyETY insertedEty = vocabularySRV.insert(ety); 
+		TerminologyETY insertedEty = mongoTemplate.insert(ety);
 		
 		assertNotNull(insertedEty); 
 	}

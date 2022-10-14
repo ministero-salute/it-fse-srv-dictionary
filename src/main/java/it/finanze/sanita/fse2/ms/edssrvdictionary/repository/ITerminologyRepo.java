@@ -35,7 +35,7 @@ public interface ITerminologyRepo extends IChangeSetRepo<TerminologyETY> {
 	 * Inserts all vocabularies on database.
 	 *
 	 * @param etys List of vocabularies to insert.
-	 * @return
+	 * @return The entities inserted
 	 */
 	Collection<TerminologyETY> insertAll(List<TerminologyETY> etys) throws OperationException;
 
@@ -47,7 +47,7 @@ public interface ITerminologyRepo extends IChangeSetRepo<TerminologyETY> {
 	 */
 	boolean existsBySystem(String system) throws OperationException;
 	
-	List<TerminologyETY> findByInCodeAndSystem(List<String> codes, String system);
+	List<TerminologyETY> findByInCodeAndSystem(List<String> codes, String system) throws OperationException;
 
 	/**
      * Retrieves all the not-deleted termonologues

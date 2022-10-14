@@ -3,7 +3,6 @@ package it.finanze.sanita.fse2.ms.edssrvdictionary.repository.impl;
 
 import com.mongodb.MongoException;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Logs;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.BusinessException;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.OperationException;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.ITerminologyRepo;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.TerminologyETY;
@@ -87,15 +86,14 @@ public class TerminologyRepo implements ITerminologyRepo {
 	}
 
 	@Override
-	public List<TerminologyETY> findByInCodeAndSystem(final List<String> codes, final String system) {
+	public List<TerminologyETY> findByInCodeAndSystem(final List<String> codes, final String system) throws OperationException {
 		List<TerminologyETY> output;
 		try {
 			Query query = new Query();
 			query.addCriteria(where("code").in(codes).and(FIELD_SYSTEM).is(system));
 			output = mongo.find(query, TerminologyETY.class);
-		} catch(Exception ex) {
-			log.error("Error while execute find by in code and system :" , ex);
-			throw new BusinessException("Error while execute find by in code and system :" , ex);
+		} catch(MongoException ex) {
+			throw new OperationException("Unable to retrieve by code and system", ex);
 		}
 		return output;
 	}

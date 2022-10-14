@@ -1,7 +1,9 @@
 package it.finanze.sanita.fse2.ms.edssrvdictionary.service.impl;
 
-import com.opencsv.bean.CsvToBeanBuilder;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.*;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.ChunksDTO;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.TerminologyDocumentDTO;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.TerminologyFileEntryDTO;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.VocabularyDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes.base.ChangeSetDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.*;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.ITerminologyRepo;
@@ -18,14 +20,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Logs.*;
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Logs.ERROR_REQUESTED_DOCUMENT_DOES_NOT_EXIST;
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Logs.ERR_SRV_SYSTEM_ALREADY_EXISTS;
 import static it.finanze.sanita.fse2.ms.edssrvdictionary.dto.ChunksDTO.Chunk;
 import static it.finanze.sanita.fse2.ms.edssrvdictionary.utility.ChangeSetUtility.CHUNKS_SIZE;
 import static it.finanze.sanita.fse2.ms.edssrvdictionary.utility.ChangeSetUtility.chunks;
@@ -42,49 +44,25 @@ import static java.lang.String.format;
 public class TerminologySRV implements ITerminologySRV {
 
 	@Autowired
-	private ITerminologyRepo terminologyRepo;
-	
-	
-	@Override
-	public TerminologyETY insert(final TerminologyETY ety) {
-		TerminologyETY output = null;
-		try {
-			output = terminologyRepo.insert(ety);
-		} catch(Exception ex) {
-			log.error("Error inserting ety vocabulary :" , ex);
-			throw new BusinessException("Error inserting ety vocabulary :" , ex);
-		}
-		return output;
-	}
-
-	@Override
-	public void insertAll(List<TerminologyETY> etys) {
-		try {
-			terminologyRepo.insertAll(etys);
-		} catch(Exception ex) {
-			log.error("Error inserting all ety vocabulary :" , ex);
-			throw new BusinessException("Error inserting all ety vocabulary :" , ex);
-		}
-	}
-
+	private ITerminologyRepo repository;
 
 	@Override
 	public Integer saveNewVocabularySystems(final List<VocabularyDTO> vocabulariesDTO) throws OperationException {
-		Integer recordSaved = 0;
+		int recordSaved = 0;
 		if(vocabulariesDTO!=null && !vocabulariesDTO.isEmpty()) {
 			for(VocabularyDTO entry : vocabulariesDTO) {
-				boolean exist = terminologyRepo.existsBySystem(entry.getSystem());
+				boolean exist = repository.existsBySystem(entry.getSystem());
 				
 				List<TerminologyETY> vocabularyETYS = buildDtoToETY(entry.getEntryDTO(), entry.getSystem());
 				if(Boolean.TRUE.equals(exist)) {
 					log.info("Save new version vocabulary");
-					List<String> codeList = vocabularyETYS.stream().map(e-> e.getCode()).collect(Collectors.toList());
-					List<TerminologyETY> vocabularyFinded = terminologyRepo.findByInCodeAndSystem(codeList,entry.getSystem());
+					List<String> codeList = vocabularyETYS.stream().map(TerminologyETY::getCode).collect(Collectors.toList());
+					List<TerminologyETY> vocabularyFinded = repository.findByInCodeAndSystem(codeList,entry.getSystem());
 					List<TerminologyETY> vocabularyToSave = minus(vocabularyETYS, vocabularyFinded);
-					terminologyRepo.insertAll(vocabularyToSave);
+					repository.insertAll(vocabularyToSave);
 					recordSaved = recordSaved+vocabularyToSave.size();
 				} else {
-					terminologyRepo.insertAll(vocabularyETYS);
+					repository.insertAll(vocabularyETYS);
 					recordSaved = recordSaved+vocabularyETYS.size();
 				}
 			}
@@ -120,38 +98,30 @@ public class TerminologySRV implements ITerminologySRV {
 
 	@Override
 	public List<ChangeSetDTO> getInsertions(Date lastUpdate) throws OperationException {
-
+		// Retrieve insertions
 		List<TerminologyETY> insertions;
-
+		// Verify no null value has been provided
 		if (lastUpdate != null) {
-			insertions = terminologyRepo.getInsertions(lastUpdate);
+			insertions = repository.getInsertions(lastUpdate);
 		} else {
-			insertions = terminologyRepo.getEveryActiveTerminology();
+			insertions = repository.getEveryActiveTerminology();
 		}
-
-		return insertions.stream().map(ChangeSetUtility::terminologyToChangeset).collect(Collectors.toList());
-
+		// Iterate and populate
+		return insertions.stream().map(ChangeSetUtility::toChangeset).collect(Collectors.toList());
 	}
 
     @Override
 	public List<ChangeSetDTO> getDeletions(Date lastUpdate) throws OperationException {
-		try {
-
-			List<ChangeSetDTO> deletions = new ArrayList<>();
-
-			if (lastUpdate != null) {
-				List<TerminologyETY> deletionsETY = terminologyRepo.getDeletions(lastUpdate);
-				deletions = deletionsETY.stream().map(ChangeSetUtility::terminologyToChangeset)
-						.collect(Collectors.toList());
-
-			}
-
-			return deletions;
-
-		} catch (Exception e) {
-			log.error(ERROR_UNABLE_FIND_DELETIONS, e);
-			throw new BusinessException(ERROR_UNABLE_FIND_DELETIONS, e);
+		// Create empty container
+		List<ChangeSetDTO> changes = new ArrayList<>();
+		// Verify no null value has been provided
+		if(lastUpdate != null) {
+			// Retrieve deletions
+			List<TerminologyETY> deletions = repository.getDeletions(lastUpdate);
+			// Iterate and populate
+			changes = deletions.stream().map(ChangeSetUtility::toChangeset).collect(Collectors.toList());
 		}
+		return changes;
 	}
 
 	/**
@@ -190,7 +160,7 @@ public class TerminologySRV implements ITerminologySRV {
 				chunks.setDeletions(new Chunk(out));
 			}
 			// Insert into database
-			snapshot = terminologyRepo.insertSnapshot(snapshot);
+			snapshot = repository.insertSnapshot(snapshot);
 			// Aggregate
 			chunks = new ChunksDTO(snapshot.getId(), chunks.getInsertions(), chunks.getDeletions());
 		}
@@ -209,7 +179,7 @@ public class TerminologySRV implements ITerminologySRV {
 	@Override
 	public SnapshotETY getChunks(String id) throws OperationException, DocumentNotFoundException {
 		// Retrieve document
-		SnapshotETY doc = terminologyRepo.getSnapshot(id);
+		SnapshotETY doc = repository.getSnapshot(id);
 		// Verify existence
 		if(doc == null) {
 			throw new DocumentNotFoundException(ERROR_REQUESTED_DOCUMENT_DOES_NOT_EXIST);
@@ -221,7 +191,7 @@ public class TerminologySRV implements ITerminologySRV {
 	@Override
 	public TerminologyDocumentDTO findById(String id) throws OperationException, DocumentNotFoundException {
 
-		TerminologyETY output = terminologyRepo.findById(id);
+		TerminologyETY output = repository.findById(id);
 
         if (output == null) {
             throw new DocumentNotFoundException(ERROR_REQUESTED_DOCUMENT_DOES_NOT_EXIST);
@@ -269,7 +239,7 @@ public class TerminologySRV implements ITerminologySRV {
 
 	@Override
 	public void deleteTerminologyById(String id) throws DocumentNotFoundException, OperationException {
-		TerminologyETY out = terminologyRepo.deleteById(id);
+		TerminologyETY out = repository.deleteById(id);
 		if (out == null) {
 			throw new DocumentNotFoundException(ERROR_REQUESTED_DOCUMENT_DOES_NOT_EXIST);
 		}
@@ -280,7 +250,7 @@ public class TerminologySRV implements ITerminologySRV {
 		// Extract system from filename
 		String system = file.getOriginalFilename().replace(".xml", "");
 		// Verify this system does not exist
-		if(terminologyRepo.existsBySystem(system)) {
+		if(repository.existsBySystem(system)) {
 			throw new DocumentAlreadyPresentException(
 				String.format(ERR_SRV_SYSTEM_ALREADY_EXISTS, system)
 			);
@@ -290,7 +260,7 @@ public class TerminologySRV implements ITerminologySRV {
 		// Parse entities
 		List<TerminologyETY> entities = TerminologyETY.fromXML(raw, system, version);
 		// Insert
-		Collection<TerminologyETY> insertions = terminologyRepo.insertAll(entities);
+		Collection<TerminologyETY> insertions = repository.insertAll(entities);
 		// Return size
 		return insertions.size();
 	}
@@ -309,7 +279,7 @@ public class TerminologySRV implements ITerminologySRV {
 			throw new ChunkOutOfRangeException("The chunk index is out of range: " + index);
 		}
 		// Retrieve documents
-		List<TerminologyETY> docs = terminologyRepo.findByIds(chunk);
+		List<TerminologyETY> docs = repository.findByIds(chunk);
 		// Verify it matches the expected size
 		if(chunk.size() != docs.size()) {
 			throw new DataIntegrityException(
@@ -329,10 +299,9 @@ public class TerminologySRV implements ITerminologySRV {
 	 * @throws OperationException        If a data-layer error occurs
 	 * @throws DocumentNotFoundException If no snapshot matching the given id exists
 	 * @throws ChunkOutOfRangeException  If no chunk matching the given index exists
-	 * @throws DataIntegrityException    If the database output does not match with the requested ids
 	 */
 	@Override
-	public List<ObjectId> getTermsByChunkDel(String id, int index) throws DocumentNotFoundException, OperationException, ChunkOutOfRangeException, DataIntegrityException {
+	public List<ObjectId> getTermsByChunkDel(String id, int index) throws DocumentNotFoundException, OperationException, ChunkOutOfRangeException {
 		// Retrieve document chunks
 		SnapshotETY chunks = getChunks(id);
 		// Get chunk according to type
@@ -347,11 +316,4 @@ public class TerminologySRV implements ITerminologySRV {
 		return chunk;
 	}
 
-	private List<TerminologyBuilderDTO> buildDTOFromCsv(Reader reader){
-		List<TerminologyBuilderDTO> output = null; 
-		output = new CsvToBeanBuilder(reader).withType(TerminologyBuilderDTO.class).withSeparator(',').build().parse();
-		return output;
-	}
-	
-	
 }

@@ -1,34 +1,5 @@
 package it.finanze.sanita.fse2.ms.edssrvdictionary;
 
-import static it.finanze.sanita.fse2.ms.edssrvdictionary.base.MockRequests.findTerminologyByIdMockRequest;
-import static it.finanze.sanita.fse2.ms.edssrvdictionary.base.MockRequests.getTerminologyByChunkDelMockRequest;
-import static it.finanze.sanita.fse2.ms.edssrvdictionary.base.MockRequests.getTerminologyByChunkInsMockRequest;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import java.util.Date;
-
-import org.bson.types.ObjectId;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.http.MediaType;
-import org.springframework.mock.web.MockHttpServletRequest;
-import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.request.MockMultipartHttpServletRequestBuilder;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.request.RequestPostProcessor;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-
 import brave.Tracer;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.controller.impl.TerminologyCTL;
@@ -38,6 +9,26 @@ import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.TerminologyE
 import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.snapshot.ChunksETY;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.snapshot.SnapshotETY;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.service.ITerminologySRV;
+import org.bson.types.ObjectId;
+import org.junit.jupiter.api.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.request.MockMultipartHttpServletRequestBuilder;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+
+import java.util.Date;
+
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.base.MockRequests.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
 
@@ -67,12 +58,10 @@ public class TerminologyControllerTest extends AbstractTest {
 
 
 	@BeforeAll
-    public void setup() throws Exception {
+    public void setup() {
 		mongoTemplate.dropCollection(TerminologyETY.class);
 		mongoTemplate.dropCollection(ChunksETY.class);
 		mongoTemplate.dropCollection(SnapshotETY.class);
-
-
     } 
 
 
@@ -90,14 +79,11 @@ public class TerminologyControllerTest extends AbstractTest {
 	    
 	    MockMultipartHttpServletRequestBuilder builder = MockMvcRequestBuilders.multipart("http://127.0.0.1:9088/v1/terminology"); 
 	    
-	    builder.with(new RequestPostProcessor() {
-	        @Override
-	        public MockHttpServletRequest postProcessRequest(MockHttpServletRequest request) {
-	            request.setMethod("POST");
-	            request.setParameter("file", "multipartFile");
-	            return request;
-	        }
-	    }); 
+	    builder.with(request -> {
+			request.setMethod("POST");
+			request.setParameter("file", "multipartFile");
+			return request;
+		});
 	    
 	    mvc.perform(builder
 	            .file(new MockMultipartFile("file", multipartFile.getBytes()))
@@ -121,7 +107,7 @@ public class TerminologyControllerTest extends AbstractTest {
 		ety.setInsertionDate(new Date()); 
 		ety.setLastUpdateDate(new Date()); 
 		
-		terminologySRV.insert(ety);
+		mongoTemplate.insert(ety);
         
         mvc.perform(findTerminologyByIdMockRequest(TEST_TERMINOLOGY_ID)).andExpectAll(
                 status().is2xxSuccessful()
@@ -150,7 +136,7 @@ public class TerminologyControllerTest extends AbstractTest {
 
 		
 
-		MvcResult out = mvc.perform(getTerminologyByChunkInsMockRequest(snapshot.getId().toString(),0)).andReturn();
+		MvcResult out = mvc.perform(getTerminologyByChunkInsMockRequest(snapshot.getId(),0)).andReturn();
 
 		System.out.println(out.getResponse().getContentAsString());
 		
@@ -171,7 +157,7 @@ public class TerminologyControllerTest extends AbstractTest {
 		terminologyRepo.insertSnapshot(snapshot);
 
 
-	assertThrows(ChunkOutOfRangeException.class,()-> getTerminologyByChunkInsMockRequest(snapshot.getId().toString(),1000));
+	assertThrows(ChunkOutOfRangeException.class,()-> getTerminologyByChunkInsMockRequest(snapshot.getId(),1000));
 
 
 }
@@ -260,7 +246,7 @@ void getTermsByChunkDelWithChunkOutOfRangeTest() throws Exception{
 		terminologyRepo.insertSnapshot(snapshot);
 
 
-		assertThrows(ChunkOutOfRangeException.class,()-> getTerminologyByChunkDelMockRequest(snapshot.getId().toString(),1000));
+		assertThrows(ChunkOutOfRangeException.class,()-> getTerminologyByChunkDelMockRequest(snapshot.getId(),1000));
 
 
 }

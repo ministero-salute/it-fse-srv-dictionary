@@ -20,7 +20,7 @@ public final class ChangeSetUtility {
 	/**
 	 * Creates a ChangesetDTO from a TerminologyETY.
 	 */
-	public static ChangeSetDTO terminologyToChangeset(TerminologyETY entity) {
+	public static ChangeSetDTO toChangeset(TerminologyETY entity) {
 		return new ChangeSetDTO(entity.getId(), new ChangeSetDTO.Payload(entity.getSystem(), entity.getCode()));
     }
 

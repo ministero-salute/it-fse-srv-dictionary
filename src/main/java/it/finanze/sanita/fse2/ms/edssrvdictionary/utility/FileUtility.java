@@ -1,6 +1,5 @@
 package it.finanze.sanita.fse2.ms.edssrvdictionary.utility;
 
-import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.BusinessException;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DataProcessingException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.multipart.MultipartFile;
@@ -8,6 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Objects;
 
 import static it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Logs.ERR_UTLS_IO_EMPTY;
 import static it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Logs.ERR_UTLS_IO_ERROR;
@@ -44,7 +44,7 @@ public final class FileUtility {
 		InputStream is = null;
 		try {
 			is = Thread.currentThread().getContextClassLoader().getResourceAsStream(filename);
-			b = getByteFromInputStream(is);
+			b = getByteFromInputStream(Objects.requireNonNull(is));
 			is.close();
 		} catch (Exception e) {
 			log.error("FILE UTILS getFileFromInternalResources(): Errore in fase di recupero del contenuto di un file dalla folder '/src/main/resources'. ", e);
@@ -79,9 +79,8 @@ public final class FileUtility {
 			}
 			buffer.flush();
 			b = buffer.toByteArray();
-		} catch (Exception e) {
-			log.error("Errore durante il trasform da InputStream a byte[]: ", e);
-			throw new BusinessException(e);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
 		}
 		return b;
 	}
