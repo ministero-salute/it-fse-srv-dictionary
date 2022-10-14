@@ -324,4 +324,15 @@ public class TerminologySRV implements ITerminologySRV {
 		return chunk;
 	}
 
+	@Override
+	public int deleteTerminologiesBySystem(String system) throws DocumentNotFoundException, OperationException, DataIntegrityException {
+		// Check system exists
+		if(!repository.existsBySystem(system)) {
+			// Let the caller know about it
+			throw new DocumentNotFoundException(String.format(ERR_SRV_SYSTEM_NOT_EXISTS, system));
+		}
+		// Delete any matching document system (then return size)
+		return repository.deleteBySystem(system).size();
+	}
+
 }

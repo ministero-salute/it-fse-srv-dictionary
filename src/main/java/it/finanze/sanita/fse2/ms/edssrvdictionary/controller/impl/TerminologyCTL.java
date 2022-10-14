@@ -5,10 +5,7 @@ import it.finanze.sanita.fse2.ms.edssrvdictionary.controller.ITerminologyCTL;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.crud.DelTermsResDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.crud.GetTermsResDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.crud.PostTermsResDTO;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DataProcessingException;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DocumentAlreadyPresentException;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DocumentNotFoundException;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.OperationException;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.*;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.service.ITerminologySRV;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +38,11 @@ public class TerminologyCTL extends AbstractCTL implements ITerminologyCTL {
 	@Override
 	public PostTermsResDTO uploadTerminologies(MultipartFile file, String version) throws OperationException, DocumentAlreadyPresentException, DataProcessingException {
 		return new PostTermsResDTO(getLogTraceInfo(), terminologySRV.uploadTerminologyXml(file, version));
+	}
+
+	@Override
+	public DelTermsResDTO deleteTerminologies(String system) throws OperationException, DocumentNotFoundException, DataIntegrityException {
+		return new DelTermsResDTO(getLogTraceInfo(), terminologySRV.deleteTerminologiesBySystem(system));
 	}
 
 	@Override

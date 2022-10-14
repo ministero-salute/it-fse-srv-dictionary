@@ -2,7 +2,8 @@ package it.finanze.sanita.fse2.ms.edssrvdictionary.repository.impl;
 
 
 import com.mongodb.MongoException;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Logs;
+import com.mongodb.client.result.UpdateResult;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DataIntegrityException;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.OperationException;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.ITerminologyRepo;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.TerminologyETY;
@@ -19,6 +20,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Logs.*;
 import static it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.TerminologyETY.FIELD_SYSTEM;
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 
@@ -41,7 +43,7 @@ public class TerminologyRepo implements ITerminologyRepo {
 		try {
 			out = mongo.insert(ety);
 		}catch (MongoException ex) {
-			throw new OperationException(Logs.ERR_REP_UNABLE_INSERT_ENTITY, ex);
+			throw new OperationException(ERR_REP_UNABLE_INSERT_ENTITY, ex);
 		}
 		return out;
 	}
@@ -52,7 +54,7 @@ public class TerminologyRepo implements ITerminologyRepo {
 		try {
 			out = mongo.findById(new ObjectId(pk), TerminologyETY.class);
 		}catch (MongoException ex) {
-			throw new OperationException(Logs.ERROR_UNABLE_FIND_TERMINOLOGIES, ex);
+			throw new OperationException(ERROR_UNABLE_FIND_TERMINOLOGIES, ex);
 		}
 		return out;
 	}
@@ -63,7 +65,7 @@ public class TerminologyRepo implements ITerminologyRepo {
 		try {
 			entities = mongo.insertAll(etys);
 		}catch (MongoException ex) {
-			throw new OperationException(Logs.ERR_REP_UNABLE_INSERT_ENTITY, ex);
+			throw new OperationException(ERR_REP_UNABLE_INSERT_ENTITY, ex);
 		}
 		return entities;
 	}
@@ -80,7 +82,7 @@ public class TerminologyRepo implements ITerminologyRepo {
 		try {
 			output = mongo.exists(query, TerminologyETY.class);
  		} catch(MongoException ex) {
-			throw new OperationException(Logs.ERR_REP_UNABLE_CHECK_SYSTEM, ex);
+			throw new OperationException(ERR_REP_UNABLE_CHECK_SYSTEM, ex);
 		}
 		return output;
 	}
@@ -119,7 +121,7 @@ public class TerminologyRepo implements ITerminologyRepo {
             objects = mongo.find(q, TerminologyETY.class);
         } catch (MongoException e) {
             // Catch data-layer runtime exceptions and turn into a checked exception
-            throw new OperationException(Logs.ERROR_UNABLE_FIND_INSERTIONS, e);
+            throw new OperationException(ERROR_UNABLE_FIND_INSERTIONS, e);
         }
         return objects;
     }
@@ -144,7 +146,7 @@ public class TerminologyRepo implements ITerminologyRepo {
         try {
             objects = mongo.find(q, TerminologyETY.class);
         } catch (MongoException e) {
-            throw new OperationException(Logs.ERROR_UNABLE_FIND_DELETIONS, e);
+            throw new OperationException(ERROR_UNABLE_FIND_DELETIONS, e);
         }
         return objects;
     }
@@ -192,7 +194,7 @@ public class TerminologyRepo implements ITerminologyRepo {
         try {
             objects = mongo.find(q, TerminologyETY.class);
         } catch (MongoException e) {
-            throw new OperationException(Logs.ERROR_UNABLE_FIND_TERMINOLOGIES, e);
+            throw new OperationException(ERROR_UNABLE_FIND_TERMINOLOGIES, e);
         }
         return objects;
     }
@@ -207,6 +209,26 @@ public class TerminologyRepo implements ITerminologyRepo {
 			throw new OperationException("Unable to retrieve documents by multiple ids", e);
 		}
 		return objects;
+	}
+
+	@Override
+	public List<TerminologyETY> findBySystem(String system) throws OperationException {
+		// Init empty collection
+		List<TerminologyETY> out;
+		// Create query
+		Query query = new Query();
+		query.addCriteria(
+			where(FIELD_SYSTEM).is(system).and(FIELD_DELETED).is(false)
+		);
+		try {
+			// Execute
+			out = mongo.find(query, TerminologyETY.class);
+		} catch (MongoException e) {
+			// Catch data-layer runtime exceptions and turn into a checked exception
+			throw new OperationException(ERR_REP_DOCS_NOT_FOUND, e);
+		}
+		// Return data
+		return out;
 	}
 
 	@Override
@@ -228,5 +250,34 @@ public class TerminologyRepo implements ITerminologyRepo {
 		// Retrieve update entity
 		return findById(id);
 	}
-	
+
+	@Override
+	public Collection<TerminologyETY> deleteBySystem(String system) throws OperationException, DataIntegrityException {
+		// Working vars
+		List<TerminologyETY> entities;
+		UpdateResult result;
+		// Create query
+		Query query = new Query();
+		query.addCriteria(where(FIELD_SYSTEM).is(system).and(FIELD_DELETED).is(false));
+		// Create update definition
+		Update update = new Update();
+		update.set(FIELD_LAST_UPDATE, new Date());
+		update.set(FIELD_DELETED, true);
+		// Get docs to remove
+		entities = findBySystem(system);
+		try {
+			// Execute
+			result = mongo.updateMulti(query, update, TerminologyETY.class);
+		} catch(MongoException e) {
+			// Catch data-layer runtime exceptions and turn into a checked exception
+			throw new OperationException(ERR_REP_DEL_DOCS_BY_SYS , e);
+		}
+		// Assert we modified the expected data size
+		if(entities.size() != result.getMatchedCount() || entities.size() != result.getModifiedCount()) {
+			throw new DataIntegrityException(String.format(ERR_REP_DEL_MISMATCH, result.getModifiedCount(), entities.size()));
+		}
+		// Return modified entities
+		return entities;
+	}
+
 }

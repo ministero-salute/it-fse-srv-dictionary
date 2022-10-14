@@ -11,10 +11,7 @@ import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.crud.DelTermsResD
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.crud.GetTermsResDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.crud.PostTermsResDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.error.base.ErrorResponseDTO;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DataProcessingException;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DocumentAlreadyPresentException;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DocumentNotFoundException;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.OperationException;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.*;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.validators.ValidObjectId;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
@@ -69,5 +66,14 @@ public interface ITerminologyCTL {
         @RequestPart
         String version
     ) throws OperationException, DocumentAlreadyPresentException, DataProcessingException;
+
+    @DeleteMapping(
+        value = API_SYSTEM_EXTS,
+        produces = { MediaType.APPLICATION_JSON_VALUE }
+    )
+    DelTermsResDTO deleteTerminologies(
+        @PathVariable
+        String system
+    ) throws OperationException, DocumentNotFoundException, DataIntegrityException;
 
 }

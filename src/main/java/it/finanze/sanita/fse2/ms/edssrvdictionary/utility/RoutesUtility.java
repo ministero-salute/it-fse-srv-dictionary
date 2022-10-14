@@ -18,9 +18,10 @@ public final class RoutesUtility {
 
     public static final String API_PATH_ID_VAR = "id";
     public static final String API_PATH_IDX_VAR = "idx";
+    public static final String API_PATH_SYSTEM_VAR = "system";
 
     public static final String API_QP_LAST_UPDATE = "lastUpdate";
-
+    public static final String API_SYSTEM_EXTS = "/{" + API_PATH_SYSTEM_VAR + "}";
     public static final String API_IDX_EXTS = "/{" + API_PATH_IDX_VAR + "}";
     public static final String API_ID_EXTS = "/{" + API_PATH_ID_VAR + "}";
     public static final String API_TERMS_MAPPER = API_VERSION + "/" + API_TERMINOLOGY;

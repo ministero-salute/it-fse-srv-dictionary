@@ -1,5 +1,6 @@
 package it.finanze.sanita.fse2.ms.edssrvdictionary.repository;
 
+import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DataIntegrityException;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.OperationException;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.TerminologyETY;
 import org.bson.types.ObjectId;
@@ -58,7 +59,9 @@ public interface ITerminologyRepo extends IChangeSetRepo<TerminologyETY> {
     List<TerminologyETY> getEveryActiveTerminology() throws OperationException;
 
 	List<TerminologyETY> findByIds(List<ObjectId> ids) throws OperationException;
+	List<TerminologyETY> findBySystem(String system) throws OperationException;
 
 	TerminologyETY deleteById(String id) throws OperationException;
 
+	Collection<TerminologyETY> deleteBySystem(String system) throws OperationException, DataIntegrityException;
 }
