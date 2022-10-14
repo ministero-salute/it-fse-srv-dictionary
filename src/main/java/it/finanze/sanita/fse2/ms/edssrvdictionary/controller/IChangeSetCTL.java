@@ -61,7 +61,7 @@ public interface IChangeSetCTL {
 		Date lastUpdate
 	) throws OperationException;
 
-	@GetMapping(value = "/chunks/ins/{id}/{idx}", produces = {MediaType.APPLICATION_JSON_VALUE })
+	@GetMapping(value = API_CHANGESET_CHUNKS_INS, produces = {MediaType.APPLICATION_JSON_VALUE })
 	@Tag(name = API_CHANGESET_CHUNKS_TAG)
 	@Operation(summary = "Returns a terminology chunk given its index and document id (insert-only)", description = "Servizio che consente di ritornare un Terminology dalla base dati dati il suo ID.")
 	@ApiResponse(content = @Content(mediaType = MediaType.APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = PostTermsResDTO.class)))
@@ -70,9 +70,15 @@ public interface IChangeSetCTL {
 		@ApiResponse(responseCode = "400", description = "I parametri forniti non sono validi", content = @Content(mediaType = MediaType.APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = ErrorResponseDTO.class))),
 		@ApiResponse(responseCode = "404", description = "terminology non trovato sul database", content = @Content(mediaType = MediaType.APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = ErrorResponseDTO.class))),
 		@ApiResponse(responseCode = "500", description = "Internal Server Error", content = @Content(mediaType = MediaType.APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = ErrorResponseDTO.class))) })
-	GetTermsInsDTO getTermsByChunkIns(@PathVariable @ValidObjectId String id, @PathVariable int idx) throws ChunkOutOfRangeException, DocumentNotFoundException, DataIntegrityException, OperationException;
+	GetTermsInsDTO getTermsByChunkIns(
+		@PathVariable
+		@ValidObjectId
+		String id,
+		@PathVariable
+		int idx
+	) throws ChunkOutOfRangeException, DocumentNotFoundException, DataIntegrityException, OperationException;
 
-	@GetMapping(value = "/chunks/del/{id}/{idx}", produces = {MediaType.APPLICATION_JSON_VALUE })
+	@GetMapping(value = API_CHANGESET_CHUNKS_DEL, produces = {MediaType.APPLICATION_JSON_VALUE })
 	@Tag(name = API_CHANGESET_CHUNKS_TAG)
 	@Operation(summary = "Returns a terminology chunk given its index and document id (deleted-only)", description = "Servizio che consente di ritornare un Terminology dalla base dati dati il suo ID.")
 	@ApiResponse(content = @Content(mediaType = MediaType.APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = PostTermsResDTO.class)))
@@ -81,7 +87,13 @@ public interface IChangeSetCTL {
 		@ApiResponse(responseCode = "400", description = "I parametri forniti non sono validi", content = @Content(mediaType = MediaType.APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = ErrorResponseDTO.class))),
 		@ApiResponse(responseCode = "404", description = "terminology non trovato sul database", content = @Content(mediaType = MediaType.APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = ErrorResponseDTO.class))),
 		@ApiResponse(responseCode = "500", description = "Internal Server Error", content = @Content(mediaType = MediaType.APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = ErrorResponseDTO.class))) })
-	GetTermsDelDTO getTermsByChunkDel(@PathVariable @ValidObjectId String id, @PathVariable int idx) throws ChunkOutOfRangeException, DocumentNotFoundException, DataIntegrityException, OperationException;
+	GetTermsDelDTO getTermsByChunkDel(
+		@PathVariable
+		@ValidObjectId
+		String id,
+		@PathVariable
+		int idx
+	) throws ChunkOutOfRangeException, DocumentNotFoundException, DataIntegrityException, OperationException;
 
 
 }

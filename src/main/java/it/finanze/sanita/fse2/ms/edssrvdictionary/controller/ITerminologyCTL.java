@@ -24,7 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.Size;
 
-import static it.finanze.sanita.fse2.ms.edssrvdictionary.utility.RoutesUtility.API_DOCUMENTS_TAG;
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.utility.RoutesUtility.*;
 import static it.finanze.sanita.fse2.ms.edssrvdictionary.utility.ValidationUtility.DEFAULT_STRING_MAX_SIZE;
 
 /**
@@ -32,12 +32,15 @@ import static it.finanze.sanita.fse2.ms.edssrvdictionary.utility.ValidationUtili
  *
  * @author Riccardo Bonesi
  */
-@RequestMapping(path = "/v1/terminology")
+@RequestMapping(path = API_TERMS_MAPPER)
 @Tag(name = API_DOCUMENTS_TAG)
 @Validated
 public interface ITerminologyCTL {
 
-    @GetMapping(value = "/id/{id}", produces = {MediaType.APPLICATION_JSON_VALUE })
+    @GetMapping(
+        value = API_TERMS_GET_ONE_BY_ID,
+        produces = { MediaType.APPLICATION_JSON_VALUE }
+    )
     @Operation(summary = "Returns a Terminology from MongoDB, given its ID", description = "Servizio che consente di ritornare un Terminology dalla base dati dati il suo ID.")
     @ApiResponse(content = @Content(mediaType = MediaType.APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = PostTermsResDTO.class)))
     @ApiResponses(value = {
@@ -49,7 +52,7 @@ public interface ITerminologyCTL {
         throws OperationException, DocumentNotFoundException;
 
     @PostMapping(
-        produces = {MediaType.APPLICATION_JSON_VALUE },
+        produces = { MediaType.APPLICATION_JSON_VALUE },
         consumes = { MediaType.MULTIPART_FORM_DATA_VALUE }
     )
     PostTermsResDTO uploadTerminologyXml(
@@ -59,7 +62,10 @@ public interface ITerminologyCTL {
         String version
     ) throws OperationException, DocumentAlreadyPresentException, DataProcessingException;
 
-    @DeleteMapping(value = "/id/{id}", produces = {MediaType.APPLICATION_JSON_VALUE })
+    @DeleteMapping(
+        value = API_TERMS_GET_ONE_BY_ID,
+        produces = { MediaType.APPLICATION_JSON_VALUE }
+    )
     DelTermsResDTO deleteTerminologyById(
         @PathVariable
         @ValidObjectId(message = "Document id not valid") String id
