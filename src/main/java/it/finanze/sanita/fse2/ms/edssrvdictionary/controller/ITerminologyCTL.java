@@ -13,6 +13,7 @@ import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.crud.PostTermsRes
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.error.base.ErrorResponseDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.*;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.validators.ValidObjectId;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -60,6 +61,7 @@ public interface ITerminologyCTL {
         produces = { MediaType.APPLICATION_JSON_VALUE },
         consumes = { MediaType.MULTIPART_FORM_DATA_VALUE }
     )
+    @ResponseStatus(HttpStatus.CREATED)
     PostTermsResDTO uploadTerminologies(
         @RequestPart
         MultipartFile file,
