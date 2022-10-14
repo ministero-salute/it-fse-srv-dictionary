@@ -11,6 +11,7 @@ import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.snapshot.Sna
 import it.finanze.sanita.fse2.ms.edssrvdictionary.service.ITerminologySRV;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.utility.ChangeSetUtility;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.utility.FileUtility;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.utility.StringUtility;
 import lombok.extern.slf4j.Slf4j;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -244,13 +245,15 @@ public class TerminologySRV implements ITerminologySRV {
 			
 			List<TerminologyETY> listToSave = new ArrayList<>();
 			for(TerminologyBuilderDTO vocabularyDTO : vocabularyListDTO) {
-				TerminologyETY ety = new TerminologyETY();
-				ety.setCode(vocabularyDTO.getCode());
-				ety.setDescription(vocabularyDTO.getDescription());
-				ety.setSystem(vocabularyDTO.getSystem());
-				ety.setInsertionDate(insertionDate);
-				ety.setLastUpdateDate(insertionDate);
-				listToSave.add(ety);
+				if(!StringUtility.isNullOrEmpty(vocabularyDTO.getSystem())){
+					TerminologyETY ety = new TerminologyETY();
+					ety.setCode(vocabularyDTO.getCode());
+					ety.setDescription(vocabularyDTO.getDescription());
+					ety.setSystem(vocabularyDTO.getSystem());
+					ety.setInsertionDate(insertionDate);
+					ety.setLastUpdateDate(insertionDate);
+					listToSave.add(ety);
+				}
 				
 			}
 			
