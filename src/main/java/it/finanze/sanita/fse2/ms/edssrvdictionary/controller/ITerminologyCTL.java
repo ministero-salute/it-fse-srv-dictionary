@@ -51,17 +51,6 @@ public interface ITerminologyCTL {
     GetTermsResDTO getTerminologyById(@PathVariable @Size(max = DEFAULT_STRING_MAX_SIZE, message = "id does not match the expected size") @ValidObjectId(message = "Document id not valid") String id)
         throws OperationException, DocumentNotFoundException;
 
-    @PostMapping(
-        produces = { MediaType.APPLICATION_JSON_VALUE },
-        consumes = { MediaType.MULTIPART_FORM_DATA_VALUE }
-    )
-    PostTermsResDTO uploadTerminologyXml(
-        @RequestPart
-        MultipartFile file,
-        @RequestPart
-        String version
-    ) throws OperationException, DocumentAlreadyPresentException, DataProcessingException;
-
     @DeleteMapping(
         value = API_TERMS_GET_ONE_BY_ID,
         produces = { MediaType.APPLICATION_JSON_VALUE }
@@ -70,4 +59,16 @@ public interface ITerminologyCTL {
         @PathVariable
         @ValidObjectId(message = "Document id not valid") String id
     ) throws DocumentNotFoundException, OperationException;
+
+    @PostMapping(
+        produces = { MediaType.APPLICATION_JSON_VALUE },
+        consumes = { MediaType.MULTIPART_FORM_DATA_VALUE }
+    )
+    PostTermsResDTO uploadTerminologies(
+        @RequestPart
+        MultipartFile file,
+        @RequestPart
+        String version
+    ) throws OperationException, DocumentAlreadyPresentException, DataProcessingException;
+
 }
