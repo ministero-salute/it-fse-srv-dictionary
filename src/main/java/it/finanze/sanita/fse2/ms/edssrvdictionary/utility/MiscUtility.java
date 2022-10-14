@@ -5,12 +5,12 @@ import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.Date;
 
-public final class UtilsMisc {
+public final class MiscUtility {
 
     /**
      * Private constructor to disallow to access from other classes
      */
-    private UtilsMisc() {}
+    private MiscUtility() {}
 
     public static OffsetDateTime convertToOffsetDateTime(Date dateToConvert) {
         return dateToConvert.toInstant().atOffset(ZoneOffset.UTC);
@@ -20,5 +20,9 @@ public final class UtilsMisc {
         String field = "";
         for(Path.Node node: path) field = node.getName();
         return field;
+    }
+
+    public static boolean isNullOrEmpty(final String str) {
+        return str == null || str.isEmpty();
     }
 }

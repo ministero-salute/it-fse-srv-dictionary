@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Logs;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DataProcessingException;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.utility.StringUtility;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,6 +15,7 @@ import java.io.IOException;
 import java.util.*;
 
 import static it.finanze.sanita.fse2.ms.edssrvdictionary.repository.IChangeSetRepo.*;
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.utility.MiscUtility.isNullOrEmpty;
 
 /**
  * Model to save terminology.
@@ -76,9 +76,9 @@ public class TerminologyETY {
 				Iterator<JsonNode> it = n.getValue().elements();
 				while(it.hasNext()) {
 					JsonNode n1 = it.next();
-					if(!StringUtility.isNullOrEmpty(n1.get(FIELD_CODE).asText())) {
+					if(!isNullOrEmpty(n1.get(FIELD_CODE).asText())) {
 						String code = n1.get(FIELD_CODE)==null ? "" : n1.get(FIELD_CODE).asText(); 
-						if(!StringUtility.isNullOrEmpty(code)) {
+						if(!isNullOrEmpty(code)) {
 							String description = n1.get("")==null ? "" : n1.get("").asText();
 							out.add(new TerminologyETY(null, system, code, version,description, current, current, false));
 						}

@@ -7,11 +7,12 @@ import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.error.ErrorInstan
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.error.ErrorInstance.Validation;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.error.base.ErrorResponseDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.*;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.utility.UtilsMisc;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.utility.MiscUtility;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
+import java.util.Objects;
 
 import static it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.error.ErrorInstance.IO;
 import static org.apache.http.HttpStatus.*;
@@ -26,7 +27,7 @@ public final class ErrorBuilderDTO {
     public static ErrorResponseDTO createConstraintError(LogTraceInfoDTO trace, ConstraintViolationException ex) {
         // Retrieve the first constraint error
         ConstraintViolation<?> violation = ex.getConstraintViolations().iterator().next();
-        String field = UtilsMisc.extractKeyFromPath(violation.getPropertyPath());
+        String field = MiscUtility.extractKeyFromPath(violation.getPropertyPath());
         // Return associated information
         return new ErrorResponseDTO(
             trace,
@@ -83,20 +84,15 @@ public final class ErrorBuilderDTO {
             ErrorType.RESOURCE.toInstance(Resource.CONFLICT)
         );
     } 
-   
-
-    
 
     public static ErrorResponseDTO createTypeMismatchError(LogTraceInfoDTO trace, MethodArgumentTypeMismatchException ex){
-       
-        String field = ex.getRequiredType().toString();
         return new ErrorResponseDTO(
             trace,
             ErrorType.VALIDATION.getType(),
             ErrorType.VALIDATION.getTitle(),
             ex.getMessage(),
             SC_CONFLICT,
-            ErrorType.VALIDATION.toInstance(Validation.CONSTRAINT_FIELD, field)
+            ErrorType.VALIDATION.toInstance(Validation.CONSTRAINT_FIELD, Objects.requireNonNull(ex.getRequiredType()).toString())
         );
     }
 
