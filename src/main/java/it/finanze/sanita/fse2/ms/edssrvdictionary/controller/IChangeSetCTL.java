@@ -22,11 +22,11 @@ import static it.finanze.sanita.fse2.ms.edssrvdictionary.utility.RoutesUtility.*
  *
  * @author Riccardo Bonesi
  */
-@Tag(name = API_CHANGESET_TAG)
 @Validated
 public interface IChangeSetCTL {
 	@GetChangeSet
 	@GetMapping(API_CHANGESET_STATUS)
+	@Tag(name = API_CHANGESET_TAG)
     ChangeSetResDTO changeSet(
 		@RequestParam(value=API_QP_LAST_UPDATE, required = false)
 		@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
@@ -36,6 +36,7 @@ public interface IChangeSetCTL {
 
 	@GetChangeSetChunks
 	@GetMapping(API_CHANGESET_CHUNKS)
+	@Tag(name = API_CHANGESET_CHUNKS_TAG)
     ChangeSetChunkDTO changeSetChunks(
 		@RequestParam(value=API_QP_LAST_UPDATE, required = false)
 		@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)

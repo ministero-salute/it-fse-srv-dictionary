@@ -16,9 +16,10 @@ public final class RoutesUtility {
     public static final String API_CHANGESET_STATUS = "/" + API_VERSION + "/" + API_CHANGESET + "/" + API_TERMINOLOGY + "/" + API_STATUS ;
     public static final String API_CHANGESET_CHUNKS = "/" + API_VERSION + "/" + API_CHANGESET + "/" + API_TERMINOLOGY + "/" + API_CHUNKS ;
 
-    public static final String API_CHANGESET_TAG = "ChangeSet";
+    public static final String API_CHANGESET_TAG = "Changeset";
+    public static final String API_CHANGESET_CHUNKS_TAG = "Changeset - Chunks";
 
-    public static final String API_TEST_TAG = "Test";
+    public static final String API_DEVTOOLS_TAG = "DevTools";
 
     public static final String API_CRUD_TAG = "CRUD";
 
