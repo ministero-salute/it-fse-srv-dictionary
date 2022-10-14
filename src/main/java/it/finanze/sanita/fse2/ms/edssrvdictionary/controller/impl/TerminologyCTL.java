@@ -8,10 +8,14 @@ import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.crud.PostTermsRes
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.*;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.service.ITerminologySRV;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 
 
 /**
@@ -48,5 +52,14 @@ public class TerminologyCTL extends AbstractCTL implements ITerminologyCTL {
 	@Override
 	public DelTermsResDTO deleteTerminologyById(String id) throws DocumentNotFoundException, OperationException {
 		return new DelTermsResDTO(getLogTraceInfo(), terminologySRV.deleteTerminologyById(id));
+	}
+	@Override
+	public ResponseEntity<PostTermsResDTO> uploadTerminologyFile(HttpServletRequest request, MultipartFile file) throws IOException, OperationException {
+		Integer uploadItems = terminologySRV.uploadTerminologyFile(file);
+		if(uploadItems!=0) {
+			return new ResponseEntity<>(new PostTermsResDTO(getLogTraceInfo(),uploadItems), null, HttpStatus.SC_CREATED);
+		} else {
+			return new ResponseEntity<>(new PostTermsResDTO(getLogTraceInfo(),uploadItems), null, HttpStatus.SC_OK);
+		}
 	}
 }

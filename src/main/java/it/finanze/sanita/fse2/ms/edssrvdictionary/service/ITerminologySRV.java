@@ -7,6 +7,7 @@ import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.*;
 import org.bson.types.ObjectId;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -22,6 +23,8 @@ public interface ITerminologySRV extends IChangeSetSRV {
 	TerminologyDocumentDTO findById(String id) throws OperationException, DocumentNotFoundException;
 
 	int deleteTerminologyById(String id) throws DocumentNotFoundException, OperationException;
+
+	Integer uploadTerminologyFile(MultipartFile file) throws IOException, OperationException;
 
 	int uploadTerminologyXml(MultipartFile file, String version) throws DocumentAlreadyPresentException, OperationException, DataProcessingException;
 
