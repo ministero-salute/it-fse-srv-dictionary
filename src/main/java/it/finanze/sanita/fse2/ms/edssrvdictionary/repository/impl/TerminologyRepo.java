@@ -2,14 +2,12 @@ package it.finanze.sanita.fse2.ms.edssrvdictionary.repository.impl;
 
 
 import com.mongodb.MongoException;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Logs;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.BusinessException;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.OperationException;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.ITerminologyRepo;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.TerminologyETY;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.snapshot.SnapshotETY;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.utility.ProfileUtility;
 import lombok.extern.slf4j.Slf4j;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,16 +34,13 @@ import static org.springframework.data.mongodb.core.query.Criteria.where;
 public class TerminologyRepo implements ITerminologyRepo {
 
 	@Autowired
-	private MongoTemplate mongoTemplate;
-
-	@Autowired
-	private ProfileUtility profileUtility;
+	private MongoTemplate mongo;
 	
 	@Override
 	public TerminologyETY insert(final TerminologyETY ety) throws OperationException {
 		TerminologyETY out;
 		try {
-			out = mongoTemplate.insert(ety);
+			out = mongo.insert(ety);
 		}catch (MongoException ex) {
 			throw new OperationException(Logs.ERR_REP_UNABLE_INSERT_ENTITY, ex);
 		}
@@ -56,7 +51,7 @@ public class TerminologyRepo implements ITerminologyRepo {
 	public TerminologyETY findById(String pk) throws OperationException {
 		TerminologyETY out;
 		try {
-			out = mongoTemplate.findById(new ObjectId(pk), TerminologyETY.class);
+			out = mongo.findById(new ObjectId(pk), TerminologyETY.class);
 		}catch (MongoException ex) {
 			throw new OperationException(Logs.ERROR_UNABLE_FIND_TERMINOLOGIES, ex);
 		}
@@ -67,7 +62,7 @@ public class TerminologyRepo implements ITerminologyRepo {
 	public Collection<TerminologyETY> insertAll(List<TerminologyETY> etys) throws OperationException {
 		Collection<TerminologyETY> entities;
 		try {
-			entities = mongoTemplate.insertAll(etys);
+			entities = mongo.insertAll(etys);
 		}catch (MongoException ex) {
 			throw new OperationException(Logs.ERR_REP_UNABLE_INSERT_ENTITY, ex);
 		}
@@ -84,7 +79,7 @@ public class TerminologyRepo implements ITerminologyRepo {
 			where(FIELD_SYSTEM).is(system).and(FIELD_DELETED).is(false)
 		);
 		try {
-			output = mongoTemplate.exists(query, TerminologyETY.class);
+			output = mongo.exists(query, TerminologyETY.class);
  		} catch(MongoException ex) {
 			throw new OperationException(Logs.ERR_REP_UNABLE_CHECK_SYSTEM, ex);
 		}
@@ -97,7 +92,7 @@ public class TerminologyRepo implements ITerminologyRepo {
 		try {
 			Query query = new Query();
 			query.addCriteria(where("code").in(codes).and(FIELD_SYSTEM).is(system));
-			output = mongoTemplate.find(query, TerminologyETY.class);
+			output = mongo.find(query, TerminologyETY.class);
 		} catch(Exception ex) {
 			log.error("Error while execute find by in code and system :" , ex);
 			throw new BusinessException("Error while execute find by in code and system :" , ex);
@@ -123,7 +118,7 @@ public class TerminologyRepo implements ITerminologyRepo {
         );
         try {
             // Execute
-            objects = mongoTemplate.find(q, TerminologyETY.class, getCollectionName());
+            objects = mongo.find(q, TerminologyETY.class);
         } catch (MongoException e) {
             // Catch data-layer runtime exceptions and turn into a checked exception
             throw new OperationException(Logs.ERROR_UNABLE_FIND_INSERTIONS, e);
@@ -149,7 +144,7 @@ public class TerminologyRepo implements ITerminologyRepo {
                 .and(FIELD_DELETED).is(true)
         );
         try {
-            objects = mongoTemplate.find(q, TerminologyETY.class, getCollectionName());
+            objects = mongo.find(q, TerminologyETY.class);
         } catch (MongoException e) {
             throw new OperationException(Logs.ERROR_UNABLE_FIND_DELETIONS, e);
         }
@@ -167,7 +162,7 @@ public class TerminologyRepo implements ITerminologyRepo {
 	public SnapshotETY getSnapshot(String id) throws OperationException {
 		SnapshotETY obj;
 		try {
-			obj = mongoTemplate.findById(new ObjectId(id), SnapshotETY.class);
+			obj = mongo.findById(new ObjectId(id), SnapshotETY.class);
 		} catch (MongoException e) {
 			throw new OperationException("Unable to retrieve the requested snapshot document", e);
 		}
@@ -178,7 +173,7 @@ public class TerminologyRepo implements ITerminologyRepo {
 	public SnapshotETY insertSnapshot(SnapshotETY entity) throws OperationException {
 		SnapshotETY obj;
 		try {
-			obj = mongoTemplate.insert(entity);
+			obj = mongo.insert(entity);
 		} catch (MongoException e) {
 			throw new OperationException("Unable to insert the given snapshot document", e);
 		}
@@ -197,7 +192,7 @@ public class TerminologyRepo implements ITerminologyRepo {
         Query q = Query.query(where(FIELD_DELETED).ne(true));
         
         try {
-            objects = mongoTemplate.find(q, TerminologyETY.class, getCollectionName()); 
+            objects = mongo.find(q, TerminologyETY.class);
         } catch (MongoException e) {
             throw new OperationException(Logs.ERROR_UNABLE_FIND_TERMINOLOGIES, e);
         }
@@ -209,7 +204,7 @@ public class TerminologyRepo implements ITerminologyRepo {
 		List<TerminologyETY> objects;
 		Query q = Query.query(where(FIELD_ID).in(ids));
 		try {
-			objects = mongoTemplate.find(q, TerminologyETY.class);
+			objects = mongo.find(q, TerminologyETY.class);
 		}catch (MongoException e) {
 			throw new OperationException("Unable to retrieve documents by multiple ids", e);
 		}
@@ -228,16 +223,12 @@ public class TerminologyRepo implements ITerminologyRepo {
 		update.set(FIELD_DELETED, true);
 		// Execute
 		try {
-			mongoTemplate.updateFirst(query, update, TerminologyETY.class);
+			mongo.updateFirst(query, update, TerminologyETY.class);
 		}catch (MongoException ex) {
 			throw new OperationException("Unable to delete document", ex);
 		}
 		// Retrieve update entity
 		return findById(id);
 	}
-
-	public String getCollectionName() {
-		return profileUtility.isTestProfile() ?  Constants.Profile.TEST_PREFIX + Constants.ComponentScan.Collections.TERMINOLOGY : Constants.ComponentScan.Collections.TERMINOLOGY; 
-	} 
 	
 }
