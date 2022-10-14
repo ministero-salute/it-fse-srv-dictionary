@@ -61,7 +61,7 @@ public interface ITerminologyCTL {
         @ValidObjectId(message = "Document id not valid") String id
     ) throws DocumentNotFoundException, OperationException;
 
-    @PostMapping(value = "/csv", produces = {MediaType.APPLICATION_JSON_VALUE }, consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
+    @PostMapping(value = API_TERMS_GET_BY_CSV, produces = {MediaType.APPLICATION_JSON_VALUE }, consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
     @Operation(summary = "Add terminologies to MongoDB", description = "Servizio che consente di aggiungere terminologes alla base dati caricando un file csv.")
     @ApiResponse(content = @Content(mediaType = MediaType.APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = PostTermsResDTO.class)))
     @ApiResponses(value = {

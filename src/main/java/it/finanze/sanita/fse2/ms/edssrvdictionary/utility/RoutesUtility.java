@@ -15,6 +15,7 @@ public final class RoutesUtility {
     public static final String API_CHUNKS_INS = "ins";
     public static final String API_CHUNKS_DEL = "del";
     public static final String API_TERMINOLOGY = "terminology";
+    public static final String API_CSV = "csv";
 
     public static final String API_PATH_ID_VAR = "id";
     public static final String API_PATH_IDX_VAR = "idx";
@@ -26,6 +27,7 @@ public final class RoutesUtility {
     public static final String API_ID_EXTS = "/{" + API_PATH_ID_VAR + "}";
     public static final String API_TERMS_MAPPER = API_VERSION + "/" + API_TERMINOLOGY;
     public static final String API_TERMS_GET_ONE_BY_ID = API_ID + API_ID_EXTS;
+    public static final String API_TERMS_GET_BY_CSV = "/" + API_CSV;
 
     public static final String API_CHANGESET_MAPPER = API_VERSION + "/" + API_CHANGESET;
     public static final String API_CHANGESET_STATUS = "/" + API_TERMINOLOGY + "/" + API_STATUS ;
