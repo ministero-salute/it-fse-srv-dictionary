@@ -13,15 +13,14 @@ public final class RoutesUtility {
     public static final String API_STATUS = "status";
     public static final String API_CHUNKS = "chunks";
     public static final String API_TERMINOLOGY = "terminology";
-    public static final String API_CHANGESET_STATUS = "/" + API_VERSION + "/" + API_CHANGESET + "/" + API_TERMINOLOGY + "/" + API_STATUS ;
-    public static final String API_CHANGESET_CHUNKS = "/" + API_VERSION + "/" + API_CHANGESET + "/" + API_TERMINOLOGY + "/" + API_CHUNKS ;
+
+    public static final String API_CHANGESET_MAPPER = API_VERSION + "/" + API_CHANGESET;
+    public static final String API_CHANGESET_STATUS = "/" + API_TERMINOLOGY + "/" + API_STATUS ;
+    public static final String API_CHANGESET_CHUNKS = "/" + API_TERMINOLOGY + "/" + API_CHUNKS ;
 
     public static final String API_CHANGESET_TAG = "Changeset";
     public static final String API_CHANGESET_CHUNKS_TAG = "Changeset - Chunks";
 
-    public static final String API_DEVTOOLS_TAG = "DevTools";
-
-    public static final String API_CRUD_TAG = "CRUD";
-
+    public static final String API_DOCUMENTS_TAG = "Documents";
 
 }

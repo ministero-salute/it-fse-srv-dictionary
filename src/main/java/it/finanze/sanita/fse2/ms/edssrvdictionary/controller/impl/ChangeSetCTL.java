@@ -1,20 +1,24 @@
 package it.finanze.sanita.fse2.ms.edssrvdictionary.controller.impl;
 
-import java.util.Date;
-import java.util.List;
-
+import it.finanze.sanita.fse2.ms.edssrvdictionary.controller.AbstractCTL;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.controller.IChangeSetCTL;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.ChunksDTO;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.LogTraceInfoDTO;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes.base.ChangeSetDTO;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes.base.ChangeSetResDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes.chunks.ChangeSetChunkDTO;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.chunks.GetTermsDelDTO;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.chunks.GetTermsInsDTO;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.ChunkOutOfRangeException;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DataIntegrityException;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DocumentNotFoundException;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.OperationException;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.service.ITerminologySRV;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
 
-import it.finanze.sanita.fse2.ms.edssrvdictionary.controller.AbstractCTL;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.controller.IChangeSetCTL;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes.base.ChangeSetDTO;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes.base.ChangeSetResDTO;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.LogTraceInfoDTO;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.OperationException;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.service.ITerminologySRV;
+import java.util.Date;
+import java.util.List;
 
 /** 
  * 
@@ -31,8 +35,15 @@ public class ChangeSetCTL extends AbstractCTL implements IChangeSetCTL{
     @Autowired
     private transient ITerminologySRV terminologySRV;
 
+    @Override
+    public GetTermsInsDTO getTermsByChunkIns(String id, int idx) throws ChunkOutOfRangeException, DocumentNotFoundException, DataIntegrityException, OperationException {
+        return new GetTermsInsDTO(getLogTraceInfo(), terminologySRV.getTermsByChunkIns(id, idx));
+    }
 
-
+    @Override
+    public GetTermsDelDTO getTermsByChunkDel(String id, int idx) throws ChunkOutOfRangeException, DocumentNotFoundException, OperationException {
+        return new GetTermsDelDTO(getLogTraceInfo(), terminologySRV.getTermsByChunkDel(id, idx));
+    }
 
     /**
      * @param lastUpdate The last update date
