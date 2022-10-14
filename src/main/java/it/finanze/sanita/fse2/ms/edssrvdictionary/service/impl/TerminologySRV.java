@@ -275,7 +275,7 @@ public class TerminologySRV implements ITerminologySRV {
 	@Override
 	public int uploadTerminologyXml(MultipartFile file, String version) throws DocumentAlreadyPresentException, OperationException, DataProcessingException {
 		// Extract system from filename
-		String system = file.getOriginalFilename();
+		String system = file.getOriginalFilename().replace(".xml", "");
 		// Verify this system does not exist
 		if(terminologyRepo.existsBySystem(system)) {
 			throw new DocumentAlreadyPresentException(

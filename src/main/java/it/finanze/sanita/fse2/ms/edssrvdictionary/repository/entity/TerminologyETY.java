@@ -77,7 +77,7 @@ public class TerminologyETY {
 					String code = n1.get(FIELD_CODE).asText();
 					String description = n1.get("").asText();
 					if(!StringUtility.isNullOrEmpty(code)) {
-						out.add(new TerminologyETY(null, system, code,description, version, current, current, false));
+						out.add(new TerminologyETY(null, system, code, version,description, current, current, false));
 					}
 				}
 			}
