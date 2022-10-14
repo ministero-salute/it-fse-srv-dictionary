@@ -74,10 +74,12 @@ public class TerminologyETY {
 				Iterator<JsonNode> it = n.getValue().elements();
 				while(it.hasNext()) {
 					JsonNode n1 = it.next();
-					String code = n1.get(FIELD_CODE).asText();
-					String description = n1.get("").asText();
-					if(!StringUtility.isNullOrEmpty(code)) {
-						out.add(new TerminologyETY(null, system, code, version,description, current, current, false));
+					if(!StringUtility.isNullOrEmpty(n1.get(FIELD_CODE).asText())) {
+						String code = n1.get(FIELD_CODE)==null ? "" : n1.get(FIELD_CODE).asText(); 
+						if(!StringUtility.isNullOrEmpty(code)) {
+							String description = n1.get("")==null ? "" : n1.get("").asText();
+							out.add(new TerminologyETY(null, system, code, version,description, current, current, false));
+						}
 					}
 				}
 			}
