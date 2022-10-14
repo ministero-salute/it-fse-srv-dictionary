@@ -17,33 +17,11 @@ public final class Constants {
 		 * Base path.
 		 */
 		public static final String BASE = "it.finanze.sanita.fse2.ms.edssrvdictionary";
-
-		/**
-		 * Controller path.
-		 */
-		public static final String CONTROLLER = "it.finanze.sanita.fse2.ms.edssrvdictionary.controller";
-
-		/**
-		 * Service path.
-		 */
-		public static final String SERVICE = "it.finanze.sanita.fse2.ms.edssrvdictionary.service";
-
-		/**
-		 * Configuration path.
-		 */
-		public static final String CONFIG = "it.finanze.sanita.fse2.ms.edssrvdictionary.config";
 		
 		/**
 		 * Configuration mongo path.
 		 */
 		public static final String CONFIG_MONGO = "it.finanze.sanita.fse2.ms.edssrvdictionary.config.mongo";
-		
-		/**
-		 * Configuration mongo repository path.
-		 */
-		public static final String REPOSITORY_MONGO = "it.finanze.sanita.fse2.ms.edssrvdictionary.repository";
-
-
 
 		public static final class Collections {
 
@@ -86,14 +64,11 @@ public final class Constants {
 
 		public static final String ERROR_UNABLE_FIND_TERMINOLOGIES = "Unable to retrieve terminologies from database"; 
 
-		public static final String CALLED_GET_TERMINOLOGY_BY_ID = "Called GET /terminology by ID";
-		
-		public static final String ERROR_REQUESTED_DOCUMENT_DOES_NOT_EXIST = "The requested document does not exists"; 
+		public static final String ERROR_REQUESTED_DOCUMENT_DOES_NOT_EXIST = "The requested document does not exists";
 
-		public static final String ERROR_RETRIEVING_HOST_INFO = "Error while retrieving host informations"; 
-
-		public static final String ERR_REP_UNABLE_CHECK_SYSTEM = "Impossibile verificare l'esistenza del system";
 		public static final String ERR_SRV_SYSTEM_ALREADY_EXISTS = "System %s già presente nel database";
+		public static final String ERR_REP_UNABLE_RETRIVE_FILENAME = "Impossibile recuperare il nome del file corrente";
+		public static final String ERR_REP_UNABLE_CHECK_SYSTEM = "Impossibile verificare l'esistenza del system";
 		public static final String ERR_ETY_PARSE_XML = "Impossibile decodificare correttamente XML";
 		public static final String ERR_UTLS_IO_ERROR = "Impossibile estrarre i dati dal file";
 		public static final String ERR_UTLS_IO_EMPTY = "Il file risulta essere vuoto";
@@ -103,9 +78,6 @@ public final class Constants {
 			//This method is intentionally left blank. 
 		}
 	}
-
-
-	
   
 	/**
 	 *	Constants.

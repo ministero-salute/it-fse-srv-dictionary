@@ -14,6 +14,16 @@ public class DataProcessingException extends IOException {
     private static final long serialVersionUID = 6134857493429760036L;
 
     /**
+     * Constructs an {@code IOException} with the specified detail message.
+     *
+     * @param message The detail message (which is saved for later retrieval
+     *                by the {@link #getMessage()} method)
+     */
+    public DataProcessingException(String message) {
+        super(message);
+    }
+
+    /**
      * Complete constructor.
      *
      * @param msg	Message to be shown.

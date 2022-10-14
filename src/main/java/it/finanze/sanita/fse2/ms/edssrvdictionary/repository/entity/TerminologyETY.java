@@ -32,6 +32,8 @@ public class TerminologyETY {
 	public static final String FIELD_VERSION = "version";
 	public static final String FIELD_DESCRIPTION = "description";
 
+	public static final String FILE_EXT_DOTTED = ".xml";
+
 	@Id
 	private String id;
 	

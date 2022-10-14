@@ -1,5 +1,6 @@
 package it.finanze.sanita.fse2.ms.edssrvdictionary.service.impl;
 
+import com.google.common.collect.Lists;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.ChunksDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.TerminologyDocumentDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.TerminologyFileEntryDTO;
@@ -26,9 +27,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Logs.ERROR_REQUESTED_DOCUMENT_DOES_NOT_EXIST;
-import static it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Logs.ERR_SRV_SYSTEM_ALREADY_EXISTS;
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Logs.*;
 import static it.finanze.sanita.fse2.ms.edssrvdictionary.dto.ChunksDTO.Chunk;
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.TerminologyETY.FILE_EXT_DOTTED;
 import static it.finanze.sanita.fse2.ms.edssrvdictionary.utility.ChangeSetUtility.CHUNKS_SIZE;
 import static it.finanze.sanita.fse2.ms.edssrvdictionary.utility.ChangeSetUtility.chunks;
 import static java.lang.String.format;
@@ -206,13 +207,13 @@ public class TerminologySRV implements ITerminologySRV {
 		try {
 			byte [] byteArr = file.getBytes();
 			InputStream targetStream = new ByteArrayInputStream(byteArr);
-			
+
 			Reader reader = new InputStreamReader(targetStream);
 			List<TerminologyBuilderDTO> vocabularyListDTO = buildDTOFromCsv(reader);
 			vocabularyListDTO.remove(0);
-			
+
 			Date insertionDate = new Date();
-			
+
 			List<TerminologyETY> listToSave = new ArrayList<>();
 			for(TerminologyBuilderDTO vocabularyDTO : vocabularyListDTO) {
 				if(!StringUtility.isNullOrEmpty(vocabularyDTO.getSystem())){
@@ -224,9 +225,9 @@ public class TerminologySRV implements ITerminologySRV {
 					ety.setLastUpdateDate(insertionDate);
 					listToSave.add(ety);
 				}
-				
+
 			}
-			
+
 			terminologyRepo.insertAll(listToSave);
 			output = listToSave.size();
 			log.info("Successfully inserted " + listToSave.size() + " Termonologies");
@@ -238,17 +239,24 @@ public class TerminologySRV implements ITerminologySRV {
 	}
 
 	@Override
-	public void deleteTerminologyById(String id) throws DocumentNotFoundException, OperationException {
+	public int deleteTerminologyById(String id) throws DocumentNotFoundException, OperationException {
 		TerminologyETY out = repository.deleteById(id);
 		if (out == null) {
 			throw new DocumentNotFoundException(ERROR_REQUESTED_DOCUMENT_DOES_NOT_EXIST);
 		}
+		return Lists.newArrayList(out).size();
 	}
 
 	@Override
 	public int uploadTerminologyXml(MultipartFile file, String version) throws DocumentAlreadyPresentException, OperationException, DataProcessingException {
 		// Extract system from filename
-		String system = file.getOriginalFilename().replace(".xml", "");
+		String system = file.getOriginalFilename();
+		// Check we got the original filename
+		if (system == null || system.isEmpty()) {
+			throw new DataProcessingException(ERR_REP_UNABLE_RETRIVE_FILENAME);
+		}
+		// Remove extension
+		system = system.replace(FILE_EXT_DOTTED, "");
 		// Verify this system does not exist
 		if(repository.existsBySystem(system)) {
 			throw new DocumentAlreadyPresentException(

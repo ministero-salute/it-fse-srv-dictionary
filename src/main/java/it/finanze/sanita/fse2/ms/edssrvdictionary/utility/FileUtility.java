@@ -94,7 +94,7 @@ public final class FileUtility {
 			throw new DataProcessingException(ERR_UTLS_IO_ERROR, ex);
 		}
 		// Check emptiness
-		if(raw.length == 0) throw new DataProcessingException(ERR_UTLS_IO_EMPTY, new IOException());
+		if(raw.length == 0) throw new DataProcessingException(ERR_UTLS_IO_EMPTY);
 		return raw;
 	}
 

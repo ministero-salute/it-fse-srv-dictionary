@@ -21,7 +21,7 @@ public interface ITerminologySRV extends IChangeSetSRV {
 
 	TerminologyDocumentDTO findById(String id) throws OperationException, DocumentNotFoundException;
 
-	void deleteTerminologyById(String id) throws DocumentNotFoundException, OperationException;
+	int deleteTerminologyById(String id) throws DocumentNotFoundException, OperationException;
 
 	int uploadTerminologyXml(MultipartFile file, String version) throws DocumentAlreadyPresentException, OperationException, DataProcessingException;
 

@@ -45,7 +45,6 @@ public class TerminologyCTL extends AbstractCTL implements ITerminologyCTL {
 
 	@Override
 	public DelTermsResDTO deleteTerminologyById(String id) throws DocumentNotFoundException, OperationException {
-		terminologySRV.deleteTerminologyById(id);
-		return new DelTermsResDTO(getLogTraceInfo(), 1);
+		return new DelTermsResDTO(getLogTraceInfo(), terminologySRV.deleteTerminologyById(id));
 	}
 }
