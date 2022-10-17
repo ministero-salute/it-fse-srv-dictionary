@@ -16,11 +16,12 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
 
-import java.util.Collection;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import static it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Logs.*;
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.TerminologyETY.FIELD_CODE;
 import static it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.TerminologyETY.FIELD_SYSTEM;
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 
@@ -60,10 +61,10 @@ public class TerminologyRepo implements ITerminologyRepo {
 	}
 
 	@Override
-	public Collection<TerminologyETY> insertAll(List<TerminologyETY> etys) throws OperationException {
-		Collection<TerminologyETY> entities;
+	public List<TerminologyETY> insertAll(List<TerminologyETY> insertions) throws OperationException {
+		List<TerminologyETY> entities;
 		try {
-			entities = mongo.insertAll(etys);
+			entities = new ArrayList<>(mongo.insertAll(insertions));
 		}catch (MongoException ex) {
 			throw new OperationException(ERR_REP_UNABLE_INSERT_ENTITY, ex);
 		}
@@ -92,7 +93,7 @@ public class TerminologyRepo implements ITerminologyRepo {
 		List<TerminologyETY> output;
 		try {
 			Query query = new Query();
-			query.addCriteria(where("code").in(codes).and(FIELD_SYSTEM).is(system));
+			query.addCriteria(where(FIELD_CODE).in(codes).and(FIELD_SYSTEM).is(system));
 			output = mongo.find(query, TerminologyETY.class);
 		} catch(MongoException ex) {
 			throw new OperationException("Unable to retrieve by code and system", ex);
@@ -252,7 +253,7 @@ public class TerminologyRepo implements ITerminologyRepo {
 	}
 
 	@Override
-	public Collection<TerminologyETY> deleteBySystem(String system) throws OperationException, DataIntegrityException {
+	public List<TerminologyETY> deleteBySystem(String system) throws OperationException, DataIntegrityException {
 		// Working vars
 		List<TerminologyETY> entities;
 		UpdateResult result;
@@ -278,6 +279,14 @@ public class TerminologyRepo implements ITerminologyRepo {
 		}
 		// Return modified entities
 		return entities;
+	}
+
+	@Override
+	public List<TerminologyETY> updateBySystem(String system, List<TerminologyETY> entities) throws OperationException, DataIntegrityException {
+		// Mark as inactive the current system
+		deleteBySystem(system);
+		// Insert the new one
+		return insertAll(entities);
 	}
 
 }

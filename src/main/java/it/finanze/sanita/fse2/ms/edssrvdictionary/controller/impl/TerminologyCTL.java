@@ -5,6 +5,7 @@ import it.finanze.sanita.fse2.ms.edssrvdictionary.controller.ITerminologyCTL;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.crud.DelTermsResDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.crud.GetTermsResDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.crud.PostTermsResDTO;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.crud.PutTermsResDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.*;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.service.ITerminologySRV;
 import lombok.extern.slf4j.Slf4j;
@@ -32,30 +33,35 @@ public class TerminologyCTL extends AbstractCTL implements ITerminologyCTL {
 	private static final long serialVersionUID = -805992440464600570L; 
 
     @Autowired
-    private ITerminologySRV terminologySRV;
+    private ITerminologySRV service;
 
 	@Override
 	public GetTermsResDTO getTerminologyById(String id) throws OperationException, DocumentNotFoundException {
-		return new GetTermsResDTO(getLogTraceInfo(), terminologySRV.findById(id));
+		return new GetTermsResDTO(getLogTraceInfo(), service.findById(id));
 	}
 
 	@Override
 	public PostTermsResDTO uploadTerminologies(MultipartFile file, String version) throws OperationException, DocumentAlreadyPresentException, DataProcessingException {
-		return new PostTermsResDTO(getLogTraceInfo(), terminologySRV.uploadTerminologyXml(file, version));
+		return new PostTermsResDTO(getLogTraceInfo(), service.uploadTerminologyXml(file, version));
+	}
+
+	@Override
+	public PutTermsResDTO updateTerminologies(MultipartFile file, String version) throws OperationException, DocumentNotFoundException, DataProcessingException, DataIntegrityException {
+		return new PutTermsResDTO(getLogTraceInfo(), service.updateTerminologyXml(file, version));
 	}
 
 	@Override
 	public DelTermsResDTO deleteTerminologies(String system) throws OperationException, DocumentNotFoundException, DataIntegrityException {
-		return new DelTermsResDTO(getLogTraceInfo(), terminologySRV.deleteTerminologiesBySystem(system));
+		return new DelTermsResDTO(getLogTraceInfo(), service.deleteTerminologiesBySystem(system));
 	}
 
 	@Override
 	public DelTermsResDTO deleteTerminologyById(String id) throws DocumentNotFoundException, OperationException {
-		return new DelTermsResDTO(getLogTraceInfo(), terminologySRV.deleteTerminologyById(id));
+		return new DelTermsResDTO(getLogTraceInfo(), service.deleteTerminologyById(id));
 	}
 	@Override
 	public ResponseEntity<PostTermsResDTO> uploadTerminologyFile(HttpServletRequest request, MultipartFile file) throws IOException, OperationException {
-		Integer uploadItems = terminologySRV.uploadTerminologyFile(file);
+		Integer uploadItems = service.uploadTerminologyFile(file);
 		if(uploadItems!=0) {
 			return new ResponseEntity<>(new PostTermsResDTO(getLogTraceInfo(),uploadItems), null, HttpStatus.SC_CREATED);
 		} else {

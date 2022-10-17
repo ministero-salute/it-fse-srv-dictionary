@@ -52,4 +52,6 @@ public interface ITerminologySRV extends IChangeSetSRV {
 	List<ObjectId> getTermsByChunkDel(String id, int index) throws  DocumentNotFoundException, OperationException, ChunkOutOfRangeException;
 
 	int deleteTerminologiesBySystem(String system) throws DocumentNotFoundException, OperationException, DataIntegrityException;
+
+	int updateTerminologyXml(MultipartFile file, String version) throws DocumentNotFoundException, OperationException, DataProcessingException, DataIntegrityException;
 }

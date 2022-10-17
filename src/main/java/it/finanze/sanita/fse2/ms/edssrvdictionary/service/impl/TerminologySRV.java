@@ -297,10 +297,33 @@ public class TerminologySRV implements ITerminologySRV {
 		return repository.deleteBySystem(system).size();
 	}
 
-	@Override
+    @Override
+    public int updateTerminologyXml(MultipartFile file, String version) throws DocumentNotFoundException, OperationException, DataProcessingException, DataIntegrityException {
+		// Extract system from filename
+		String system = file.getOriginalFilename();
+		// Check we got the original filename
+		if (system == null || system.isEmpty()) {
+			throw new DataProcessingException(ERR_REP_UNABLE_RETRIVE_FILENAME);
+		}
+		// Remove extension
+		system = system.replace(FILE_EXT_DOTTED, "");
+		// Check system exists
+		if(!repository.existsBySystem(system)) {
+			// Let the caller know about it
+			throw new DocumentNotFoundException(String.format(ERR_SRV_SYSTEM_NOT_EXISTS, system));
+		}
+		// Extract binary content
+		byte[] raw = FileUtility.throwIfEmpty(file);
+		// Parse entities
+		List<TerminologyETY> entities = TerminologyETY.fromXML(raw, system, version);
+		// Execute and return size
+		return repository.updateBySystem(system, entities).size();
+	}
+
+    @Override
 	public Integer uploadTerminologyFile(MultipartFile file) throws IOException, OperationException {
 		int output;
-	
+
 		byte [] byteArr = file.getBytes();
 		InputStream targetStream = new ByteArrayInputStream(byteArr);
 

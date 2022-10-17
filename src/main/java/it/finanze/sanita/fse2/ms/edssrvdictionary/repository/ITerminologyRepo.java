@@ -5,7 +5,6 @@ import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.OperationException;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.TerminologyETY;
 import org.bson.types.ObjectId;
 
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -38,7 +37,7 @@ public interface ITerminologyRepo extends IChangeSetRepo<TerminologyETY> {
 	 * @param etys List of vocabularies to insert.
 	 * @return The entities inserted
 	 */
-	Collection<TerminologyETY> insertAll(List<TerminologyETY> etys) throws OperationException;
+	List<TerminologyETY> insertAll(List<TerminologyETY> etys) throws OperationException;
 
 	/**
 	 * Check if a given system is already present
@@ -63,5 +62,7 @@ public interface ITerminologyRepo extends IChangeSetRepo<TerminologyETY> {
 
 	TerminologyETY deleteById(String id) throws OperationException;
 
-	Collection<TerminologyETY> deleteBySystem(String system) throws OperationException, DataIntegrityException;
+	List<TerminologyETY> deleteBySystem(String system) throws OperationException, DataIntegrityException;
+
+	List<TerminologyETY> updateBySystem(String system, List<TerminologyETY> entities) throws OperationException, DataIntegrityException;
 }

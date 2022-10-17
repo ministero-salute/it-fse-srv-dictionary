@@ -11,6 +11,7 @@ import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.base.ResponseDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.crud.DelTermsResDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.crud.GetTermsResDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.crud.PostTermsResDTO;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.crud.PutTermsResDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.error.base.ErrorResponseDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.*;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.validators.ValidObjectId;
@@ -80,6 +81,18 @@ public interface ITerminologyCTL {
         @RequestPart
         String version
     ) throws OperationException, DocumentAlreadyPresentException, DataProcessingException;
+
+    @PutMapping(
+        produces = { MediaType.APPLICATION_JSON_VALUE },
+        consumes = { MediaType.MULTIPART_FORM_DATA_VALUE }
+    )
+    @ResponseStatus(HttpStatus.CREATED)
+    PutTermsResDTO updateTerminologies(
+        @RequestPart
+        MultipartFile file,
+        @RequestPart
+        String version
+    ) throws OperationException, DocumentNotFoundException, DataProcessingException, DataIntegrityException;
 
     @DeleteMapping(
         value = API_SYSTEM_EXTS,
