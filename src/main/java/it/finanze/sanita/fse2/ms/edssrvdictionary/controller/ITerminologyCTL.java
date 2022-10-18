@@ -8,10 +8,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.base.ResponseDTO;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.crud.DelTermsResDTO;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.crud.GetTermsResDTO;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.crud.PostTermsResDTO;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.crud.PutTermsResDTO;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.crud.*;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.error.base.ErrorResponseDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.*;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.validators.ValidObjectId;
@@ -70,6 +67,16 @@ public interface ITerminologyCTL {
             @ApiResponse(responseCode = "500", description = "Internal Server Error", content = @Content(mediaType = MediaType.APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = ErrorResponseDTO.class))) })
     ResponseEntity<PostTermsResDTO> uploadTerminologyFile(HttpServletRequest request, @RequestPart("file") MultipartFile file) throws IOException, OperationException;
 
+    @GetMapping(
+        value = API_SYSTEM_EXTS,
+        produces = { MediaType.APPLICATION_JSON_VALUE }
+    )
+    GetTermsPageResDTO getTerminologies(
+        @PathVariable String system,
+        @RequestParam(API_QP_PAGE) int page,
+        @RequestParam(API_QP_LIMIT) int limit
+    ) throws OperationException, DocumentNotFoundException;
+
     @PostMapping(
         produces = { MediaType.APPLICATION_JSON_VALUE },
         consumes = { MediaType.MULTIPART_FORM_DATA_VALUE }
@@ -92,7 +99,7 @@ public interface ITerminologyCTL {
         MultipartFile file,
         @RequestPart
         String version
-    ) throws OperationException, DocumentNotFoundException, DataProcessingException, DataIntegrityException;
+    ) throws OperationException, DocumentNotFoundException, DataProcessingException, DataIntegrityException, DocumentAlreadyPresentException;
 
     @DeleteMapping(
         value = API_SYSTEM_EXTS,

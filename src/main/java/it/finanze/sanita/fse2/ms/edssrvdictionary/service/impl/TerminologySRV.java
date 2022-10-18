@@ -16,10 +16,13 @@ import it.finanze.sanita.fse2.ms.edssrvdictionary.utility.MiscUtility;
 import lombok.extern.slf4j.Slf4j;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
+import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -298,7 +301,7 @@ public class TerminologySRV implements ITerminologySRV {
 	}
 
     @Override
-    public int updateTerminologyXml(MultipartFile file, String version) throws DocumentNotFoundException, OperationException, DataProcessingException, DataIntegrityException {
+    public int updateTerminologyXml(MultipartFile file, String version) throws DocumentNotFoundException, OperationException, DataProcessingException, DataIntegrityException, DocumentAlreadyPresentException {
 		// Extract system from filename
 		String system = file.getOriginalFilename();
 		// Check we got the original filename
@@ -312,6 +315,12 @@ public class TerminologySRV implements ITerminologySRV {
 			// Let the caller know about it
 			throw new DocumentNotFoundException(String.format(ERR_SRV_SYSTEM_NOT_EXISTS, system));
 		}
+		// Check version does not exist on the given system
+		if(repository.existsBySystemAndVersion(system, version)) {
+			throw new DocumentAlreadyPresentException(String.format(
+				ERR_SRV_SYSTEM_VERSION_ALREADY_EXISTS, system, version
+			));
+		}
 		// Extract binary content
 		byte[] raw = FileUtility.throwIfEmpty(file);
 		// Parse entities
@@ -320,7 +329,22 @@ public class TerminologySRV implements ITerminologySRV {
 		return repository.updateBySystem(system, entities).size();
 	}
 
-    @Override
+	@Override
+	public SimpleImmutableEntry<Page<TerminologyETY>, List<TerminologyDocumentDTO>> getTerminologies(Pageable page, String system) throws OperationException, DocumentNotFoundException {
+		// Check system exists
+		if(!repository.existsBySystem(system)) {
+			// Let the caller know about it
+			throw new DocumentNotFoundException(String.format(ERR_SRV_SYSTEM_NOT_EXISTS, system));
+		}
+		// Retrieve page
+		Page<TerminologyETY> current = repository.getBySystem(system, page);
+		// Convert entities to dto
+		List<TerminologyDocumentDTO> entities = current.stream().map(TerminologyDocumentDTO::fromEntity).collect(Collectors.toList());
+		// Return Pair<Page,Entities> object
+		return new SimpleImmutableEntry<>(current, entities);
+	}
+
+	@Override
 	public Integer uploadTerminologyFile(MultipartFile file) throws IOException, OperationException {
 		int output;
 

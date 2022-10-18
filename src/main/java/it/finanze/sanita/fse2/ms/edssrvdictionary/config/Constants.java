@@ -67,9 +67,11 @@ public final class Constants {
 		public static final String ERROR_REQUESTED_DOCUMENT_DOES_NOT_EXIST = "The requested document does not exists";
 
 		public static final String ERR_SRV_SYSTEM_ALREADY_EXISTS = "System %s già presente nel database";
+		public static final String ERR_SRV_SYSTEM_VERSION_ALREADY_EXISTS = "System %s con version %s già presente nel database";
 		public static final String ERR_SRV_SYSTEM_NOT_EXISTS = "System %s non presente nel database";
 		public static final String ERR_REP_UNABLE_RETRIVE_FILENAME = "Impossibile recuperare il nome del file corrente";
 		public static final String ERR_REP_UNABLE_CHECK_SYSTEM = "Impossibile verificare l'esistenza del system";
+		public static final String ERR_REP_UNABLE_CHECK_SYSTEM_VERSION = "Impossibile verificare l'esistenza del system con version";
 		public static final String ERR_ETY_PARSE_XML = "Impossibile decodificare correttamente XML";
 		public static final String ERR_UTLS_IO_ERROR = "Impossibile estrarre i dati dal file";
 		public static final String ERR_UTLS_IO_EMPTY = "Il file risulta essere vuoto";

@@ -4,10 +4,14 @@ package it.finanze.sanita.fse2.ms.edssrvdictionary.service;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.TerminologyDocumentDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.VocabularyDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.*;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.TerminologyETY;
 import org.bson.types.ObjectId;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.List;
 
 /**
@@ -53,5 +57,7 @@ public interface ITerminologySRV extends IChangeSetSRV {
 
 	int deleteTerminologiesBySystem(String system) throws DocumentNotFoundException, OperationException, DataIntegrityException;
 
-	int updateTerminologyXml(MultipartFile file, String version) throws DocumentNotFoundException, OperationException, DataProcessingException, DataIntegrityException;
+	int updateTerminologyXml(MultipartFile file, String version) throws DocumentNotFoundException, OperationException, DataProcessingException, DataIntegrityException, DocumentAlreadyPresentException;
+
+    SimpleImmutableEntry<Page<TerminologyETY>, List<TerminologyDocumentDTO>> getTerminologies(Pageable of, String system) throws OperationException, DocumentNotFoundException;
 }

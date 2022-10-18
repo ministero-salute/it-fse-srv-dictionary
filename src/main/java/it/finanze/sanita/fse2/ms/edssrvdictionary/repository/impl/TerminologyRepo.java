@@ -11,6 +11,9 @@ import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.snapshot.Sna
 import lombok.extern.slf4j.Slf4j;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
@@ -21,8 +24,7 @@ import java.util.Date;
 import java.util.List;
 
 import static it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Logs.*;
-import static it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.TerminologyETY.FIELD_CODE;
-import static it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.TerminologyETY.FIELD_SYSTEM;
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.TerminologyETY.*;
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 
 /**
@@ -84,6 +86,33 @@ public class TerminologyRepo implements ITerminologyRepo {
 			output = mongo.exists(query, TerminologyETY.class);
  		} catch(MongoException ex) {
 			throw new OperationException(ERR_REP_UNABLE_CHECK_SYSTEM, ex);
+		}
+		return output;
+	}
+
+	/**
+	 * Check if a given system is already present
+	 *
+	 * @param system  The system parameter
+	 * @param version The system version parameter
+	 * @return True if exists at least one term with the given system, otherwise false
+	 * @throws OperationException If a data-layer error occurs
+	 */
+	@Override
+	public boolean existsBySystemAndVersion(String system, String version) throws OperationException {
+		// Working var
+		boolean output;
+		// Create query
+		Query query = new Query();
+		query.addCriteria(
+			where(FIELD_SYSTEM).is(system)
+			.and(FIELD_VERSION).is(version)
+			.and(FIELD_DELETED).is(false)
+		);
+		try {
+			output = mongo.exists(query, TerminologyETY.class);
+		} catch(MongoException ex) {
+			throw new OperationException(ERR_REP_UNABLE_CHECK_SYSTEM_VERSION, ex);
 		}
 		return output;
 	}
@@ -287,6 +316,27 @@ public class TerminologyRepo implements ITerminologyRepo {
 		deleteBySystem(system);
 		// Insert the new one
 		return insertAll(entities);
+	}
+
+	@Override
+	public Page<TerminologyETY> getBySystem(String system, Pageable page) throws OperationException {
+		// Working vars
+		List<TerminologyETY> entities;
+		long count;
+		// Create query
+		Query query = new Query();
+		query.addCriteria(where(FIELD_SYSTEM).is(system).and(FIELD_DELETED).is(false));
+		try {
+			// Get count
+			count = mongo.count(query, TerminologyETY.class);
+			// Retrive slice with pagination
+			entities = mongo.find(query.with(page), TerminologyETY.class);
+		} catch (MongoException e) {
+			// Catch data-layer runtime exceptions and turn into a checked exception
+			throw new OperationException(ERR_REP_DOCS_NOT_FOUND, e);
+		}
+		// Return data
+		return new PageImpl<>(entities, page, count);
 	}
 
 }

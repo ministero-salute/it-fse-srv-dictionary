@@ -4,6 +4,8 @@ import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DataIntegrityExcept
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.OperationException;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.TerminologyETY;
 import org.bson.types.ObjectId;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -46,6 +48,15 @@ public interface ITerminologyRepo extends IChangeSetRepo<TerminologyETY> {
 	 * @throws OperationException If a data-layer error occurs
 	 */
 	boolean existsBySystem(String system) throws OperationException;
+
+	/**
+	 * Check if a given system is already present
+	 * @param system The system parameter
+	 * @param version The system version parameter
+	 * @return True if exists at least one term with the given system, otherwise false
+	 * @throws OperationException If a data-layer error occurs
+	 */
+	boolean existsBySystemAndVersion(String system, String version) throws OperationException;
 	
 	List<TerminologyETY> findByInCodeAndSystem(List<String> codes, String system) throws OperationException;
 
@@ -65,4 +76,6 @@ public interface ITerminologyRepo extends IChangeSetRepo<TerminologyETY> {
 	List<TerminologyETY> deleteBySystem(String system) throws OperationException, DataIntegrityException;
 
 	List<TerminologyETY> updateBySystem(String system, List<TerminologyETY> entities) throws OperationException, DataIntegrityException;
+
+    Page<TerminologyETY> getBySystem(String system, Pageable page) throws OperationException;
 }
