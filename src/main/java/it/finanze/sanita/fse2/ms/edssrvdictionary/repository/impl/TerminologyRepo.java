@@ -57,7 +57,7 @@ public class TerminologyRepo implements ITerminologyRepo {
 		try {
 			out = mongo.findById(new ObjectId(pk), TerminologyETY.class);
 		}catch (MongoException ex) {
-			throw new OperationException(ERROR_UNABLE_FIND_TERMINOLOGIES, ex);
+			throw new OperationException(ERR_REP_DOCS_NOT_FOUND, ex);
 		}
 		return out;
 	}
@@ -151,7 +151,7 @@ public class TerminologyRepo implements ITerminologyRepo {
             objects = mongo.find(q, TerminologyETY.class);
         } catch (MongoException e) {
             // Catch data-layer runtime exceptions and turn into a checked exception
-            throw new OperationException(ERROR_UNABLE_FIND_INSERTIONS, e);
+            throw new OperationException(ERR_REP_CHANGESET_INSERT, e);
         }
         return objects;
     }
@@ -176,7 +176,7 @@ public class TerminologyRepo implements ITerminologyRepo {
         try {
             objects = mongo.find(q, TerminologyETY.class);
         } catch (MongoException e) {
-            throw new OperationException(ERROR_UNABLE_FIND_DELETIONS, e);
+            throw new OperationException(ERR_REP_CHANGESET_DELETE, e);
         }
         return objects;
     }
@@ -224,7 +224,7 @@ public class TerminologyRepo implements ITerminologyRepo {
         try {
             objects = mongo.find(q, TerminologyETY.class);
         } catch (MongoException e) {
-            throw new OperationException(ERROR_UNABLE_FIND_TERMINOLOGIES, e);
+            throw new OperationException(ERR_REP_EVERY_ACTIVE_DOC, e);
         }
         return objects;
     }

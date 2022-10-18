@@ -186,7 +186,7 @@ public class TerminologySRV implements ITerminologySRV {
 		SnapshotETY doc = repository.getSnapshot(id);
 		// Verify existence
 		if(doc == null) {
-			throw new DocumentNotFoundException(ERROR_REQUESTED_DOCUMENT_DOES_NOT_EXIST);
+			throw new DocumentNotFoundException(ERR_SRV_DOCUMENT_NOT_EXIST);
 		}
 		return doc;
 	}
@@ -198,7 +198,7 @@ public class TerminologySRV implements ITerminologySRV {
 		TerminologyETY output = repository.findById(id);
 
         if (output == null) {
-            throw new DocumentNotFoundException(ERROR_REQUESTED_DOCUMENT_DOES_NOT_EXIST);
+            throw new DocumentNotFoundException(ERR_SRV_DOCUMENT_NOT_EXIST);
         }
 		
 		return TerminologyDocumentDTO.fromEntity(output);
@@ -208,7 +208,7 @@ public class TerminologySRV implements ITerminologySRV {
 	public int deleteTerminologyById(String id) throws DocumentNotFoundException, OperationException {
 		TerminologyETY out = repository.deleteById(id);
 		if (out == null) {
-			throw new DocumentNotFoundException(ERROR_REQUESTED_DOCUMENT_DOES_NOT_EXIST);
+			throw new DocumentNotFoundException(ERR_SRV_DOCUMENT_NOT_EXIST);
 		}
 		return Lists.newArrayList(out).size();
 	}
