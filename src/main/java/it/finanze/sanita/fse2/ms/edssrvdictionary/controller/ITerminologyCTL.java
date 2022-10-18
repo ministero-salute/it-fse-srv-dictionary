@@ -75,7 +75,7 @@ public interface ITerminologyCTL {
         @PathVariable String system,
         @RequestParam(API_QP_PAGE) int page,
         @RequestParam(API_QP_LIMIT) int limit
-    ) throws OperationException, DocumentNotFoundException;
+    ) throws OperationException, DocumentNotFoundException, PageOutOfRangeException;
 
     @PostMapping(
         produces = { MediaType.APPLICATION_JSON_VALUE },

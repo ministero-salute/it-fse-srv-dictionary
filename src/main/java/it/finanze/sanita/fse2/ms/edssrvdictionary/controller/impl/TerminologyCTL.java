@@ -11,7 +11,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -73,9 +72,9 @@ public class TerminologyCTL extends AbstractCTL implements ITerminologyCTL {
 	}
 
 	@Override
-	public GetTermsPageResDTO getTerminologies(String system, int page, int limit) throws OperationException, DocumentNotFoundException {
+	public GetTermsPageResDTO getTerminologies(String system, int page, int limit) throws OperationException, DocumentNotFoundException, PageOutOfRangeException {
 		// Retrieve Pair<Page, Entities>
-		SimpleImmutableEntry<Page<TerminologyETY>, List<TerminologyDocumentDTO>> slice = service.getTerminologies(PageRequest.of(page, limit), system);
+		SimpleImmutableEntry<Page<TerminologyETY>, List<TerminologyDocumentDTO>> slice = service.getTerminologies(page, limit, system);
 		// When returning, it builds the URL according to provided values
 		return new GetTermsPageResDTO(getLogTraceInfo(), slice.getValue(), system, slice.getKey());
 	}

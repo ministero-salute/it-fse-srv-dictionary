@@ -69,6 +69,8 @@ public final class Constants {
 		public static final String ERR_SRV_SYSTEM_ALREADY_EXISTS = "System %s già presente nel database";
 		public static final String ERR_SRV_SYSTEM_VERSION_ALREADY_EXISTS = "System %s con version %s già presente nel database";
 		public static final String ERR_SRV_SYSTEM_NOT_EXISTS = "System %s non presente nel database";
+		public static final String ERR_SRV_PAGE_NOT_EXISTS = "La pagina richiesta non esiste, range valido da <%d> a <%d>";
+		public static final String ERR_SRV_PAGE_IDX_LESS_ZERO = "L'indice pagina non può essere minore di zero";
 		public static final String ERR_REP_UNABLE_RETRIVE_FILENAME = "Impossibile recuperare il nome del file corrente";
 		public static final String ERR_REP_UNABLE_CHECK_SYSTEM = "Impossibile verificare l'esistenza del system";
 		public static final String ERR_REP_UNABLE_CHECK_SYSTEM_VERSION = "Impossibile verificare l'esistenza del system con version";

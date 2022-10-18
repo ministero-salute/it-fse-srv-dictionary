@@ -17,7 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -330,14 +330,24 @@ public class TerminologySRV implements ITerminologySRV {
 	}
 
 	@Override
-	public SimpleImmutableEntry<Page<TerminologyETY>, List<TerminologyDocumentDTO>> getTerminologies(Pageable page, String system) throws OperationException, DocumentNotFoundException {
+	public SimpleImmutableEntry<Page<TerminologyETY>, List<TerminologyDocumentDTO>> getTerminologies(int page, int limit, String system) throws OperationException, DocumentNotFoundException, PageOutOfRangeException {
 		// Check system exists
 		if(!repository.existsBySystem(system)) {
 			// Let the caller know about it
 			throw new DocumentNotFoundException(String.format(ERR_SRV_SYSTEM_NOT_EXISTS, system));
 		}
+		// Check valid index was provided
+		if(page < 0) {
+			// Let the caller know about it
+			throw new PageOutOfRangeException(ERR_SRV_PAGE_IDX_LESS_ZERO);
+		}
 		// Retrieve page
-		Page<TerminologyETY> current = repository.getBySystem(system, page);
+		Page<TerminologyETY> current = repository.getBySystem(system, PageRequest.of(page, limit));
+		// Check valid index was provided
+		if(page >= current.getTotalPages()) {
+			// Let the caller know about it
+			throw new PageOutOfRangeException(String.format(ERR_SRV_PAGE_NOT_EXISTS, 0, current.getTotalPages() - 1));
+		}
 		// Convert entities to dto
 		List<TerminologyDocumentDTO> entities = current.stream().map(TerminologyDocumentDTO::fromEntity).collect(Collectors.toList());
 		// Return Pair<Page,Entities> object
