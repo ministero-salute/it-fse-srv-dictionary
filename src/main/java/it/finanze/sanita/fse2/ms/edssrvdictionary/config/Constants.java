@@ -57,9 +57,16 @@ public final class Constants {
 	}
 
 	public static final class Logs {
-		public static final String ERR_VAL_UNABLE_CONVERT = "Impossibile convertire dal tipo %s al tipo %s il valore richiesto";
+
+		public static final String ERR_VAL_ID_BLANK = "L'identificatore documento non può essere vuoto";
+		public static final String ERR_VAL_ID_NOT_VALID = "L'identificatore documento non è valido";
+		public static final String ERR_VAL_UNABLE_CONVERT = "Impossibile convertire %s nel tipo %s";
 		public static final String ERR_VAL_MISSING_PART = "Il campo richiesto '%s' non è presente";
 		public static final String ERR_VAL_MISSING_PARAMETER = "Il parametro richiesto '%s' non è presente";
+		public static final String ERR_VAL_SYSTEM_BLANK = "Il system non può essere vuoto";
+		public static final String ERR_VAL_VERSION_BLANK = "La versione non può essere vuota";
+		public static final String ERR_VAL_IDX_BLANK = "L'indice non può essere vuoto";
+		public static final String ERR_VAL_LIMIT_BLANK = "Il limite non può essere vuoto";
 		public static final String ERR_SRV_SYSTEM_ALREADY_EXISTS = "System %s già presente nel database";
 		public static final String ERR_SRV_DOCUMENT_NOT_EXIST = "Il documento richiesto non esiste";
 		public static final String ERR_SRV_SYSTEM_VERSION_ALREADY_EXISTS = "System %s con version %s già presente nel database";

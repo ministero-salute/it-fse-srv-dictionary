@@ -20,11 +20,11 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.NotBlank;
 import java.io.IOException;
 
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Logs.*;
 import static it.finanze.sanita.fse2.ms.edssrvdictionary.utility.RoutesUtility.*;
-import static it.finanze.sanita.fse2.ms.edssrvdictionary.utility.ValidationUtility.DEFAULT_STRING_MAX_SIZE;
 
 /**
  * Terminology controller
@@ -47,8 +47,12 @@ public interface ITerminologyCTL {
         @ApiResponse(responseCode = "404", description = "Documento non trovato sul database", content = @Content(mediaType = MediaType.APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = ErrorResponseDTO.class))),
         @ApiResponse(responseCode = "500", description = "Errore interno del server", content = @Content(mediaType = MediaType.APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = ErrorResponseDTO.class)))
     })
-    GetTermsResDTO getTerminologyById(@PathVariable @Size(max = DEFAULT_STRING_MAX_SIZE, message = "id does not match the expected size") @ValidObjectId(message = "Document id not valid") String id)
-        throws OperationException, DocumentNotFoundException;
+    GetTermsResDTO getTerminologyById(
+        @PathVariable
+        @NotBlank(message = ERR_VAL_ID_BLANK)
+        @ValidObjectId(message = ERR_VAL_ID_NOT_VALID)
+        String id
+    ) throws OperationException, DocumentNotFoundException;
 
     @DeleteMapping(
         value = API_TERMS_GET_ONE_BY_ID,
@@ -56,7 +60,9 @@ public interface ITerminologyCTL {
     )
     DelTermsResDTO deleteTerminologyById(
         @PathVariable
-        @ValidObjectId(message = "Document id not valid") String id
+        @NotBlank(message = ERR_VAL_ID_BLANK)
+        @ValidObjectId(message = ERR_VAL_ID_NOT_VALID)
+        String id
     ) throws DocumentNotFoundException, OperationException;
 
     @PostMapping(value = API_TERMS_GET_BY_CSV, produces = {MediaType.APPLICATION_JSON_VALUE }, consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
@@ -72,9 +78,15 @@ public interface ITerminologyCTL {
         produces = { MediaType.APPLICATION_JSON_VALUE }
     )
     GetTermsPageResDTO getTerminologies(
-        @PathVariable String system,
-        @RequestParam(API_QP_PAGE) int page,
-        @RequestParam(API_QP_LIMIT) int limit
+        @PathVariable
+        @NotBlank(message = ERR_VAL_SYSTEM_BLANK)
+        String system,
+        @RequestParam(API_QP_PAGE)
+        @NotBlank(message = ERR_VAL_IDX_BLANK)
+        int page,
+        @RequestParam(API_QP_LIMIT)
+        @NotBlank(message = ERR_VAL_LIMIT_BLANK)
+        int limit
     ) throws OperationException, DocumentNotFoundException, OutOfRangeException;
 
     @PostMapping(
@@ -86,6 +98,7 @@ public interface ITerminologyCTL {
         @RequestPart
         MultipartFile file,
         @RequestPart
+        @NotBlank(message = ERR_VAL_VERSION_BLANK)
         String version
     ) throws OperationException, DocumentAlreadyPresentException, DataProcessingException;
 
@@ -98,6 +111,7 @@ public interface ITerminologyCTL {
         @RequestPart
         MultipartFile file,
         @RequestPart
+        @NotBlank(message = ERR_VAL_VERSION_BLANK)
         String version
     ) throws OperationException, DocumentNotFoundException, DataProcessingException, DataIntegrityException, DocumentAlreadyPresentException;
 
@@ -107,6 +121,7 @@ public interface ITerminologyCTL {
     )
     DelTermsResDTO deleteTerminologies(
         @PathVariable
+        @NotBlank(message = ERR_VAL_SYSTEM_BLANK)
         String system
     ) throws OperationException, DocumentNotFoundException, DataIntegrityException;
 
