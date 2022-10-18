@@ -1,6 +1,5 @@
 package it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.error;
 
-
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -9,11 +8,10 @@ import org.springframework.web.util.UriComponentsBuilder;
 @RequiredArgsConstructor
 public enum ErrorType {
 
-    VALIDATION("/err/validation","Validation error"),
-    RESOURCE("/err/resource", "Resource error"),
-    SERVER("/err/server", "Server error"),
-    IO("/err/io", "IO error");
-
+    VALIDATION("/msg/validation","Errore di validazione"),
+    RESOURCE("/msg/resource", "Errore risorsa"),
+    SERVER("/msg/server", "Errore interno"),
+    IO("/msg/io", "Errore IO");
 
     private final String type;
     private final String title;

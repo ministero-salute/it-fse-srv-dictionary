@@ -13,6 +13,7 @@ import it.finanze.sanita.fse2.ms.edssrvdictionary.service.ITerminologySRV;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.utility.ChangeSetUtility;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.utility.FileUtility;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.utility.MiscUtility;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.utility.RoutesUtility;
 import lombok.extern.slf4j.Slf4j;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -249,7 +250,7 @@ public class TerminologySRV implements ITerminologySRV {
 		try {
 			chunk = ids.get(index);
 		}catch (IndexOutOfBoundsException e) {
-			throw new OutOfRangeException("The chunk index is out of range: " + index);
+			throw new OutOfRangeException("The chunk index is out of range: " + index, RoutesUtility.API_PATH_IDX_VAR);
 		}
 		// Retrieve documents
 		List<TerminologyETY> docs = repository.findByIds(chunk);
@@ -284,7 +285,7 @@ public class TerminologySRV implements ITerminologySRV {
 		try {
 			chunk = ids.get(index);
 		}catch (IndexOutOfBoundsException e) {
-			throw new OutOfRangeException("The chunk index is out of range: " + index);
+			throw new OutOfRangeException("The chunk index is out of range: " + index, RoutesUtility.API_PATH_IDX_VAR);
 		}
 		return chunk;
 	}
@@ -339,14 +340,14 @@ public class TerminologySRV implements ITerminologySRV {
 		// Check valid index was provided
 		if(page < 0) {
 			// Let the caller know about it
-			throw new OutOfRangeException(ERR_SRV_PAGE_IDX_LESS_ZERO);
+			throw new OutOfRangeException(ERR_SRV_PAGE_IDX_LESS_ZERO, RoutesUtility.API_QP_PAGE);
 		}
 		// Retrieve page
 		Page<TerminologyETY> current = repository.getBySystem(system, PageRequest.of(page, limit));
 		// Check valid index was provided
 		if(page >= current.getTotalPages()) {
 			// Let the caller know about it
-			throw new OutOfRangeException(String.format(ERR_SRV_PAGE_NOT_EXISTS, 0, current.getTotalPages() - 1));
+			throw new OutOfRangeException(String.format(ERR_SRV_PAGE_NOT_EXISTS, 0, current.getTotalPages() - 1), RoutesUtility.API_QP_PAGE);
 		}
 		// Convert entities to dto
 		List<TerminologyDocumentDTO> entities = current.stream().map(TerminologyDocumentDTO::fromEntity).collect(Collectors.toList());

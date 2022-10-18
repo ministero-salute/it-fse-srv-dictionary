@@ -65,7 +65,10 @@ public final class Constants {
 		public static final String ERROR_UNABLE_FIND_TERMINOLOGIES = "Unable to retrieve terminologies from database"; 
 
 		public static final String ERROR_REQUESTED_DOCUMENT_DOES_NOT_EXIST = "The requested document does not exists";
+		public static final String ERR_VAL_UNABLE_CONVERT = "Impossibile convertire dal tipo %s al tipo %s il valore richiesto";
 
+		public static final String ERR_VAL_MISSING_PART = "Il campo richiesto '%s' non è presente";
+		public static final String ERR_VAL_MISSING_PARAMETER = "Il parametro richiesto '%s' non è presente";
 		public static final String ERR_SRV_SYSTEM_ALREADY_EXISTS = "System %s già presente nel database";
 		public static final String ERR_SRV_SYSTEM_VERSION_ALREADY_EXISTS = "System %s con version %s già presente nel database";
 		public static final String ERR_SRV_SYSTEM_NOT_EXISTS = "System %s non presente nel database";
