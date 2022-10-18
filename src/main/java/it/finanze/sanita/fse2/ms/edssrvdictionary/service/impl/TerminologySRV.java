@@ -337,6 +337,11 @@ public class TerminologySRV implements ITerminologySRV {
 			// Let the caller know about it
 			throw new DocumentNotFoundException(String.format(ERR_SRV_SYSTEM_NOT_EXISTS, system));
 		}
+		// Check valid limit was provided
+		if(limit < 0) {
+			// Let the caller know about it
+			throw new OutOfRangeException(ERR_SRV_PAGE_LIMIT_LESS_ZERO, RoutesUtility.API_QP_PAGE);
+		}
 		// Check valid index was provided
 		if(page < 0) {
 			// Let the caller know about it
