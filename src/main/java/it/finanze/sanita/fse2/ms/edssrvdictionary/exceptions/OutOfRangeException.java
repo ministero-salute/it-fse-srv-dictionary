@@ -2,17 +2,17 @@ package it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions;
 
 
 /**
- * Represent the absence of a given page due to invalid index
+ * Represent an invalid index upon a sortable, indexable data
  * @author G. Baittiner
  */
-public class PageOutOfRangeException extends Exception {
+public class OutOfRangeException extends Exception {
 
     /**
      * Message constructor.
      *
      * @param msg	Message to be shown.
      */
-    public PageOutOfRangeException(final String msg) {
+    public OutOfRangeException(final String msg) {
         super(msg);
     }
 

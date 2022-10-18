@@ -38,10 +38,10 @@ public interface ITerminologySRV extends IChangeSetSRV {
 	 * @return The terminologies associated with the chunk
  	 * @throws OperationException If a data-layer error occurs
 	 * @throws DocumentNotFoundException If no snapshot matching the given id exists
-	 * @throws ChunkOutOfRangeException If no chunk matching the given index exists
+	 * @throws OutOfRangeException If no chunk matching the given index exists
 	 * @throws DataIntegrityException If the database output does not match with the requested ids
 	 */
-	List<TerminologyDocumentDTO> getTermsByChunkIns(String id, int index) throws  DocumentNotFoundException, OperationException, ChunkOutOfRangeException, DataIntegrityException;
+	List<TerminologyDocumentDTO> getTermsByChunkIns(String id, int index) throws  DocumentNotFoundException, OperationException, OutOfRangeException, DataIntegrityException;
 
 	/**
 	 * Aggregates and return documents by chunk
@@ -50,13 +50,13 @@ public interface ITerminologySRV extends IChangeSetSRV {
 	 * @return The terminologies associated with the chunk
 	 * @throws OperationException If a data-layer error occurs
 	 * @throws DocumentNotFoundException If no snapshot matching the given id exists
-	 * @throws ChunkOutOfRangeException If no chunk matching the given index exists
+	 * @throws OutOfRangeException If no chunk matching the given index exists
 	 */
-	List<ObjectId> getTermsByChunkDel(String id, int index) throws  DocumentNotFoundException, OperationException, ChunkOutOfRangeException;
+	List<ObjectId> getTermsByChunkDel(String id, int index) throws  DocumentNotFoundException, OperationException, OutOfRangeException;
 
 	int deleteTerminologiesBySystem(String system) throws DocumentNotFoundException, OperationException, DataIntegrityException;
 
 	int updateTerminologyXml(MultipartFile file, String version) throws DocumentNotFoundException, OperationException, DataProcessingException, DataIntegrityException, DocumentAlreadyPresentException;
 
-    SimpleImmutableEntry<Page<TerminologyETY>, List<TerminologyDocumentDTO>> getTerminologies(int page, int limit, String system) throws OperationException, DocumentNotFoundException, PageOutOfRangeException;
+    SimpleImmutableEntry<Page<TerminologyETY>, List<TerminologyDocumentDTO>> getTerminologies(int page, int limit, String system) throws OperationException, DocumentNotFoundException, OutOfRangeException;
 }

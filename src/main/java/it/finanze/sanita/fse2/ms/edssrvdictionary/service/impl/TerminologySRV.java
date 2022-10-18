@@ -239,7 +239,7 @@ public class TerminologySRV implements ITerminologySRV {
 	}
 
 	@Override
-	public List<TerminologyDocumentDTO> getTermsByChunkIns(String id, int index) throws DocumentNotFoundException, OperationException, ChunkOutOfRangeException, DataIntegrityException {
+	public List<TerminologyDocumentDTO> getTermsByChunkIns(String id, int index) throws DocumentNotFoundException, OperationException, OutOfRangeException, DataIntegrityException {
 		// Retrieve document chunks
 		SnapshotETY chunks = getChunks(id);
 		// Get chunk according to type
@@ -249,7 +249,7 @@ public class TerminologySRV implements ITerminologySRV {
 		try {
 			chunk = ids.get(index);
 		}catch (IndexOutOfBoundsException e) {
-			throw new ChunkOutOfRangeException("The chunk index is out of range: " + index);
+			throw new OutOfRangeException("The chunk index is out of range: " + index);
 		}
 		// Retrieve documents
 		List<TerminologyETY> docs = repository.findByIds(chunk);
@@ -271,10 +271,10 @@ public class TerminologySRV implements ITerminologySRV {
 	 * @return The terminologies associated with the chunk
 	 * @throws OperationException        If a data-layer error occurs
 	 * @throws DocumentNotFoundException If no snapshot matching the given id exists
-	 * @throws ChunkOutOfRangeException  If no chunk matching the given index exists
+	 * @throws OutOfRangeException  If no chunk matching the given index exists
 	 */
 	@Override
-	public List<ObjectId> getTermsByChunkDel(String id, int index) throws DocumentNotFoundException, OperationException, ChunkOutOfRangeException {
+	public List<ObjectId> getTermsByChunkDel(String id, int index) throws DocumentNotFoundException, OperationException, OutOfRangeException {
 		// Retrieve document chunks
 		SnapshotETY chunks = getChunks(id);
 		// Get chunk according to type
@@ -284,7 +284,7 @@ public class TerminologySRV implements ITerminologySRV {
 		try {
 			chunk = ids.get(index);
 		}catch (IndexOutOfBoundsException e) {
-			throw new ChunkOutOfRangeException("The chunk index is out of range: " + index);
+			throw new OutOfRangeException("The chunk index is out of range: " + index);
 		}
 		return chunk;
 	}
@@ -330,7 +330,7 @@ public class TerminologySRV implements ITerminologySRV {
 	}
 
 	@Override
-	public SimpleImmutableEntry<Page<TerminologyETY>, List<TerminologyDocumentDTO>> getTerminologies(int page, int limit, String system) throws OperationException, DocumentNotFoundException, PageOutOfRangeException {
+	public SimpleImmutableEntry<Page<TerminologyETY>, List<TerminologyDocumentDTO>> getTerminologies(int page, int limit, String system) throws OperationException, DocumentNotFoundException, OutOfRangeException {
 		// Check system exists
 		if(!repository.existsBySystem(system)) {
 			// Let the caller know about it
@@ -339,14 +339,14 @@ public class TerminologySRV implements ITerminologySRV {
 		// Check valid index was provided
 		if(page < 0) {
 			// Let the caller know about it
-			throw new PageOutOfRangeException(ERR_SRV_PAGE_IDX_LESS_ZERO);
+			throw new OutOfRangeException(ERR_SRV_PAGE_IDX_LESS_ZERO);
 		}
 		// Retrieve page
 		Page<TerminologyETY> current = repository.getBySystem(system, PageRequest.of(page, limit));
 		// Check valid index was provided
 		if(page >= current.getTotalPages()) {
 			// Let the caller know about it
-			throw new PageOutOfRangeException(String.format(ERR_SRV_PAGE_NOT_EXISTS, 0, current.getTotalPages() - 1));
+			throw new OutOfRangeException(String.format(ERR_SRV_PAGE_NOT_EXISTS, 0, current.getTotalPages() - 1));
 		}
 		// Convert entities to dto
 		List<TerminologyDocumentDTO> entities = current.stream().map(TerminologyDocumentDTO::fromEntity).collect(Collectors.toList());

@@ -72,7 +72,7 @@ public class TerminologyCTL extends AbstractCTL implements ITerminologyCTL {
 	}
 
 	@Override
-	public GetTermsPageResDTO getTerminologies(String system, int page, int limit) throws OperationException, DocumentNotFoundException, PageOutOfRangeException {
+	public GetTermsPageResDTO getTerminologies(String system, int page, int limit) throws OperationException, DocumentNotFoundException, OutOfRangeException {
 		// Retrieve Pair<Page, Entities>
 		SimpleImmutableEntry<Page<TerminologyETY>, List<TerminologyDocumentDTO>> slice = service.getTerminologies(page, limit, system);
 		// When returning, it builds the URL according to provided values

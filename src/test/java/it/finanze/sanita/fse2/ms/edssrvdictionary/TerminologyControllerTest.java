@@ -3,7 +3,7 @@ package it.finanze.sanita.fse2.ms.edssrvdictionary;
 import brave.Tracer;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.controller.impl.TerminologyCTL;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.ChunkOutOfRangeException;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.OutOfRangeException;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.ITerminologyRepo;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.TerminologyETY;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.snapshot.ChunksETY;
@@ -157,7 +157,7 @@ public class TerminologyControllerTest extends AbstractTest {
 		terminologyRepo.insertSnapshot(snapshot);
 
 
-	assertThrows(ChunkOutOfRangeException.class,()-> getTerminologyByChunkInsMockRequest(snapshot.getId(),1000));
+	assertThrows(OutOfRangeException.class,()-> getTerminologyByChunkInsMockRequest(snapshot.getId(),1000));
 
 
 }
@@ -246,7 +246,7 @@ void getTermsByChunkDelWithChunkOutOfRangeTest() throws Exception{
 		terminologyRepo.insertSnapshot(snapshot);
 
 
-		assertThrows(ChunkOutOfRangeException.class,()-> getTerminologyByChunkDelMockRequest(snapshot.getId(),1000));
+		assertThrows(OutOfRangeException.class,()-> getTerminologyByChunkDelMockRequest(snapshot.getId(),1000));
 
 
 }

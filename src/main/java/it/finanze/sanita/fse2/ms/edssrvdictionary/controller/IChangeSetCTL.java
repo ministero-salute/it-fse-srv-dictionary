@@ -15,10 +15,10 @@ import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.chunks.GetTermsDe
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.chunks.GetTermsInsDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.crud.PostTermsResDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.error.base.ErrorResponseDTO;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.ChunkOutOfRangeException;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DataIntegrityException;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DocumentNotFoundException;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.OperationException;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.OutOfRangeException;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.validators.NoFutureDate;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.validators.ValidObjectId;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -76,7 +76,7 @@ public interface IChangeSetCTL {
 		String id,
 		@PathVariable
 		int idx
-	) throws ChunkOutOfRangeException, DocumentNotFoundException, DataIntegrityException, OperationException;
+	) throws OutOfRangeException, DocumentNotFoundException, DataIntegrityException, OperationException;
 
 	@GetMapping(value = API_CHANGESET_CHUNKS_DEL, produces = {MediaType.APPLICATION_JSON_VALUE })
 	@Tag(name = API_CHANGESET_CHUNKS_TAG)
@@ -93,7 +93,7 @@ public interface IChangeSetCTL {
 		String id,
 		@PathVariable
 		int idx
-	) throws ChunkOutOfRangeException, DocumentNotFoundException, DataIntegrityException, OperationException;
+	) throws OutOfRangeException, DocumentNotFoundException, DataIntegrityException, OperationException;
 
 
 }
