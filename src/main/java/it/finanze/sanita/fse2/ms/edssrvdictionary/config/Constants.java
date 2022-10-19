@@ -69,6 +69,7 @@ public final class Constants {
 		public static final String ERR_VAL_LIMIT_BLANK = "Il limite non può essere vuoto";
 		public static final String ERR_SRV_SYSTEM_ALREADY_EXISTS = "System %s già presente nel database";
 		public static final String ERR_SRV_DOCUMENT_NOT_EXIST = "Il documento richiesto non esiste";
+		public static final String ERR_SRV_FILE_NOT_VALID = "Il documento è nullo oppure vuoto";
 		public static final String ERR_SRV_SYSTEM_VERSION_ALREADY_EXISTS = "System %s con version %s già presente nel database";
 		public static final String ERR_SRV_SYSTEM_NOT_EXISTS = "System %s non presente nel database";
 		public static final String ERR_SRV_PAGE_NOT_EXISTS = "La pagina richiesta non esiste, range valido da <%d> a <%d>";

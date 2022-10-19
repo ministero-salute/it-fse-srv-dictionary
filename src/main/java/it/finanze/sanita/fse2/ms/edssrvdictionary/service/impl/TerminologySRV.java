@@ -32,6 +32,7 @@ import java.util.stream.Collectors;
 
 import static it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Logs.*;
 import static it.finanze.sanita.fse2.ms.edssrvdictionary.dto.ChunksDTO.Chunk;
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.error.ErrorInstance.Fields.FILE;
 import static it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.TerminologyETY.FILE_EXT_DOTTED;
 import static it.finanze.sanita.fse2.ms.edssrvdictionary.utility.ChangeSetUtility.CHUNKS_SIZE;
 import static it.finanze.sanita.fse2.ms.edssrvdictionary.utility.ChangeSetUtility.chunks;
@@ -214,7 +215,9 @@ public class TerminologySRV implements ITerminologySRV {
 	}
 
 	@Override
-	public int uploadTerminologyXml(MultipartFile file, String version) throws DocumentAlreadyPresentException, OperationException, DataProcessingException {
+	public int uploadTerminologyXml(MultipartFile file, String version) throws DocumentAlreadyPresentException, OperationException, DataProcessingException, InvalidContentException {
+		// Check file integrity
+		if(file == null || file.isEmpty()) throw new InvalidContentException(ERR_SRV_FILE_NOT_VALID, FILE);
 		// Extract system from filename
 		String system = file.getOriginalFilename();
 		// Check we got the original filename
@@ -302,7 +305,9 @@ public class TerminologySRV implements ITerminologySRV {
 	}
 
     @Override
-    public int updateTerminologyXml(MultipartFile file, String version) throws DocumentNotFoundException, OperationException, DataProcessingException, DataIntegrityException, DocumentAlreadyPresentException {
+    public int updateTerminologyXml(MultipartFile file, String version) throws DocumentNotFoundException, OperationException, DataProcessingException, DataIntegrityException, DocumentAlreadyPresentException, InvalidContentException {
+		// Check file integrity
+		if(file == null || file.isEmpty()) throw new InvalidContentException(ERR_SRV_FILE_NOT_VALID, FILE);
 		// Extract system from filename
 		String system = file.getOriginalFilename();
 		// Check we got the original filename

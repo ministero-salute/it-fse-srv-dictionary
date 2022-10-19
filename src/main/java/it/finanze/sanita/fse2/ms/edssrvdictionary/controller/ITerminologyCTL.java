@@ -100,7 +100,7 @@ public interface ITerminologyCTL {
         @RequestPart
         @NotBlank(message = ERR_VAL_VERSION_BLANK)
         String version
-    ) throws OperationException, DocumentAlreadyPresentException, DataProcessingException;
+    ) throws OperationException, DocumentAlreadyPresentException, DataProcessingException, InvalidContentException;
 
     @PutMapping(
         produces = { MediaType.APPLICATION_JSON_VALUE },
@@ -113,7 +113,7 @@ public interface ITerminologyCTL {
         @RequestPart
         @NotBlank(message = ERR_VAL_VERSION_BLANK)
         String version
-    ) throws OperationException, DocumentNotFoundException, DataProcessingException, DataIntegrityException, DocumentAlreadyPresentException;
+    ) throws OperationException, DocumentNotFoundException, DataProcessingException, DataIntegrityException, DocumentAlreadyPresentException, InvalidContentException;
 
     @DeleteMapping(
         value = API_SYSTEM_EXTS,

@@ -56,6 +56,18 @@ public class ExceptionCTL extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(out, headers, out.getStatus());
     }
 
+    @ExceptionHandler(InvalidContentException.class)
+    protected ResponseEntity<ErrorResponseDTO> handleInvalidContentException(InvalidContentException ex) {
+        // Log me
+        log.error("HANDLER handleInvalidContentException()", ex);
+        // Create error DTO
+        ErrorResponseDTO out = createInvalidContentError(getLogTraceInfo(), ex);
+        // Set HTTP headers
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_PROBLEM_JSON);
+        return new ResponseEntity<>(out, headers, out.getStatus());
+    }
+
     /**
      * Handles any document conflict.
      *

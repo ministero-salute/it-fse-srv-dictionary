@@ -43,12 +43,12 @@ public class TerminologyCTL extends AbstractCTL implements ITerminologyCTL {
 	}
 
 	@Override
-	public PostTermsResDTO uploadTerminologies(MultipartFile file, String version) throws OperationException, DocumentAlreadyPresentException, DataProcessingException {
+	public PostTermsResDTO uploadTerminologies(MultipartFile file, String version) throws OperationException, DocumentAlreadyPresentException, DataProcessingException, InvalidContentException {
 		return new PostTermsResDTO(getLogTraceInfo(), service.uploadTerminologyXml(file, version));
 	}
 
 	@Override
-	public PutTermsResDTO updateTerminologies(MultipartFile file, String version) throws OperationException, DocumentNotFoundException, DataProcessingException, DataIntegrityException, DocumentAlreadyPresentException {
+	public PutTermsResDTO updateTerminologies(MultipartFile file, String version) throws OperationException, DocumentNotFoundException, DataProcessingException, DataIntegrityException, DocumentAlreadyPresentException, InvalidContentException {
 		return new PutTermsResDTO(getLogTraceInfo(), service.updateTerminologyXml(file, version));
 	}
 

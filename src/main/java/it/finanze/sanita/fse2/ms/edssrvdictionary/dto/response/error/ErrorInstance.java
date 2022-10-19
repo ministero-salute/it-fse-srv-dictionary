@@ -29,4 +29,9 @@ public final class ErrorInstance {
                 public static final String INTEGRITY = "/data-integrity";
         }
 
+        @NoArgsConstructor(access = AccessLevel.PRIVATE)
+        public static final class Fields {
+                public static final String FILE = "file";
+        }
+
 }

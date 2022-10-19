@@ -57,6 +57,18 @@ public final class ErrorBuilderDTO {
         );
     }
 
+    public static ErrorResponseDTO createInvalidContentError(LogTraceInfoDTO trace, InvalidContentException ex) {
+        return new ErrorResponseDTO(
+            trace,
+            ErrorType.VALIDATION.getType(),
+            ErrorType.VALIDATION.getTitle(),
+            ex.getMessage(),
+            SC_BAD_REQUEST,
+            ErrorType.VALIDATION.toInstance(Validation.CONSTRAINT_FIELD, ex.getField())
+        );
+
+    }
+
     public static ErrorResponseDTO createMissingPartError(LogTraceInfoDTO trace, MissingServletRequestPartException ex) {
         return new ErrorResponseDTO(
             trace,
