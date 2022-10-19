@@ -194,7 +194,7 @@ public class TerminologySRV implements ITerminologySRV {
 
 
 	@Override
-	public TerminologyDocumentDTO findById(String id) throws OperationException, DocumentNotFoundException {
+	public TerminologyDocumentDTO getTerminologyById(String id) throws OperationException, DocumentNotFoundException {
 
 		TerminologyETY output = repository.findById(id);
 

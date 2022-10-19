@@ -18,26 +18,27 @@ import java.util.List;
 public interface ITerminologyRepo extends IChangeSetRepo<TerminologyETY> {
 
 	/**
-	 * Inserts a vocabulary on database.
-	 * 
-	 * @param ety Vocabulary to insert.
-	 * @return Vocabulary inserted.
+	 * Inserts terminology into the database.
+	 * @param ety The entity to insert
+	 * @return The entity inserted.
+	 * @throws OperationException If a data-layer error occurs
 	 */
 	TerminologyETY insert(TerminologyETY ety) throws OperationException;
 	
 	/**
-	 * Returns a Vcard identified by its {@code pk}.
-	 * 
-	 * @param pk Primary key of the Vcard to return.
-	 * @return Vcard identified by its {@code pk}.
+	 * Returns terminology matching the identifier
+	 * @param pk The entity identifier
+	 * @return The entity matching the identifier or {@code null}
+	 * @throws OperationException If a data-layer error occurs
 	 */
 	TerminologyETY findById(String pk) throws OperationException;
 
 	/**
-	 * Inserts all vocabularies on database.
+	 * Inserts all terminologies into the database.
 	 *
-	 * @param etys List of vocabularies to insert.
+	 * @param etys List of entities to insert
 	 * @return The entities inserted
+	 * @throws OperationException If a data-layer error occurs
 	 */
 	List<TerminologyETY> insertAll(List<TerminologyETY> etys) throws OperationException;
 
@@ -57,25 +58,73 @@ public interface ITerminologyRepo extends IChangeSetRepo<TerminologyETY> {
 	 * @throws OperationException If a data-layer error occurs
 	 */
 	boolean existsBySystemAndVersion(String system, String version) throws OperationException;
-	
+
+	/**
+	 * Returns all the entities matching the given codes and system
+	 * @param codes List containing code identifiers
+	 * @param system System identifier
+	 * @return List containing the entities matching code and system
+	 * @throws OperationException If a data-layer error occurs
+	 */
 	List<TerminologyETY> findByInCodeAndSystem(List<String> codes, String system) throws OperationException;
 
 	/**
-     * Retrieves all the not-deleted termonologues
+     * Retrieves all the not-deleted terminologies
      *
      * @return Any available terminology
      * @throws OperationException If a data-layer error occurs
      */
     List<TerminologyETY> getEveryActiveTerminology() throws OperationException;
 
+	/**
+	 * Returns entities matching the identifier list
+	 * @param ids List containing identifiers
+	 * @return The entities matching the identifiers
+	 * @throws OperationException If a data-layer error occurs
+	 */
 	List<TerminologyETY> findByIds(List<ObjectId> ids) throws OperationException;
+
+	/**
+	 * Return entities matching the system
+	 * @param system System identifier
+	 * @return The entities matching the system
+	 * @throws OperationException If a data-layer error occurs
+	 */
 	List<TerminologyETY> findBySystem(String system) throws OperationException;
 
+	/**
+	 * Delete a given entity and returns it
+	 * @param id The document id
+	 * @return The deleted entity or {@code null}
+	 * @throws OperationException If a data-layer error occurs
+	 */
 	TerminologyETY deleteById(String id) throws OperationException;
 
+	/**
+	 * Delete entities matching system and returns them
+	 * @param system System identifier
+	 * @return The entities matching the system
+	 * @throws OperationException If a data-layer error occurs
+	 * @throws DataIntegrityException If database output is not the expected one
+	 */
 	List<TerminologyETY> deleteBySystem(String system) throws OperationException, DataIntegrityException;
 
+	/**
+	 * Update entities by system, deleting the oldest and inserting the new one
+	 * @param system System identifier
+	 * @param entities Entities to insert
+	 * @return The inserted entities
+	 * @throws OperationException If a data-layer error occurs
+	 * @throws DataIntegrityException If database output is not the expected one
+	 */
 	List<TerminologyETY> updateBySystem(String system, List<TerminologyETY> entities) throws OperationException, DataIntegrityException;
 
+	/**
+	 * Returns terminologies matching system with pagination
+	 * @param system System identifier
+	 * @param page Page index
+	 * @return The page data
+	 * @throws OperationException If a data-layer error occurs
+	 */
     Page<TerminologyETY> getBySystem(String system, Pageable page) throws OperationException;
 }

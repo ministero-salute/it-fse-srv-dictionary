@@ -80,7 +80,7 @@ class TerminologyServiceTest extends AbstractTest {
 		
 		mongoTemplate.insert(ety);
         
-        TerminologyDocumentDTO terminology = terminologySRV.findById(TEST_TERMINOLOGY_ID);
+        TerminologyDocumentDTO terminology = terminologySRV.getTerminologyById(TEST_TERMINOLOGY_ID);
         assertNotNull(terminology);
         assertEquals(TEST_SYSTEM, terminology.getSystem());
         assertEquals(TEST_CODE, terminology.getCode());
