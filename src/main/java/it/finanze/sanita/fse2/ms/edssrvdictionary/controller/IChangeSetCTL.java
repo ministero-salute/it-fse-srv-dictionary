@@ -29,10 +29,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.validation.constraints.NotBlank;
 import java.util.Date;
 
-import static it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Logs.ERR_VAL_FUTURE_DATE;
-import static it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Logs.ERR_VAL_ID_BLANK;
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Logs.*;
 import static it.finanze.sanita.fse2.ms.edssrvdictionary.utility.RoutesUtility.*;
 
 /**
@@ -81,7 +81,8 @@ public interface IChangeSetCTL {
 	GetTermsInsDTO getTermsByChunkIns(
 		@PathVariable
 		@Parameter(description = "Identificatore documento (snapshot)")
-		@ValidObjectId(message = ERR_VAL_ID_BLANK)
+		@NotBlank(message = ERR_VAL_ID_BLANK)
+		@ValidObjectId(message = ERR_VAL_ID_NOT_VALID)
 		String id,
 		@PathVariable
 		@Parameter(description = "Indice chunk richiesto (eg. 0, 1, 2...)")
@@ -106,7 +107,8 @@ public interface IChangeSetCTL {
 	GetTermsDelDTO getTermsByChunkDel(
 		@PathVariable
 		@Parameter(description = "Identificatore documento (snapshot)")
-		@ValidObjectId(message = ERR_VAL_ID_BLANK)
+		@NotBlank(message = ERR_VAL_ID_BLANK)
+		@ValidObjectId(message = ERR_VAL_ID_NOT_VALID)
 		String id,
 		@PathVariable
 		@Parameter(description = "Indice chunk richiesto (eg. 0, 1, 2...)")
