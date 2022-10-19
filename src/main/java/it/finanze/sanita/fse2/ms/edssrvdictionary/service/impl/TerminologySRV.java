@@ -13,7 +13,6 @@ import it.finanze.sanita.fse2.ms.edssrvdictionary.service.ITerminologySRV;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.utility.ChangeSetUtility;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.utility.FileUtility;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.utility.MiscUtility;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.utility.RoutesUtility;
 import lombok.extern.slf4j.Slf4j;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +35,7 @@ import static it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.error.Erro
 import static it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.TerminologyETY.FILE_EXT_DOTTED;
 import static it.finanze.sanita.fse2.ms.edssrvdictionary.utility.ChangeSetUtility.CHUNKS_SIZE;
 import static it.finanze.sanita.fse2.ms.edssrvdictionary.utility.ChangeSetUtility.chunks;
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.utility.RoutesUtility.*;
 import static java.lang.String.format;
 
 /**
@@ -253,14 +253,14 @@ public class TerminologySRV implements ITerminologySRV {
 		try {
 			chunk = ids.get(index);
 		}catch (IndexOutOfBoundsException e) {
-			throw new OutOfRangeException("The chunk index is out of range: " + index, RoutesUtility.API_PATH_IDX_VAR);
+			throw new OutOfRangeException(ERR_VAL_IDX_CHUNK_NOT_VALID, API_PATH_IDX_VAR);
 		}
 		// Retrieve documents
 		List<TerminologyETY> docs = repository.findByIds(chunk);
 		// Verify it matches the expected size
 		if(chunk.size() != docs.size()) {
 			throw new DataIntegrityException(
-				format("The expected document size <%s> does not match the returned one <%s>", chunk.size(), docs.size())
+				format(ERR_SRV_CHUNK_MISMATCH, chunk.size(), docs.size())
 			);
 		}
 		// Return mapping back to DTO type
@@ -288,7 +288,7 @@ public class TerminologySRV implements ITerminologySRV {
 		try {
 			chunk = ids.get(index);
 		}catch (IndexOutOfBoundsException e) {
-			throw new OutOfRangeException("The chunk index is out of range: " + index, RoutesUtility.API_PATH_IDX_VAR);
+			throw new OutOfRangeException(ERR_VAL_IDX_CHUNK_NOT_VALID, API_PATH_IDX_VAR);
 		}
 		return chunk;
 	}
@@ -345,19 +345,19 @@ public class TerminologySRV implements ITerminologySRV {
 		// Check valid limit was provided
 		if(limit <= 0) {
 			// Let the caller know about it
-			throw new OutOfRangeException(ERR_SRV_PAGE_LIMIT_LESS_ZERO, RoutesUtility.API_QP_LIMIT);
+			throw new OutOfRangeException(ERR_SRV_PAGE_LIMIT_LESS_ZERO, API_QP_LIMIT);
 		}
 		// Check valid index was provided
 		if(page < 0) {
 			// Let the caller know about it
-			throw new OutOfRangeException(ERR_SRV_PAGE_IDX_LESS_ZERO, RoutesUtility.API_QP_PAGE);
+			throw new OutOfRangeException(ERR_SRV_PAGE_IDX_LESS_ZERO, API_QP_PAGE);
 		}
 		// Retrieve page
 		Page<TerminologyETY> current = repository.getBySystem(system, PageRequest.of(page, limit));
 		// Check valid index was provided
 		if(page >= current.getTotalPages()) {
 			// Let the caller know about it
-			throw new OutOfRangeException(String.format(ERR_SRV_PAGE_NOT_EXISTS, 0, current.getTotalPages() - 1), RoutesUtility.API_QP_PAGE);
+			throw new OutOfRangeException(String.format(ERR_SRV_PAGE_NOT_EXISTS, 0, current.getTotalPages() - 1), API_QP_PAGE);
 		}
 		// Convert entities to dto
 		List<TerminologyDocumentDTO> entities = current.stream().map(TerminologyDocumentDTO::fromEntity).collect(Collectors.toList());

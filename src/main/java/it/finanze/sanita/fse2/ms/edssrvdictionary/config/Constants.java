@@ -65,8 +65,10 @@ public final class Constants {
 		public static final String ERR_VAL_MISSING_PARAMETER = "Il parametro richiesto '%s' non è presente";
 		public static final String ERR_VAL_SYSTEM_BLANK = "Il system non può essere vuoto";
 		public static final String ERR_VAL_VERSION_BLANK = "La versione non può essere vuota";
+		public static final String ERR_VAL_IDX_CHUNK_NOT_VALID = "L'indice chunk non è valido (minore di zero o maggiore dei chunk disponibili)";
 		public static final String ERR_VAL_IDX_BLANK = "L'indice non può essere vuoto";
 		public static final String ERR_VAL_LIMIT_BLANK = "Il limite non può essere vuoto";
+		public static final String ERR_VAL_FUTURE_DATE = "La data del ultimo aggiornamento non può essere nel futuro";
 		public static final String ERR_SRV_SYSTEM_ALREADY_EXISTS = "System %s già presente nel database";
 		public static final String ERR_SRV_DOCUMENT_NOT_EXIST = "Il documento richiesto non esiste";
 		public static final String ERR_SRV_FILE_NOT_VALID = "Il documento è nullo oppure vuoto";
@@ -74,6 +76,7 @@ public final class Constants {
 		public static final String ERR_SRV_SYSTEM_NOT_EXISTS = "System %s non presente nel database";
 		public static final String ERR_SRV_PAGE_NOT_EXISTS = "La pagina richiesta non esiste, range valido da <%d> a <%d>";
 		public static final String ERR_SRV_PAGE_IDX_LESS_ZERO = "L'indice pagina non può essere minore di zero";
+		public static final String ERR_SRV_CHUNK_MISMATCH =  "Il numero dei documenti richiesti <%d> non coincide con quelli ottenuti <%d>";
 		public static final String ERR_SRV_PAGE_LIMIT_LESS_ZERO = "Il limite pagina non può essere minore o uguale a zero";
 		public static final String ERR_REP_UNABLE_RETRIVE_FILENAME = "Impossibile recuperare il nome del file corrente";
 		public static final String ERR_REP_UNABLE_CHECK_SYSTEM = "Impossibile verificare l'esistenza del system";
