@@ -117,11 +117,9 @@ public interface ITerminologyCTL {
         String system,
         @RequestParam(API_QP_PAGE)
         @Parameter(description = "Indice pagina richiesto (eg. 0, 1, 2...)")
-        @NotBlank(message = ERR_VAL_IDX_BLANK)
         int page,
         @RequestParam(API_QP_LIMIT)
         @Parameter(description = "Limite documenti per pagina (eg. 10, 20 ...)")
-        @NotBlank(message = ERR_VAL_LIMIT_BLANK)
         int limit
     ) throws OperationException, DocumentNotFoundException, OutOfRangeException;
 
