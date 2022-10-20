@@ -4,7 +4,6 @@ package it.finanze.sanita.fse2.ms.edssrvdictionary;
 import brave.Tracer;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.TerminologyDocumentDTO;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.ITerminologyRepo;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.TerminologyETY;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.snapshot.ChunksETY;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.snapshot.SnapshotETY;
@@ -14,9 +13,7 @@ import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Date;
 
@@ -25,7 +22,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 
 @SpringBootTest
-@ComponentScan
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @ActiveProfiles(Constants.Profile.TEST)
 class TerminologyServiceTest extends AbstractTest {
@@ -33,19 +29,12 @@ class TerminologyServiceTest extends AbstractTest {
 	private final String TEST_SYSTEM = "System_A"; 
     private final String TEST_CODE = "Code_A"; 
     private final String TEST_DESCRIPTION = "Description_A";
-
-    @Autowired
-	private MockMvc mvc; 
 	
 	@MockBean
 	private Tracer tracer;
 
     @Autowired
     private ITerminologySRV terminologySRV;
-
-	@Autowired
-	private ITerminologyRepo terminologyRepo;
-
 
 	@BeforeAll
     public void setup() {

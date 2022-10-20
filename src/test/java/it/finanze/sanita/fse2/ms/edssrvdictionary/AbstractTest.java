@@ -1,26 +1,20 @@
 package it.finanze.sanita.fse2.ms.edssrvdictionary;
 
-import java.io.Reader;
-import java.util.List;
-
+import com.opencsv.bean.CsvToBeanBuilder;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.TerminologyBuilderDTO;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.TerminologyETY;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 
-import com.opencsv.bean.CsvToBeanBuilder;
-
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.TerminologyBuilderDTO;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.TerminologyETY;
+import java.io.Reader;
+import java.util.List;
 
 public class AbstractTest {
 
 	@Autowired
     public MongoTemplate mongoTemplate;
 
-
-
-
 	public static final String INVALID_SNAPSHOT_ID ="invalid_id";
-
 
 	protected void dropVocabularyCollection() {
     	mongoTemplate.dropCollection(TerminologyETY.class);

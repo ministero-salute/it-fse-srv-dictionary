@@ -31,6 +31,8 @@ public final class RoutesUtility {
     public static final String API_TERMS_GET_ONE_BY_ID = API_ID + API_ID_EXTS;
     public static final String API_TERMS_GET_BY_CSV = "/" + API_CSV;
 
+    public static final String API_GET_BY_CSV_FULL = "/" + API_TERMS_MAPPER + API_TERMS_GET_BY_CSV;
+
     public static final String API_CHANGESET_MAPPER = API_VERSION + "/" + API_CHANGESET;
     public static final String API_CHANGESET_STATUS = "/" + API_TERMINOLOGY + "/" + API_STATUS ;
     public static final String API_CHANGESET_CHUNKS = "/" + API_TERMINOLOGY + "/" + API_CHUNKS ;
