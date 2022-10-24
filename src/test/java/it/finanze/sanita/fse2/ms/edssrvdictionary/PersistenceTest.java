@@ -96,7 +96,7 @@ public class PersistenceTest extends AbstractTest {
 		TerminologyBuilderDTO vocabularyDTO1 = new TerminologyBuilderDTO();
 		
 		vocabularyDTO1.setCode("code");
-		vocabularyDTO1.setDescription("descrption");
+		vocabularyDTO1.setDescription("description");
 		
 		ety1.setCode(vocabularyDTO1.getCode());
 		ety1.setDescription(vocabularyDTO1.getDescription());

@@ -3,23 +3,26 @@
  */
 package it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.error;
 
-
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.LogTraceInfoDTO;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.error.ErrorInstance.Resource;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.error.ErrorInstance.Server;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.error.ErrorInstance.Validation;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.error.base.ErrorResponseDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.*;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.utility.MiscUtility;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.multipart.support.MissingServletRequestPartException;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
-import java.util.Objects;
 
-import static it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.error.ErrorInstance.IO;
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Logs.*;
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.error.ErrorInstance.*;
 import static org.apache.http.HttpStatus.*;
 
+/**
+ * Builder class converting a given {@link Exception} into its own {@link ErrorResponseDTO} representation
+ *
+ * @author G. Baittiner
+ */
 public final class ErrorBuilderDTO {
 
     /**
@@ -42,6 +45,65 @@ public final class ErrorBuilderDTO {
         );
     }
 
+    public static ErrorResponseDTO createArgumentMismatchError(LogTraceInfoDTO trace, MethodArgumentTypeMismatchException ex) {
+        return new ErrorResponseDTO(
+            trace,
+            ErrorType.VALIDATION.getType(),
+            ErrorType.VALIDATION.getTitle(),
+            String.format(
+                ERR_VAL_UNABLE_CONVERT,
+                ex.getName(),
+                ex.getParameter().getParameter().getType().getSimpleName()
+            ),
+            SC_BAD_REQUEST,
+            ErrorType.VALIDATION.toInstance(Validation.CONSTRAINT_FIELD, ex.getName())
+        );
+    }
+
+    public static ErrorResponseDTO createInvalidContentError(LogTraceInfoDTO trace, InvalidContentException ex) {
+        return new ErrorResponseDTO(
+            trace,
+            ErrorType.VALIDATION.getType(),
+            ErrorType.VALIDATION.getTitle(),
+            ex.getMessage(),
+            SC_BAD_REQUEST,
+            ErrorType.VALIDATION.toInstance(Validation.CONSTRAINT_FIELD, ex.getField())
+        );
+
+    }
+
+    public static ErrorResponseDTO createMissingPartError(LogTraceInfoDTO trace, MissingServletRequestPartException ex) {
+        return new ErrorResponseDTO(
+            trace,
+            ErrorType.VALIDATION.getType(),
+            ErrorType.VALIDATION.getTitle(),
+            String.format(ERR_VAL_MISSING_PART, ex.getRequestPartName()),
+            SC_BAD_REQUEST,
+            ErrorType.VALIDATION.toInstance(Validation.CONSTRAINT_FIELD, ex.getRequestPartName())
+        );
+    }
+
+    public static ErrorResponseDTO createOutOfRangeError(LogTraceInfoDTO trace, OutOfRangeException ex) {
+        return new ErrorResponseDTO(
+            trace,
+            ErrorType.VALIDATION.getType(),
+            ErrorType.VALIDATION.getTitle(),
+            ex.getMessage(),
+            SC_BAD_REQUEST,
+            ErrorType.VALIDATION.toInstance(Validation.CONSTRAINT_FIELD, ex.getField())
+        );
+    }
+
+    public static ErrorResponseDTO createMissingParameterError(LogTraceInfoDTO trace, MissingServletRequestParameterException ex) {
+        return new ErrorResponseDTO(
+            trace,
+            ErrorType.VALIDATION.getType(),
+            ErrorType.VALIDATION.getTitle(),
+            String.format(ERR_VAL_MISSING_PARAMETER, ex.getParameterName()),
+            SC_BAD_REQUEST,
+            ErrorType.VALIDATION.toInstance(Validation.CONSTRAINT_FIELD, ex.getParameterName())
+        );
+    }
 
     public static ErrorResponseDTO createGenericError(LogTraceInfoDTO trace, Exception ex) {
         return new ErrorResponseDTO(
@@ -54,7 +116,6 @@ public final class ErrorBuilderDTO {
         );
     }
 
-
     public static ErrorResponseDTO createOperationError(LogTraceInfoDTO trace, OperationException ex) {
         return new ErrorResponseDTO(
             trace,
@@ -63,6 +124,17 @@ public final class ErrorBuilderDTO {
             ex.getMessage(),
             SC_INTERNAL_SERVER_ERROR,
             ErrorType.SERVER.toInstance(Server.INTERNAL)
+        );
+    }
+
+    public static ErrorResponseDTO createDocumentAlreadyPresentError(LogTraceInfoDTO trace, DocumentAlreadyPresentException ex) {
+        return new ErrorResponseDTO(
+            trace,
+            ErrorType.RESOURCE.getType(),
+            ErrorType.RESOURCE.getTitle(),
+            ex.getMessage(),
+            SC_CONFLICT,
+            ErrorType.RESOURCE.toInstance(Resource.CONFLICT)
         );
     }
 
@@ -77,41 +149,6 @@ public final class ErrorBuilderDTO {
         );
     }
 
-    public static ErrorResponseDTO createDocumentAlreadyPresentError(LogTraceInfoDTO trace, DocumentAlreadyPresentException ex) {
-        return new ErrorResponseDTO(
-            trace,
-            ErrorType.RESOURCE.getType(),
-            ErrorType.RESOURCE.getTitle(),
-            ex.getMessage(),
-            SC_CONFLICT,
-            ErrorType.RESOURCE.toInstance(Resource.CONFLICT)
-        );
-    } 
-
-    public static ErrorResponseDTO createTypeMismatchError(LogTraceInfoDTO trace, MethodArgumentTypeMismatchException ex){
-        return new ErrorResponseDTO(
-            trace,
-            ErrorType.VALIDATION.getType(),
-            ErrorType.VALIDATION.getTitle(),
-            ex.getMessage(),
-            SC_CONFLICT,
-            ErrorType.VALIDATION.toInstance(Validation.CONSTRAINT_FIELD, Objects.requireNonNull(ex.getRequiredType()).toString())
-        );
-    }
-
-
-    public static ErrorResponseDTO createDataIntegrityError(LogTraceInfoDTO trace, DataIntegrityException ex){
-        String field = ex.getCause().toString();
-        return new ErrorResponseDTO(
-            trace,
-            ErrorType.IO.getType(),
-            ErrorType.IO.getTitle(),
-            ex.getMessage(),
-            SC_CONFLICT,
-            ErrorType.IO.toInstance(IO.INTEGRITY, field)
-        );
-    }
-
     public static ErrorResponseDTO createDataProcessingError(LogTraceInfoDTO trace, DataProcessingException ex) {
         return new ErrorResponseDTO(
             trace,
@@ -123,5 +160,15 @@ public final class ErrorBuilderDTO {
         );
     }
 
+    public static ErrorResponseDTO createDataIntegrityError(LogTraceInfoDTO trace, DataIntegrityException ex) {
+        return new ErrorResponseDTO(
+            trace,
+            ErrorType.IO.getType(),
+            ErrorType.IO.getTitle(),
+            ex.getMessage(),
+            SC_INTERNAL_SERVER_ERROR,
+            ErrorType.IO.toInstance(IO.INTEGRITY)
+        );
+    }
 
 }

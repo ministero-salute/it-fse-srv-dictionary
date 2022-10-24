@@ -25,11 +25,11 @@ public class PutTermsResDTO extends ResponseDTO {
 	 */
 	private static final long serialVersionUID = 5857199886068379718L;
 
-	private Integer insertedTerminology;
+	private Integer updatedTerminology;
 
 	public PutTermsResDTO(final LogTraceInfoDTO traceInfo, final Integer inInsertedTerminology) {
 		super(traceInfo);
-		insertedTerminology = inInsertedTerminology;
+		updatedTerminology = inInsertedTerminology;
 	}
 	
 }

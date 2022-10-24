@@ -12,10 +12,10 @@ import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes.base.Chan
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes.chunks.ChangeSetChunkDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.chunks.GetTermsDelDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.chunks.GetTermsInsDTO;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.ChunkOutOfRangeException;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DataIntegrityException;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DocumentNotFoundException;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.OperationException;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.OutOfRangeException;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.service.ITerminologySRV;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
@@ -39,12 +39,12 @@ public class ChangeSetCTL extends AbstractCTL implements IChangeSetCTL{
     private transient ITerminologySRV terminologySRV;
 
     @Override
-    public GetTermsInsDTO getTermsByChunkIns(String id, int idx) throws ChunkOutOfRangeException, DocumentNotFoundException, DataIntegrityException, OperationException {
+    public GetTermsInsDTO getTermsByChunkIns(String id, int idx) throws OutOfRangeException, DocumentNotFoundException, DataIntegrityException, OperationException {
         return new GetTermsInsDTO(getLogTraceInfo(), terminologySRV.getTermsByChunkIns(id, idx));
     }
 
     @Override
-    public GetTermsDelDTO getTermsByChunkDel(String id, int idx) throws ChunkOutOfRangeException, DocumentNotFoundException, OperationException {
+    public GetTermsDelDTO getTermsByChunkDel(String id, int idx) throws OutOfRangeException, DocumentNotFoundException, OperationException {
         return new GetTermsDelDTO(getLogTraceInfo(), terminologySRV.getTermsByChunkDel(id, idx));
     }
 

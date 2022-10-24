@@ -19,10 +19,13 @@ import it.finanze.sanita.fse2.ms.edssrvdictionary.utility.MiscUtility;
 import lombok.extern.slf4j.Slf4j;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
+import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -31,9 +34,11 @@ import java.util.stream.Collectors;
 
 import static it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Logs.*;
 import static it.finanze.sanita.fse2.ms.edssrvdictionary.dto.ChunksDTO.Chunk;
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.error.ErrorInstance.Fields.FILE;
 import static it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.TerminologyETY.FILE_EXT_DOTTED;
 import static it.finanze.sanita.fse2.ms.edssrvdictionary.utility.ChangeSetUtility.CHUNKS_SIZE;
 import static it.finanze.sanita.fse2.ms.edssrvdictionary.utility.ChangeSetUtility.chunks;
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.utility.RoutesUtility.*;
 import static java.lang.String.format;
 
 /**
@@ -185,19 +190,19 @@ public class TerminologySRV implements ITerminologySRV {
 		SnapshotETY doc = repository.getSnapshot(id);
 		// Verify existence
 		if(doc == null) {
-			throw new DocumentNotFoundException(ERROR_REQUESTED_DOCUMENT_DOES_NOT_EXIST);
+			throw new DocumentNotFoundException(ERR_SRV_DOCUMENT_NOT_EXIST);
 		}
 		return doc;
 	}
 
 
 	@Override
-	public TerminologyDocumentDTO findById(String id) throws OperationException, DocumentNotFoundException {
+	public TerminologyDocumentDTO getTerminologyById(String id) throws OperationException, DocumentNotFoundException {
 
 		TerminologyETY output = repository.findById(id);
 
         if (output == null) {
-            throw new DocumentNotFoundException(ERROR_REQUESTED_DOCUMENT_DOES_NOT_EXIST);
+            throw new DocumentNotFoundException(ERR_SRV_DOCUMENT_NOT_EXIST);
         }
 		
 		return TerminologyDocumentDTO.fromEntity(output);
@@ -207,13 +212,15 @@ public class TerminologySRV implements ITerminologySRV {
 	public int deleteTerminologyById(String id) throws DocumentNotFoundException, OperationException {
 		TerminologyETY out = repository.deleteById(id);
 		if (out == null) {
-			throw new DocumentNotFoundException(ERROR_REQUESTED_DOCUMENT_DOES_NOT_EXIST);
+			throw new DocumentNotFoundException(ERR_SRV_DOCUMENT_NOT_EXIST);
 		}
 		return Lists.newArrayList(out).size();
 	}
 
 	@Override
-	public int uploadTerminologyXml(MultipartFile file, String version) throws DocumentAlreadyPresentException, OperationException, DataProcessingException {
+	public int uploadTerminologyXml(MultipartFile file, String version) throws DocumentAlreadyPresentException, OperationException, DataProcessingException, InvalidContentException {
+		// Check file integrity
+		if(file == null || file.isEmpty()) throw new InvalidContentException(ERR_SRV_FILE_NOT_VALID, FILE);
 		// Extract system from filename
 		String system = file.getOriginalFilename();
 		// Check we got the original filename
@@ -239,7 +246,7 @@ public class TerminologySRV implements ITerminologySRV {
 	}
 
 	@Override
-	public List<TerminologyDocumentDTO> getTermsByChunkIns(String id, int index) throws DocumentNotFoundException, OperationException, ChunkOutOfRangeException, DataIntegrityException {
+	public List<TerminologyDocumentDTO> getTermsByChunkIns(String id, int index) throws DocumentNotFoundException, OperationException, OutOfRangeException, DataIntegrityException {
 		// Retrieve document chunks
 		SnapshotETY chunks = getChunks(id);
 		// Get chunk according to type
@@ -249,14 +256,14 @@ public class TerminologySRV implements ITerminologySRV {
 		try {
 			chunk = ids.get(index);
 		}catch (IndexOutOfBoundsException e) {
-			throw new ChunkOutOfRangeException("The chunk index is out of range: " + index);
+			throw new OutOfRangeException(ERR_VAL_IDX_CHUNK_NOT_VALID, API_PATH_IDX_VAR);
 		}
 		// Retrieve documents
 		List<TerminologyETY> docs = repository.findByIds(chunk);
 		// Verify it matches the expected size
 		if(chunk.size() != docs.size()) {
 			throw new DataIntegrityException(
-				format("The expected document size <%s> does not match the returned one <%s>", chunk.size(), docs.size())
+				format(ERR_SRV_CHUNK_MISMATCH, chunk.size(), docs.size())
 			);
 		}
 		// Return mapping back to DTO type
@@ -271,10 +278,10 @@ public class TerminologySRV implements ITerminologySRV {
 	 * @return The terminologies associated with the chunk
 	 * @throws OperationException        If a data-layer error occurs
 	 * @throws DocumentNotFoundException If no snapshot matching the given id exists
-	 * @throws ChunkOutOfRangeException  If no chunk matching the given index exists
+	 * @throws OutOfRangeException  If no chunk matching the given index exists
 	 */
 	@Override
-	public List<ObjectId> getTermsByChunkDel(String id, int index) throws DocumentNotFoundException, OperationException, ChunkOutOfRangeException {
+	public List<ObjectId> getTermsByChunkDel(String id, int index) throws DocumentNotFoundException, OperationException, OutOfRangeException {
 		// Retrieve document chunks
 		SnapshotETY chunks = getChunks(id);
 		// Get chunk according to type
@@ -284,7 +291,7 @@ public class TerminologySRV implements ITerminologySRV {
 		try {
 			chunk = ids.get(index);
 		}catch (IndexOutOfBoundsException e) {
-			throw new ChunkOutOfRangeException("The chunk index is out of range: " + index);
+			throw new OutOfRangeException(ERR_VAL_IDX_CHUNK_NOT_VALID, API_PATH_IDX_VAR);
 		}
 		return chunk;
 	}
@@ -300,10 +307,71 @@ public class TerminologySRV implements ITerminologySRV {
 		return repository.deleteBySystem(system).size();
 	}
 
+    @Override
+    public int updateTerminologyXml(MultipartFile file, String version) throws DocumentNotFoundException, OperationException, DataProcessingException, DataIntegrityException, DocumentAlreadyPresentException, InvalidContentException {
+		// Check file integrity
+		if(file == null || file.isEmpty()) throw new InvalidContentException(ERR_SRV_FILE_NOT_VALID, FILE);
+		// Extract system from filename
+		String system = file.getOriginalFilename();
+		// Check we got the original filename
+		if (system == null || system.isEmpty()) {
+			throw new DataProcessingException(ERR_REP_UNABLE_RETRIVE_FILENAME);
+		}
+		// Remove extension
+		system = system.replace(FILE_EXT_DOTTED, "");
+		// Check system exists
+		if(!repository.existsBySystem(system)) {
+			// Let the caller know about it
+			throw new DocumentNotFoundException(String.format(ERR_SRV_SYSTEM_NOT_EXISTS, system));
+		}
+		// Check version does not exist on the given system
+		if(repository.existsBySystemAndVersion(system, version)) {
+			throw new DocumentAlreadyPresentException(String.format(
+				ERR_SRV_SYSTEM_VERSION_ALREADY_EXISTS, system, version
+			));
+		}
+		// Extract binary content
+		byte[] raw = FileUtility.throwIfEmpty(file);
+		// Parse entities
+		List<TerminologyETY> entities = TerminologyETY.fromXML(raw, system, version);
+		// Execute and return size
+		return repository.updateBySystem(system, entities).size();
+	}
+
+	@Override
+	public SimpleImmutableEntry<Page<TerminologyETY>, List<TerminologyDocumentDTO>> getTerminologies(int page, int limit, String system) throws OperationException, DocumentNotFoundException, OutOfRangeException {
+		// Check system exists
+		if(!repository.existsBySystem(system)) {
+			// Let the caller know about it
+			throw new DocumentNotFoundException(String.format(ERR_SRV_SYSTEM_NOT_EXISTS, system));
+		}
+		// Check valid limit was provided
+		if(limit <= 0) {
+			// Let the caller know about it
+			throw new OutOfRangeException(ERR_SRV_PAGE_LIMIT_LESS_ZERO, API_QP_LIMIT);
+		}
+		// Check valid index was provided
+		if(page < 0) {
+			// Let the caller know about it
+			throw new OutOfRangeException(ERR_SRV_PAGE_IDX_LESS_ZERO, API_QP_PAGE);
+		}
+		// Retrieve page
+		Page<TerminologyETY> current = repository.getBySystem(system, PageRequest.of(page, limit));
+		// Check valid index was provided
+		if(page >= current.getTotalPages()) {
+			// Let the caller know about it
+			throw new OutOfRangeException(String.format(ERR_SRV_PAGE_NOT_EXISTS, 0, current.getTotalPages() - 1), API_QP_PAGE);
+		}
+		// Convert entities to dto
+		List<TerminologyDocumentDTO> entities = current.stream().map(TerminologyDocumentDTO::fromEntity).collect(Collectors.toList());
+		// Return Pair<Page,Entities> object
+		return new SimpleImmutableEntry<>(current, entities);
+	}
+
 	@Override
 	public Integer uploadTerminologyFile(MultipartFile file) throws IOException, OperationException {
 		int output;
-	
+
 		byte [] byteArr = file.getBytes();
 		InputStream targetStream = new ByteArrayInputStream(byteArr);
 
