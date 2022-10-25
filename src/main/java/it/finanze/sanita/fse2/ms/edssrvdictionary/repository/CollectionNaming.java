@@ -16,17 +16,17 @@ public class CollectionNaming {
     @Bean("terminologyBean")
     public String getTerminologyCollection() {
         if (profileUtility.isTestProfile()) {
-            return Constants.Profile.TEST_PREFIX + Constants.ComponentScan.Collections.TERMINOLOGY;
+            return Constants.Profile.TEST_PREFIX + Constants.Collections.TERMINOLOGY;
         }
-        return Constants.ComponentScan.Collections.TERMINOLOGY;
+        return Constants.Collections.TERMINOLOGY;
     }
 
     @Bean("snapshotBean")
     public String getSnapshotCollection() {
         if (profileUtility.isTestProfile()) {
-            return Constants.Profile.TEST_PREFIX + Constants.ComponentScan.Collections.SNAPSHOT;
+            return Constants.Profile.TEST_PREFIX + Constants.Collections.SNAPSHOT;
         }
-        return Constants.ComponentScan.Collections.SNAPSHOT;
+        return Constants.Collections.SNAPSHOT;
     }
     
     
