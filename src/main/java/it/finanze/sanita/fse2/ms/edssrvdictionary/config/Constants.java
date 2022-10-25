@@ -23,22 +23,22 @@ public final class Constants {
 		 */
 		public static final String CONFIG_MONGO = "it.finanze.sanita.fse2.ms.edssrvdictionary.config.mongo";
 
-		public static final class Collections {
-
-			public static final String TERMINOLOGY = "terminology";
-
-			public static final String SNAPSHOT = "snapshot";
-
-			private Collections() {
-	
-			}
-		}
-		 
 		
 		private ComponentScan() {
 			//This method is intentionally left blank.
 		}
 
+	}
+	
+	public static final class Collections {
+
+		public static final String TERMINOLOGY = "terminology";
+
+		public static final String SNAPSHOT = "snapshot";
+
+		private Collections() {
+
+		}
 	}
  
 	public static final class Profile {
