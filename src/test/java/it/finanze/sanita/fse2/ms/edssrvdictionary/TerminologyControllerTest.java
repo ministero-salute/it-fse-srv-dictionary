@@ -124,7 +124,6 @@ public class TerminologyControllerTest extends AbstractTest {
 
 
     @Test
-    @Disabled
     void getTermsByChunkInsValidTest() throws Exception {
         SnapshotETY snapshot = SnapshotETY.empty();
         ChunksETY chunk = ChunksETY.empty();
@@ -165,7 +164,6 @@ public class TerminologyControllerTest extends AbstractTest {
 
 
     @Test
-    @Disabled
     void getTermsByChunkInsInvalidIdTest() throws Exception {
         SnapshotETY snapshot = SnapshotETY.empty();
         ChunksETY chunk = ChunksETY.empty();
@@ -208,7 +206,6 @@ public class TerminologyControllerTest extends AbstractTest {
     }
 
     @Test
-    @Disabled
     void getTermsByChunkDelInvalidIdTest() throws Exception {
         SnapshotETY snapshot = SnapshotETY.empty();
         ChunksETY chunk = ChunksETY.empty();

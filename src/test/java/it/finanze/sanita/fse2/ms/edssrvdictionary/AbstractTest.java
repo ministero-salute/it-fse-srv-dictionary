@@ -27,12 +27,4 @@ public class AbstractTest {
 		return output;
 	}
 
-	public static MockMultipartFile createFakeFile(String filename) {
-        return new MockMultipartFile(
-                "files",
-                filename,
-                "multipart/form-data",
-                "Hello world!".getBytes());
-    }
-
 }
