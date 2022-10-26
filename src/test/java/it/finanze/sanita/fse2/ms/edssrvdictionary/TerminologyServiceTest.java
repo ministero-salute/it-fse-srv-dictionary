@@ -13,19 +13,19 @@ import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.snapshot.Chu
 import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.snapshot.SnapshotETY;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.service.ITerminologySRV;
 import org.bson.types.ObjectId;
-import org.joda.time.LocalDate;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.util.Date;
 import java.util.List;
+import java.util.AbstractMap.SimpleImmutableEntry;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -41,6 +41,7 @@ class TerminologyServiceTest extends AbstractTest {
     private final String TEST_TERMINOLOGY_VERSION = "Version_A";
     ObjectId termId = new ObjectId();
     final String TEST_TERMINOLOGY_ID = termId.toString();
+    final String TEST_FILENAME = "test_terminolgy";
 	
 	@MockBean
 	private Tracer tracer;
@@ -81,7 +82,6 @@ class TerminologyServiceTest extends AbstractTest {
         assertTrue(existsBySystem);
         boolean existsBySystemAndVersion = terminologyRepo.existsBySystemAndVersion(TEST_TERMINOLOGY_SYSTEM, TEST_TERMINOLOGY_VERSION);
         assertTrue(existsBySystemAndVersion);
-
 	}
 
     @Test
@@ -107,10 +107,12 @@ class TerminologyServiceTest extends AbstractTest {
         assertNotNull(chunks);
         SnapshotETY snapshot = terminologySRV.getChunks(chunks.getSnapshotID());
         assertNotNull(snapshot);
+        assertEquals(String.class, snapshot.getId().getClass());
+        assertEquals(chunks.getSnapshotID(), snapshot.getId());
         List<TerminologyDocumentDTO> insDocs = terminologySRV.getTermsByChunkIns(chunks.getSnapshotID(), 0);
         assertEquals(1, insDocs.size());
         assertThrows(OutOfRangeException.class, () -> terminologySRV.getTermsByChunkDel(chunks.getSnapshotID(), 0));
-    
+            
     }
 
     @Test
@@ -120,9 +122,15 @@ class TerminologyServiceTest extends AbstractTest {
         assertNotNull(insertions);
     }
 
-
-        
-
+    @Test
+    @DisplayName("Test get Terminologies")
+    void getTerminologiesTest() throws Exception{
+        SimpleImmutableEntry<Page<TerminologyETY>, List<TerminologyDocumentDTO>> entry = terminologySRV.getTerminologies(0, 10, TEST_TERMINOLOGY_SYSTEM);
+        assertNotNull(entry);
+        assertNotNull(entry.getKey());
+        assertNotNull(entry.getValue());
+    }
+    
 }
 
 
