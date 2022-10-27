@@ -11,9 +11,9 @@
 	</parent>
 
 	<groupId>it.finanze.sanita.fse2</groupId>
-	<artifactId>eds-srv-dictionary-ms</artifactId>
+	<artifactId>srv-dictionary-ms</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>eds-srv-dictionary-ms</name>
+	<name>srv-dictionary-ms</name>
 	<description>Eds service dictionary</description>
 	
 	<properties>
