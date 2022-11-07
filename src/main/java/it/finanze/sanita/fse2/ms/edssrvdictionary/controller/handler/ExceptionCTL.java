@@ -29,7 +29,6 @@ import static it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.error.Erro
 
 /**
  *	Exceptions handler
- *  @author G. Baittiner
  */
 @ControllerAdvice
 @Slf4j

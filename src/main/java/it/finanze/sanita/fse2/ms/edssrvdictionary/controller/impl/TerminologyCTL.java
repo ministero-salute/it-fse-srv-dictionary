@@ -26,7 +26,7 @@ import java.util.List;
 
 /**
  * Terminologies handler
- * @author Riccardo Bonesi, G. Baittiner
+ * @author Riccardo Bonesi
  */
 @RestController
 @Slf4j
