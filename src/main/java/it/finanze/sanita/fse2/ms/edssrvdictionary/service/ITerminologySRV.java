@@ -4,17 +4,24 @@
 package it.finanze.sanita.fse2.ms.edssrvdictionary.service;
 
 
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.TerminologyDocumentDTO;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.VocabularyDTO;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.*;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.TerminologyETY;
+import java.util.AbstractMap.SimpleImmutableEntry;
+import java.util.Date;
+import java.util.List;
+
 import org.bson.types.ObjectId;
 import org.springframework.data.domain.Page;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.util.AbstractMap.SimpleImmutableEntry;
-import java.util.List;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.TerminologyDocumentDTO;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.VocabularyDTO;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DataIntegrityException;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DataProcessingException;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DocumentAlreadyPresentException;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DocumentNotFoundException;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.InvalidContentException;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.OperationException;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.OutOfRangeException;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.TerminologyETY;
 
 /**
  *	@author vincenzoingenito
@@ -25,8 +32,6 @@ import java.util.List;
 public interface ITerminologySRV extends IChangeSetSRV {
 
 	Integer saveNewVocabularySystems(List<VocabularyDTO> vocabulariesDTO) throws OperationException;
-
-	Integer uploadTerminologyFile(MultipartFile file) throws IOException, OperationException;
 
 	/**
 	 * Retrieves the document by identifier
@@ -85,18 +90,20 @@ public interface ITerminologySRV extends IChangeSetSRV {
 	 * Insert terminologies inside the database using an .xml file
 	 * @param file An .xml file representing terminologies
 	 * @param version Version identifier
+	 * @param releaseDate Release Date of the CodeSystem
 	 * @return The number of terminologies inserted
 	 * @throws OperationException If a data-layer error occurs
 	 * @throws DocumentAlreadyPresentException If the given system is already inserted
 	 * @throws DataProcessingException If an error occurs while converting raw data to entity type
 	 * @throws InvalidContentException  If the file is empty or null
 	 */
-	int uploadTerminologyXml(MultipartFile file, String version) throws DocumentAlreadyPresentException, OperationException, DataProcessingException, InvalidContentException;
+	int uploadTerminologyXml(MultipartFile file, String version, Date releaseDate) throws DocumentAlreadyPresentException, OperationException, DataProcessingException, InvalidContentException;
 
 	/**
 	 * Update given terminologies using the new version and the same system
 	 * @param file An .xml file representing terminologies
 	 * @param version Version identifier
+	 * @param releaseDate Release Date of the CodeSystem
 	 * @return The number of terminologies updated
 	 * @throws OperationException If a data-layer error occurs
 	 * @throws DocumentNotFoundException If no document matching system is found
@@ -105,8 +112,36 @@ public interface ITerminologySRV extends IChangeSetSRV {
 	 * @throws DocumentAlreadyPresentException If the given version already exists
 	 * @throws InvalidContentException If the file is empty or null
 	 */
-	int updateTerminologyXml(MultipartFile file, String version) throws DocumentNotFoundException, OperationException, DataProcessingException, DataIntegrityException, DocumentAlreadyPresentException, InvalidContentException;
+	int updateTerminologyXml(MultipartFile file, String version, Date releaseDate) throws DocumentNotFoundException, OperationException, DataProcessingException, DataIntegrityException, DocumentAlreadyPresentException, InvalidContentException;
 
+	/**
+	 * Insert terminologies inside the database using a .csv file
+	 * @param file A .csv file representing terminologies
+	 * @param version Version identifier
+	 * @param releaseDate Release Date of the CodeSystem
+	 * @return The number of terminologies inserted
+	 * @throws OperationException If a data-layer error occurs
+	 * @throws DocumentAlreadyPresentException If the given system is already inserted
+	 * @throws DataProcessingException If an error occurs while converting raw data to entity type
+	 * @throws InvalidContentException  If the file is empty or null
+	 */
+	int uploadTerminologyCsv(MultipartFile file, String version, Date releaseDate) throws DocumentAlreadyPresentException, OperationException, DataProcessingException, InvalidContentException;
+	
+	/**
+	 * Update given terminologies using the new version and the same system
+	 * @param file A .csv file representing terminologies
+	 * @param version Version identifier
+	 * @param releaseDate Release Date of the CodeSystem
+	 * @return The number of terminologies updated
+	 * @throws OperationException If a data-layer error occurs
+	 * @throws DocumentNotFoundException If no document matching system is found
+	 * @throws DataProcessingException If an error occurs while converting raw data to entity type
+	 * @throws DataIntegrityException If database output is not the expected one
+	 * @throws DocumentAlreadyPresentException If the given version already exists
+	 * @throws InvalidContentException If the file is empty or null
+	 */
+	int updateTerminologyCsv(MultipartFile file, String version, Date releaseDate) throws DocumentNotFoundException, OperationException, DataProcessingException, DataIntegrityException, DocumentAlreadyPresentException, InvalidContentException;
+	
 	/**
 	 * Delete terminologies matching system
 	 * @param system System identifier

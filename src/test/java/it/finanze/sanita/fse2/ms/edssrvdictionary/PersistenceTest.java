@@ -47,7 +47,7 @@ public class PersistenceTest extends AbstractTest {
 			TerminologyETY ety = new TerminologyETY();
 			ety.setCode(vocabularyDTO.getCode());
 			ety.setDescription(vocabularyDTO.getDescription());
-			ety.setSystem(vocabularyDTO.getSystem());
+			ety.setSystem("2.16.840.1.113883.6.1");
 			ety.setInsertionDate(insertionDate);
 			ety.setLastUpdateDate(insertionDate);
 			listToSave.add(ety);
@@ -96,7 +96,7 @@ public class PersistenceTest extends AbstractTest {
 		TerminologyBuilderDTO vocabularyDTO1 = new TerminologyBuilderDTO();
 		
 		vocabularyDTO1.setCode("code");
-		vocabularyDTO1.setDescription("description");
+		vocabularyDTO1.setDisplay("description");
 		
 		ety1.setCode(vocabularyDTO1.getCode());
 		ety1.setDescription(vocabularyDTO1.getDescription());
@@ -107,7 +107,7 @@ public class PersistenceTest extends AbstractTest {
 		TerminologyBuilderDTO vocabularyDTO2 = new TerminologyBuilderDTO();
 		
 		vocabularyDTO2.setCode("code");
-		vocabularyDTO2.setDescription("description");
+		vocabularyDTO2.setDisplay("description");
 		
 		ety2.setCode(vocabularyDTO2.getCode());
 		ety2.setDescription(vocabularyDTO2.getDescription());

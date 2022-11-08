@@ -1,21 +1,22 @@
 package it.finanze.sanita.fse2.ms.edssrvdictionary;
 
-import brave.Tracer;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.controller.IChangeSetCTL;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes.base.ChangeSetResDTO;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes.chunks.ChangeSetChunkDTO;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.util.Date;
 
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
+
+import brave.Tracer;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.controller.IChangeSetCTL;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes.chunks.ChangeSetChunkDTO;
 
 @SpringBootTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -29,15 +30,6 @@ class ChangeSetControllerTest extends AbstractTest {
 
     @Autowired
     private IChangeSetCTL changeSetCTL;
-
-    @Test
-    @DisplayName("Test changeSetResDTO")
-    void ChangeSetResDTOTest() throws Exception{
-        ChangeSetResDTO changeSet = changeSetCTL.changeSet(date);
-        assertNotNull(changeSet);
-        assertEquals(0, changeSet.getInsertions().size());
-        assertEquals(0, changeSet.getDeletions().size());
-    }
 
     @Test
     @DisplayName("Test changeSetChunkDTO")

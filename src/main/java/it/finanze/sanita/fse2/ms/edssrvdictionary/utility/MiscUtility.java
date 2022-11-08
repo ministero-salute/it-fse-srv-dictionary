@@ -16,6 +16,7 @@ public final class MiscUtility {
     private MiscUtility() {}
 
     public static OffsetDateTime convertToOffsetDateTime(Date dateToConvert) {
+    	if (dateToConvert == null) return null;
         return dateToConvert.toInstant().atOffset(ZoneOffset.UTC);
     }
 
