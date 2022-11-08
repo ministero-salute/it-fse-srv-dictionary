@@ -13,6 +13,7 @@ import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.snapshot.Sna
 public interface IChangeSetRepo<T> {
 
     String FIELD_ID = "_id";
+    String FIELD_RELEASE_DATE = "release_date";
     String FIELD_INSERTION_DATE = "insertion_date";
     String FIELD_LAST_UPDATE = "last_update_date";
     String FIELD_DELETED = "deleted";

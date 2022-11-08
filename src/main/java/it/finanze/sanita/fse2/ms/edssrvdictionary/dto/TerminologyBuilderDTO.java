@@ -3,19 +3,49 @@
  */
 package it.finanze.sanita.fse2.ms.edssrvdictionary.dto;
 
-import com.opencsv.bean.CsvBindByPosition;
+import org.apache.commons.lang3.StringUtils;
+
+import com.opencsv.bean.CsvBindByName;
 
 import lombok.Data;
 
 @Data
 public class TerminologyBuilderDTO {
 
-	@CsvBindByPosition(position = 0)
-	private String system;
-	
-	@CsvBindByPosition(position = 1)
+	@CsvBindByName(column = "Code")
 	private String code;
 
-	@CsvBindByPosition(position = 11)
-	private String description;
+	@CsvBindByName(column = "Display")
+	private String display;
+
+	@CsvBindByName(column = "CodeSystem")
+	private String codeSystem;
+	
+	@CsvBindByName(column = "DisplayName")
+	private String displayName;
+	
+	@CsvBindByName(column = "status")
+	private String status;
+
+	@CsvBindByName(column = "Not Selectable")
+	private boolean notSelectable;
+	
+	public String getDescription() {
+		return isValueSet() ? getDisplayName() : getDisplay();
+	}
+
+	public boolean isActive() {
+		return !isDeprecated() && !notSelectable;
+	}
+
+	public boolean isDeprecated() {
+		if (status == null) return false;
+		return status.equalsIgnoreCase("deprecated");
+	}
+
+	
+	private boolean isValueSet() {
+		return !StringUtils.isEmpty(displayName);
+	}
+	
 }

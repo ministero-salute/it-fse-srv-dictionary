@@ -3,28 +3,27 @@
  */
 package it.finanze.sanita.fse2.ms.edssrvdictionary.service.impl;
 
-import com.google.common.collect.Lists;
-import com.opencsv.bean.CsvToBeanBuilder;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.*;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes.base.ChangeSetDTO;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.*;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.ITerminologyRepo;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.TerminologyETY;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.snapshot.ChunksETY;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.snapshot.SnapshotETY;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.service.ITerminologySRV;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.utility.ChangeSetUtility;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.utility.FileUtility;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.utility.MiscUtility;
-import lombok.extern.slf4j.Slf4j;
-import org.bson.types.ObjectId;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Logs.ERR_REP_UNABLE_RETRIVE_FILENAME;
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Logs.ERR_SRV_CHUNK_MISMATCH;
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Logs.ERR_SRV_DOCUMENT_NOT_EXIST;
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Logs.ERR_SRV_FILE_NOT_VALID;
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Logs.ERR_SRV_PAGE_IDX_LESS_ZERO;
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Logs.ERR_SRV_PAGE_LIMIT_LESS_ZERO;
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Logs.ERR_SRV_PAGE_NOT_EXISTS;
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Logs.ERR_SRV_SYSTEM_ALREADY_EXISTS;
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Logs.ERR_SRV_SYSTEM_NOT_EXISTS;
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Logs.ERR_SRV_SYSTEM_VERSION_ALREADY_EXISTS;
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Logs.ERR_VAL_IDX_CHUNK_NOT_VALID;
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.error.ErrorInstance.Fields.FILE;
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.TerminologyETY.FILE_CSV_EXT_DOTTED;
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.TerminologyETY.FILE_XML_EXT_DOTTED;
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.utility.ChangeSetUtility.CHUNKS_SIZE;
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.utility.ChangeSetUtility.chunks;
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.utility.RoutesUtility.API_PATH_IDX_VAR;
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.utility.RoutesUtility.API_QP_LIMIT;
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.utility.RoutesUtility.API_QP_PAGE;
+import static java.lang.String.format;
 
-import java.io.*;
 import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -32,14 +31,36 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Logs.*;
-import static it.finanze.sanita.fse2.ms.edssrvdictionary.dto.ChunksDTO.Chunk;
-import static it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.error.ErrorInstance.Fields.FILE;
-import static it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.TerminologyETY.FILE_EXT_DOTTED;
-import static it.finanze.sanita.fse2.ms.edssrvdictionary.utility.ChangeSetUtility.CHUNKS_SIZE;
-import static it.finanze.sanita.fse2.ms.edssrvdictionary.utility.ChangeSetUtility.chunks;
-import static it.finanze.sanita.fse2.ms.edssrvdictionary.utility.RoutesUtility.*;
-import static java.lang.String.format;
+import org.bson.types.ObjectId;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.google.common.collect.Lists;
+
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.ChunksDTO;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.ChunksDTO.Chunk;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.TerminologyDocumentDTO;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.TerminologyFileEntryDTO;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.VocabularyDTO;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes.base.ChangeSetDTO;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DataIntegrityException;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DataProcessingException;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DocumentAlreadyPresentException;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DocumentNotFoundException;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.InvalidContentException;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.OperationException;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.OutOfRangeException;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.ITerminologyRepo;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.TerminologyETY;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.snapshot.ChunksETY;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.snapshot.SnapshotETY;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.service.ITerminologySRV;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.utility.ChangeSetUtility;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.utility.FileUtility;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  *	@author vincenzoingenito
@@ -218,7 +239,7 @@ public class TerminologySRV implements ITerminologySRV {
 	}
 
 	@Override
-	public int uploadTerminologyXml(MultipartFile file, String version) throws DocumentAlreadyPresentException, OperationException, DataProcessingException, InvalidContentException {
+	public int uploadTerminologyXml(MultipartFile file, String version, Date releaseDate) throws DocumentAlreadyPresentException, OperationException, DataProcessingException, InvalidContentException {
 		// Check file integrity
 		if(file == null || file.isEmpty()) throw new InvalidContentException(ERR_SRV_FILE_NOT_VALID, FILE);
 		// Extract system from filename
@@ -228,7 +249,7 @@ public class TerminologySRV implements ITerminologySRV {
 			throw new DataProcessingException(ERR_REP_UNABLE_RETRIVE_FILENAME);
 		}
 		// Remove extension
-		system = system.replace(FILE_EXT_DOTTED, "");
+		system = system.replace(FILE_XML_EXT_DOTTED, "");
 		// Verify this system does not exist
 		if(repository.existsBySystem(system)) {
 			throw new DocumentAlreadyPresentException(
@@ -238,7 +259,7 @@ public class TerminologySRV implements ITerminologySRV {
 		// Extract binary content
 		byte[] raw = FileUtility.throwIfEmpty(file);
 		// Parse entities
-		List<TerminologyETY> entities = TerminologyETY.fromXML(raw, system, version);
+		List<TerminologyETY> entities = TerminologyETY.fromXML(raw, system, version, releaseDate);
 		// Insert
 		Collection<TerminologyETY> insertions = repository.insertAll(entities);
 		// Return size
@@ -308,7 +329,7 @@ public class TerminologySRV implements ITerminologySRV {
 	}
 
     @Override
-    public int updateTerminologyXml(MultipartFile file, String version) throws DocumentNotFoundException, OperationException, DataProcessingException, DataIntegrityException, DocumentAlreadyPresentException, InvalidContentException {
+    public int updateTerminologyXml(MultipartFile file, String version, Date releaseDate) throws DocumentNotFoundException, OperationException, DataProcessingException, DataIntegrityException, DocumentAlreadyPresentException, InvalidContentException {
 		// Check file integrity
 		if(file == null || file.isEmpty()) throw new InvalidContentException(ERR_SRV_FILE_NOT_VALID, FILE);
 		// Extract system from filename
@@ -318,7 +339,7 @@ public class TerminologySRV implements ITerminologySRV {
 			throw new DataProcessingException(ERR_REP_UNABLE_RETRIVE_FILENAME);
 		}
 		// Remove extension
-		system = system.replace(FILE_EXT_DOTTED, "");
+		system = system.replace(FILE_XML_EXT_DOTTED, "");
 		// Check system exists
 		if(!repository.existsBySystem(system)) {
 			// Let the caller know about it
@@ -333,7 +354,7 @@ public class TerminologySRV implements ITerminologySRV {
 		// Extract binary content
 		byte[] raw = FileUtility.throwIfEmpty(file);
 		// Parse entities
-		List<TerminologyETY> entities = TerminologyETY.fromXML(raw, system, version);
+		List<TerminologyETY> entities = TerminologyETY.fromXML(raw, system, version, releaseDate);
 		// Execute and return size
 		return repository.updateBySystem(system, entities).size();
 	}
@@ -369,43 +390,62 @@ public class TerminologySRV implements ITerminologySRV {
 	}
 
 	@Override
-	public Integer uploadTerminologyFile(MultipartFile file) throws IOException, OperationException {
-		int output;
-
-		byte [] byteArr = file.getBytes();
-		InputStream targetStream = new ByteArrayInputStream(byteArr);
-
-		Reader reader = new InputStreamReader(targetStream);
-		List<TerminologyBuilderDTO> vocabularyListDTO = buildDTOFromCsv(reader);
-		vocabularyListDTO.remove(0);
-
-		Date insertionDate = new Date();
-
-		List<TerminologyETY> listToSave = new ArrayList<>();
-		for(TerminologyBuilderDTO vocabularyDTO : vocabularyListDTO) {
-			if(!MiscUtility.isNullOrEmpty(vocabularyDTO.getSystem())){
-				TerminologyETY ety = new TerminologyETY();
-				ety.setCode(vocabularyDTO.getCode());
-				ety.setDescription(vocabularyDTO.getDescription());
-				ety.setSystem(vocabularyDTO.getSystem());
-				ety.setInsertionDate(insertionDate);
-				ety.setLastUpdateDate(insertionDate);
-				listToSave.add(ety);
-			}
-
+	public int uploadTerminologyCsv(MultipartFile file, String version, Date releaseDate) throws DocumentAlreadyPresentException, OperationException, DataProcessingException, InvalidContentException {
+		// Check file integrity
+		if(file == null || file.isEmpty()) throw new InvalidContentException(ERR_SRV_FILE_NOT_VALID, FILE);
+		// Extract system from filename
+		String system = file.getOriginalFilename();
+		// Check we got the original filename
+		if (system == null || system.isEmpty()) {
+			throw new DataProcessingException(ERR_REP_UNABLE_RETRIVE_FILENAME);
 		}
-
-		repository.insertAll(listToSave);
-		output = listToSave.size();
-		log.info("Successfully inserted " + listToSave.size() + " Termonologies");
-
-		return output;
+		// Remove extension
+		system = system.replace(FILE_CSV_EXT_DOTTED, "");
+		// Verify this system does not exist
+		if(repository.existsBySystem(system)) {
+			throw new DocumentAlreadyPresentException(
+				String.format(ERR_SRV_SYSTEM_ALREADY_EXISTS, system)
+			);
+		}
+		// Extract binary content
+		byte[] raw = FileUtility.throwIfEmpty(file);
+		// Parse entities
+		List<TerminologyETY> entities = TerminologyETY.fromCSV(raw, system, version, releaseDate);
+		// Insert
+		Collection<TerminologyETY> insertions = repository.insertAll(entities);
+		// Return size
+		return insertions.size();
 	}
-
-	private List<TerminologyBuilderDTO> buildDTOFromCsv(Reader reader){
-		List<TerminologyBuilderDTO> output;
-		output = new CsvToBeanBuilder(reader).withType(TerminologyBuilderDTO.class).withSeparator(',').build().parse();
-		return output;
+	
+	@Override
+    public int updateTerminologyCsv(MultipartFile file, String version, Date releaseDate) throws DocumentNotFoundException, OperationException, DataProcessingException, DataIntegrityException, DocumentAlreadyPresentException, InvalidContentException {
+		// Check file integrity
+		if(file == null || file.isEmpty()) throw new InvalidContentException(ERR_SRV_FILE_NOT_VALID, FILE);
+		// Extract system from filename
+		String system = file.getOriginalFilename();
+		// Check we got the original filename
+		if (system == null || system.isEmpty()) {
+			throw new DataProcessingException(ERR_REP_UNABLE_RETRIVE_FILENAME);
+		}
+		// Remove extension
+		system = system.replace(FILE_CSV_EXT_DOTTED, "");
+		// Check system exists
+		if(!repository.existsBySystem(system)) {
+			// Let the caller know about it
+			throw new DocumentNotFoundException(String.format(ERR_SRV_SYSTEM_NOT_EXISTS, system));
+		}
+		// Check version does not exist on the given system
+		if(repository.existsBySystemAndVersion(system, version)) {
+			throw new DocumentAlreadyPresentException(String.format(
+				ERR_SRV_SYSTEM_VERSION_ALREADY_EXISTS, system, version
+			));
+		}
+		// Extract binary content
+		byte[] raw = FileUtility.throwIfEmpty(file);
+		// Parse entities
+		List<TerminologyETY> entities = TerminologyETY.fromCSV(raw, system, version, releaseDate);
+		// Execute and return size
+		return repository.updateBySystem(system, entities).size();
 	}
-
+	
 }

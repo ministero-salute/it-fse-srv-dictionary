@@ -46,15 +46,6 @@ import static it.finanze.sanita.fse2.ms.edssrvdictionary.utility.RoutesUtility.*
 @Validated
 @RequestMapping(API_CHANGESET_MAPPER)
 public interface IChangeSetCTL {
-	@GetChangeSet
-	@GetMapping(API_CHANGESET_STATUS)
-	@Tag(name = API_CHANGESET_TAG)
-    ChangeSetResDTO changeSet(
-		@RequestParam(value=API_QP_LAST_UPDATE, required = false)
-		@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-		@NoFutureDate(message = ERR_VAL_FUTURE_DATE)
-		Date lastUpdate
-	) throws OperationException;
 
 	@GetChangeSetChunks
 	@GetMapping(API_CHANGESET_CHUNKS)
