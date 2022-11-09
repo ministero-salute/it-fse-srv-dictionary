@@ -41,7 +41,6 @@ import static it.finanze.sanita.fse2.ms.edssrvdictionary.utility.RoutesUtility.*
 /**
  * ChangeSet retriever controller
  *
- * @author Riccardo Bonesi
  */
 @Validated
 @RequestMapping(API_CHANGESET_MAPPER)

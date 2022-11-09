@@ -33,7 +33,6 @@ import it.finanze.sanita.fse2.ms.edssrvdictionary.service.ITerminologySRV;
 
 /**
  * Terminologies handler
- * @author Riccardo Bonesi
  */
 @RestController
 public class TerminologyCTL extends AbstractCTL implements ITerminologyCTL {

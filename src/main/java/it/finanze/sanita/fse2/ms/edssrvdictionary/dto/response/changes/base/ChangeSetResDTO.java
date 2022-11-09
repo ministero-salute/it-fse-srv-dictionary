@@ -19,7 +19,6 @@ import lombok.Setter;
 /**
  * DTO for Change Set status endpoint response.
  *
- * @author Riccardo Bonesi
  * 
  */
 @Getter

@@ -12,7 +12,6 @@ import lombok.EqualsAndHashCode;
 /**
  * The Class TerminologyResponseDTO.
  *
- * @author Riccardo Bonesi
  * 
  * 	Terminology Response.
  */
