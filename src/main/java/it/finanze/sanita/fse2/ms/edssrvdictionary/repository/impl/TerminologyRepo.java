@@ -31,8 +31,6 @@ import static it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.Termi
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 
 /**
- *	@author vincenzoingenito
-	@author Riccardo Bonesi
  *
  *	Vocabulary repository.
  */

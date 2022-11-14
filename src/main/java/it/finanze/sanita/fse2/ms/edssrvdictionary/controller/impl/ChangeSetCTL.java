@@ -23,7 +23,6 @@ import it.finanze.sanita.fse2.ms.edssrvdictionary.service.ITerminologySRV;
 
 /** 
  * 
- * @author Riccardo Bonesi
  */
 @RestController
 public class ChangeSetCTL extends AbstractCTL implements IChangeSetCTL{

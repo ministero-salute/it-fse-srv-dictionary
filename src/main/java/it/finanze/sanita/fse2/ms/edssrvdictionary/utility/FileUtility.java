@@ -18,7 +18,6 @@ import static it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Logs.E
 /**
  * The Class FileUtils.
  *
- * @author vincenzoingenito
  *
  * Utility to manager file.
  */

@@ -15,8 +15,6 @@ import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.OperationException;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.TerminologyETY;
 
 /**
- *	@author vincenzoingenito
- 	@author Riccardo Bonesi
  *
  *	Vocabulary interface repository.
  */

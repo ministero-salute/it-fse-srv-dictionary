@@ -63,8 +63,6 @@ import it.finanze.sanita.fse2.ms.edssrvdictionary.utility.FileUtility;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- *	@author vincenzoingenito
- *	@author Riccardo Bonesi
  *
  *	Terminology service.
  */

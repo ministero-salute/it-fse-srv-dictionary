@@ -60,7 +60,6 @@ import it.finanze.sanita.fse2.ms.edssrvdictionary.validators.ValidObjectId;
 /**
  * Terminology controller
  *
- * @author Riccardo Bonesi
  */
 @RequestMapping(path = API_TERMS_MAPPER)
 @Tag(name = API_DOCUMENTS_TAG)
