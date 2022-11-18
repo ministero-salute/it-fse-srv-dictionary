@@ -97,7 +97,7 @@ public class TerminologyETY {
 		
 		return content
 				.stream()
-				.filter(TerminologyBuilderDTO::isActive)
+//				.filter(TerminologyBuilderDTO::isActive)
 				.map(line -> new TerminologyETY(null, system, line.getCode(), version, line.getDescription(), releaseDate, current, current, false))
 				.collect(Collectors.toList());
 	}
