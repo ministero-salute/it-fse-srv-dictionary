@@ -73,31 +73,6 @@ public class TerminologyControllerTest extends AbstractTest {
         mongoTemplate.dropCollection(SnapshotETY.class);
     }
 
-    @Test
-    void insertFileTerminology() throws Exception {
-
-        MockMultipartFile multipartFile = new MockMultipartFile(
-            "file",
-            "terminology_post.csv",
-            MediaType.APPLICATION_JSON_VALUE,
-            "Hello World!".getBytes()
-        );
-
-        MockMultipartHttpServletRequestBuilder builder = MockMvcRequestBuilders.multipart(API_GET_BY_CSV_FULL);
-
-        builder.with(request -> {
-            request.setMethod("POST");
-            request.setParameter("file", "multipartFile");
-            return request;
-        });
-
-        mvc.perform(
-            builder
-                .file(new MockMultipartFile("file", multipartFile.getBytes()))
-                .contentType(MediaType.MULTIPART_FORM_DATA)
-        ).andExpect(MockMvcResultMatchers.status().is(200));
-    }
-
 
     @Test
     void findTerminologyByIdTest() throws Exception {
