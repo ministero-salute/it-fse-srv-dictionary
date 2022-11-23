@@ -4,37 +4,6 @@
 package it.finanze.sanita.fse2.ms.edssrvdictionary.controller;
 
 
-import static it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Logs.ERR_VAL_ID_BLANK;
-import static it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Logs.ERR_VAL_ID_NOT_VALID;
-import static it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Logs.ERR_VAL_SYSTEM_BLANK;
-import static it.finanze.sanita.fse2.ms.edssrvdictionary.utility.RoutesUtility.API_DOCUMENTS_TAG;
-import static it.finanze.sanita.fse2.ms.edssrvdictionary.utility.RoutesUtility.API_QP_LIMIT;
-import static it.finanze.sanita.fse2.ms.edssrvdictionary.utility.RoutesUtility.API_QP_PAGE;
-import static it.finanze.sanita.fse2.ms.edssrvdictionary.utility.RoutesUtility.API_SYSTEM_EXTS;
-import static it.finanze.sanita.fse2.ms.edssrvdictionary.utility.RoutesUtility.API_TERMS_GET_ONE_BY_ID;
-import static it.finanze.sanita.fse2.ms.edssrvdictionary.utility.RoutesUtility.API_TERMS_MAPPER;
-import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
-import static org.springframework.http.MediaType.APPLICATION_PROBLEM_JSON_VALUE;
-import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
-
-import java.util.Date;
-
-import javax.validation.constraints.NotBlank;
-
-import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.http.HttpStatus;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.multipart.MultipartFile;
-
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -42,20 +11,23 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.crud.DelTermsResDTO;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.crud.GetTermsPageResDTO;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.crud.GetTermsResDTO;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.crud.PostTermsResDTO;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.crud.PutTermsResDTO;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.crud.*;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.error.base.ErrorResponseDTO;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DataIntegrityException;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DataProcessingException;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DocumentAlreadyPresentException;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DocumentNotFoundException;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.InvalidContentException;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.OperationException;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.OutOfRangeException;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.*;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.validators.NoFutureDate;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.validators.ValidObjectId;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.validation.constraints.NotBlank;
+import java.util.Date;
+
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Logs.*;
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.utility.RoutesUtility.*;
+import static org.springframework.http.MediaType.*;
 
 /**
  * Terminology controller
@@ -133,6 +105,7 @@ public interface ITerminologyCTL {
         String version,
         @Parameter(description = "Data di rilascio del dizionario")
         @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+        @NoFutureDate(message = ERR_VAL_FUTURE_RELEASE_DATE)
         Date releaseDate
     ) throws OperationException, DocumentAlreadyPresentException, DataProcessingException, InvalidContentException;
     
@@ -189,6 +162,7 @@ public interface ITerminologyCTL {
         @RequestPart
         @Parameter(description = "Data di rilascio del dizionario incrementata rispetto alla precedente")
         @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+        @NoFutureDate(message = ERR_VAL_FUTURE_RELEASE_DATE)
         Date releaseDate
     ) throws OperationException, DocumentNotFoundException, DataProcessingException, DataIntegrityException, DocumentAlreadyPresentException, InvalidContentException;
 

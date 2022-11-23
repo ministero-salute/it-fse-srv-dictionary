@@ -69,6 +69,7 @@ public final class Constants {
 		public static final String ERR_VAL_VERSION_BLANK = "La versione non può essere vuota";
 		public static final String ERR_VAL_IDX_CHUNK_NOT_VALID = "L'indice chunk non è valido (minore di zero o maggiore dei chunk disponibili)";
 		public static final String ERR_VAL_FUTURE_DATE = "La data del ultimo aggiornamento non può essere nel futuro";
+		public static final String ERR_VAL_FUTURE_RELEASE_DATE = "La data di rilascio non può essere nel futuro";
 		public static final String ERR_SRV_SYSTEM_ALREADY_EXISTS = "System %s già presente nel database";
 		public static final String ERR_SRV_DOCUMENT_NOT_EXIST = "Il documento richiesto non esiste";
 		public static final String ERR_SRV_FILE_NOT_VALID = "Il documento è nullo oppure vuoto";
