@@ -156,10 +156,8 @@ public interface ITerminologyCTL {
         @RequestPart
         @Parameter(description = "CSV contenente le terminologie da inserire (e.g 2.16.840.1.113883.1.11.1.csv)")
         MultipartFile file,
-        @RequestPart
         @Parameter(description = "Versione del dizionario incrementata rispetto alla precedente")
         String version,
-        @RequestPart
         @Parameter(description = "Data di rilascio del dizionario incrementata rispetto alla precedente")
         @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
         @NoFutureDate(message = ERR_VAL_FUTURE_RELEASE_DATE)
