@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 
 public final class ChangeSetUtility {
 
-	public static final int CHUNKS_SIZE = 1000;
+	public static final int CHUNKS_SIZE = 10000;
 
 	private ChangeSetUtility() {
 		
