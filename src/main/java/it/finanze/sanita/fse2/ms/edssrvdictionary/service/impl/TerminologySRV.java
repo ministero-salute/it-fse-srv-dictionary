@@ -12,7 +12,6 @@ import static it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Logs.E
 import static it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Logs.ERR_SRV_PAGE_NOT_EXISTS;
 import static it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Logs.ERR_SRV_SYSTEM_ALREADY_EXISTS;
 import static it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Logs.ERR_SRV_SYSTEM_NOT_EXISTS;
-import static it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Logs.ERR_SRV_SYSTEM_VERSION_ALREADY_EXISTS;
 import static it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Logs.ERR_VAL_IDX_CHUNK_NOT_VALID;
 import static it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.error.ErrorInstance.Fields.FILE;
 import static it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.TerminologyETY.FILE_CSV_EXT_DOTTED;
@@ -374,18 +373,13 @@ public class TerminologySRV implements ITerminologySRV {
 			// Let the caller know about it
 			throw new DocumentNotFoundException(String.format(ERR_SRV_SYSTEM_NOT_EXISTS, system));
 		}
-		// Check version does not exist on the given system
-		if(repository.existsBySystemAndVersion(system, version)) {
-			throw new DocumentAlreadyPresentException(String.format(
-				ERR_SRV_SYSTEM_VERSION_ALREADY_EXISTS, system, version
-			));
-		}
+	 
 		// Extract binary content
 		byte[] raw = FileUtility.throwIfEmpty(file);
 		// Parse entities
 		List<TerminologyETY> entities = TerminologyETY.fromCSV(raw, system, version, releaseDate);
 		// Execute and return size
-		return repository.updateBySystem(system, entities).size();
+		return repository.updateBySystem(system,version,releaseDate, entities).size();
 	}
 	
 }

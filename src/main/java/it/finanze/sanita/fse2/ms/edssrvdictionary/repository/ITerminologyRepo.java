@@ -11,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DataIntegrityException;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DocumentNotFoundException;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.OperationException;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.TerminologyETY;
 
@@ -114,8 +115,8 @@ public interface ITerminologyRepo extends IChangeSetRepo<TerminologyETY> {
 	 * @throws OperationException If a data-layer error occurs
 	 * @throws DataIntegrityException If database output is not the expected one
 	 */
-	List<TerminologyETY> updateBySystem(String system, List<TerminologyETY> entities) throws OperationException, DataIntegrityException;
-
+	List<TerminologyETY> updateBySystem(String system,String version,Date releaseDate, List<TerminologyETY> entities) throws OperationException, DataIntegrityException, DocumentNotFoundException;
+	
 	/**
 	 * Returns terminologies matching system with pagination
 	 * @param system System identifier
@@ -132,4 +133,5 @@ public interface ITerminologyRepo extends IChangeSetRepo<TerminologyETY> {
 	 * @throws OperationException If a data-layer error occurs
 	 */
 	boolean existsBySystemVersionAndRelease(String system, String version , Date releaseDate) throws OperationException;
+	
 }

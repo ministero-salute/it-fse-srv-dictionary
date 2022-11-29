@@ -37,18 +37,17 @@ import com.mongodb.MongoException;
 import com.mongodb.client.result.UpdateResult;
 
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DataIntegrityException;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DocumentNotFoundException;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.OperationException;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.ITerminologyRepo;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.TerminologyETY;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.snapshot.SnapshotETY;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.utility.StringUtility;
-import lombok.extern.slf4j.Slf4j;
 
 /**
  *
  *	Vocabulary repository.
  */
-@Slf4j
 @Repository
 public class TerminologyRepo implements ITerminologyRepo {
 
@@ -316,11 +315,15 @@ public class TerminologyRepo implements ITerminologyRepo {
 	}
 
 	@Override
-	public List<TerminologyETY> updateBySystem(String system, List<TerminologyETY> entities) throws OperationException, DataIntegrityException {
-		// Mark as inactive the current system
-		deleteBySystem(system);
-		// Insert the new one
-		return insertAll(entities);
+	public List<TerminologyETY> updateBySystem(String system,String version,Date releaseDate, List<TerminologyETY> entities) throws OperationException, DataIntegrityException, DocumentNotFoundException {
+		List<TerminologyETY> output = new ArrayList<>();		
+		boolean result = deleteBySystemForUpdate(system, version, releaseDate);
+		if(result) {
+			output = insertAll(entities);
+		} else {
+			throw new DocumentNotFoundException("Attenzione, nessun documento trovato con i parametri forniti in input");
+		}
+		return output;
 	}
 
 	@Override
@@ -374,4 +377,33 @@ public class TerminologyRepo implements ITerminologyRepo {
 		return output;
 	}
 
+	
+	private boolean deleteBySystemForUpdate(final String system, final String version, final Date releaseDate) throws OperationException, DataIntegrityException {
+		boolean output = false;
+		// Create query
+		Query query = new Query();
+		query.addCriteria(where(FIELD_SYSTEM).is(system).and(FIELD_DELETED).is(false));
+		
+		if(!StringUtility.isNullOrEmpty(version)) {
+			query.addCriteria(Criteria.where("version").is(version));
+		}
+		
+		if(releaseDate!=null) {
+			query.addCriteria(Criteria.where("release_date").is(releaseDate));
+		}
+		
+		// Create update definition
+		Update update = new Update();
+		update.set(FIELD_LAST_UPDATE, new Date());
+		update.set(FIELD_DELETED, true);
+		try {
+			// Execute
+			UpdateResult result = mongo.updateMulti(query, update, TerminologyETY.class);
+			output = result.getModifiedCount()>0;
+		} catch(MongoException e) {
+			// Catch data-layer runtime exceptions and turn into a checked exception
+			throw new OperationException(ERR_REP_DEL_DOCS_BY_SYS , e);
+		}
+		return output;
+	}
 }
