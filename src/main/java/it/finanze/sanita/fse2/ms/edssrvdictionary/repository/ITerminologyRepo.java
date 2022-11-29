@@ -20,14 +20,7 @@ import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.TerminologyE
  */
 public interface ITerminologyRepo extends IChangeSetRepo<TerminologyETY> {
 
-	/**
-	 * Inserts terminology into the database.
-	 * @param ety The entity to insert
-	 * @return The entity inserted.
-	 * @throws OperationException If a data-layer error occurs
-	 */
-	TerminologyETY insert(TerminologyETY ety) throws OperationException;
-	
+ 
 	/**
 	 * Returns terminology matching the identifier
 	 * @param pk The entity identifier
@@ -52,6 +45,7 @@ public interface ITerminologyRepo extends IChangeSetRepo<TerminologyETY> {
 	 * @throws OperationException If a data-layer error occurs
 	 */
 	boolean existsBySystem(String system) throws OperationException;
+	
 
 	/**
 	 * Check if a given system is already present
@@ -130,4 +124,12 @@ public interface ITerminologyRepo extends IChangeSetRepo<TerminologyETY> {
 	 * @throws OperationException If a data-layer error occurs
 	 */
     Page<TerminologyETY> getBySystem(String system, Pageable page) throws OperationException;
+
+	/**
+	 * Check if a given system is already present
+	 * @param system The system parameter
+	 * @return True if exists at least one term with the given system, otherwise false
+	 * @throws OperationException If a data-layer error occurs
+	 */
+	boolean existsBySystemVersionAndRelease(String system, String version , Date releaseDate) throws OperationException;
 }

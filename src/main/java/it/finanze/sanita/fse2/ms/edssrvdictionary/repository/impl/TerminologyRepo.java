@@ -4,31 +4,45 @@
 package it.finanze.sanita.fse2.ms.edssrvdictionary.repository.impl;
 
 
-import com.mongodb.MongoException;
-import com.mongodb.client.result.UpdateResult;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DataIntegrityException;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.OperationException;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.ITerminologyRepo;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.TerminologyETY;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.snapshot.SnapshotETY;
-import lombok.extern.slf4j.Slf4j;
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Logs.ERR_REP_CHANGESET_DELETE;
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Logs.ERR_REP_CHANGESET_INSERT;
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Logs.ERR_REP_DEL_DOCS_BY_SYS;
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Logs.ERR_REP_DEL_MISMATCH;
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Logs.ERR_REP_DOCS_NOT_FOUND;
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Logs.ERR_REP_EVERY_ACTIVE_DOC;
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Logs.ERR_REP_UNABLE_CHECK_SYSTEM;
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Logs.ERR_REP_UNABLE_CHECK_SYSTEM_VERSION;
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Logs.ERR_REP_UNABLE_INSERT_ENTITY;
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.TerminologyETY.FIELD_CODE;
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.TerminologyETY.FIELD_SYSTEM;
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.TerminologyETY.FIELD_VERSION;
+import static org.springframework.data.mongodb.core.query.Criteria.where;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import com.mongodb.MongoException;
+import com.mongodb.client.result.UpdateResult;
 
-import static it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Logs.*;
-import static it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.TerminologyETY.*;
-import static org.springframework.data.mongodb.core.query.Criteria.where;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DataIntegrityException;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.OperationException;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.ITerminologyRepo;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.TerminologyETY;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.snapshot.SnapshotETY;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.utility.StringUtility;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  *
@@ -40,17 +54,7 @@ public class TerminologyRepo implements ITerminologyRepo {
 
 	@Autowired
 	private MongoTemplate mongo;
-	
-	@Override
-	public TerminologyETY insert(final TerminologyETY ety) throws OperationException {
-		TerminologyETY out;
-		try {
-			out = mongo.insert(ety);
-		}catch (MongoException ex) {
-			throw new OperationException(ERR_REP_UNABLE_INSERT_ENTITY, ex);
-		}
-		return out;
-	}
+	 
 
 	@Override
 	public TerminologyETY findById(String pk) throws OperationException {
@@ -338,6 +342,30 @@ public class TerminologyRepo implements ITerminologyRepo {
 		}
 		// Return data
 		return new PageImpl<>(entities, page, count);
+	}
+
+	@Override
+	public boolean existsBySystemVersionAndRelease(String system, String version, Date releaseDate) throws OperationException {
+		// Working var
+		boolean output;
+		// Create query
+		Query query = new Query();
+		query.addCriteria(where(FIELD_SYSTEM).is(system).and(FIELD_DELETED).is(false));
+		
+		if(!StringUtility.isNullOrEmpty(version)) {
+			query.addCriteria(Criteria.where("version").is(version));
+		}
+		
+		if(releaseDate!=null) {
+			query.addCriteria(Criteria.where("release_date").is(releaseDate));
+		}
+		
+		try {
+			output = mongo.exists(query, TerminologyETY.class);
+		} catch(MongoException ex) {
+			throw new OperationException(ERR_REP_UNABLE_CHECK_SYSTEM, ex);
+		}
+		return output;
 	}
 
 }

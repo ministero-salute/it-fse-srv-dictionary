@@ -16,7 +16,6 @@ import static it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Logs.E
 import static it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Logs.ERR_VAL_IDX_CHUNK_NOT_VALID;
 import static it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.error.ErrorInstance.Fields.FILE;
 import static it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.TerminologyETY.FILE_CSV_EXT_DOTTED;
-import static it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.TerminologyETY.FILE_XML_EXT_DOTTED;
 import static it.finanze.sanita.fse2.ms.edssrvdictionary.utility.ChangeSetUtility.CHUNKS_SIZE;
 import static it.finanze.sanita.fse2.ms.edssrvdictionary.utility.ChangeSetUtility.chunks;
 import static it.finanze.sanita.fse2.ms.edssrvdictionary.utility.RoutesUtility.API_PATH_IDX_VAR;
@@ -63,7 +62,7 @@ import it.finanze.sanita.fse2.ms.edssrvdictionary.utility.FileUtility;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- *
+ 
  *	Terminology service.
  */
 @Service
@@ -236,33 +235,6 @@ public class TerminologySRV implements ITerminologySRV {
 		return Lists.newArrayList(out).size();
 	}
 
-	@Override
-	public int uploadTerminologyXml(MultipartFile file, String version, Date releaseDate) throws DocumentAlreadyPresentException, OperationException, DataProcessingException, InvalidContentException {
-		// Check file integrity
-		if(file == null || file.isEmpty()) throw new InvalidContentException(ERR_SRV_FILE_NOT_VALID, FILE);
-		// Extract system from filename
-		String system = file.getOriginalFilename();
-		// Check we got the original filename
-		if (system == null || system.isEmpty()) {
-			throw new DataProcessingException(ERR_REP_UNABLE_RETRIVE_FILENAME);
-		}
-		// Remove extension
-		system = system.replace(FILE_XML_EXT_DOTTED, "");
-		// Verify this system does not exist
-		if(repository.existsBySystem(system)) {
-			throw new DocumentAlreadyPresentException(
-				String.format(ERR_SRV_SYSTEM_ALREADY_EXISTS, system)
-			);
-		}
-		// Extract binary content
-		byte[] raw = FileUtility.throwIfEmpty(file);
-		// Parse entities
-		List<TerminologyETY> entities = TerminologyETY.fromXML(raw, system, version, releaseDate);
-		// Insert
-		Collection<TerminologyETY> insertions = repository.insertAll(entities);
-		// Return size
-		return insertions.size();
-	}
 
 	@Override
 	public List<TerminologyDocumentDTO> getTermsByChunkIns(String id, int index) throws DocumentNotFoundException, OperationException, OutOfRangeException, DataIntegrityException {
@@ -326,36 +298,6 @@ public class TerminologySRV implements ITerminologySRV {
 		return repository.deleteBySystem(system).size();
 	}
 
-    @Override
-    public int updateTerminologyXml(MultipartFile file, String version, Date releaseDate) throws DocumentNotFoundException, OperationException, DataProcessingException, DataIntegrityException, DocumentAlreadyPresentException, InvalidContentException {
-		// Check file integrity
-		if(file == null || file.isEmpty()) throw new InvalidContentException(ERR_SRV_FILE_NOT_VALID, FILE);
-		// Extract system from filename
-		String system = file.getOriginalFilename();
-		// Check we got the original filename
-		if (system == null || system.isEmpty()) {
-			throw new DataProcessingException(ERR_REP_UNABLE_RETRIVE_FILENAME);
-		}
-		// Remove extension
-		system = system.replace(FILE_XML_EXT_DOTTED, "");
-		// Check system exists
-		if(!repository.existsBySystem(system)) {
-			// Let the caller know about it
-			throw new DocumentNotFoundException(String.format(ERR_SRV_SYSTEM_NOT_EXISTS, system));
-		}
-		// Check version does not exist on the given system
-		if(repository.existsBySystemAndVersion(system, version)) {
-			throw new DocumentAlreadyPresentException(String.format(
-				ERR_SRV_SYSTEM_VERSION_ALREADY_EXISTS, system, version
-			));
-		}
-		// Extract binary content
-		byte[] raw = FileUtility.throwIfEmpty(file);
-		// Parse entities
-		List<TerminologyETY> entities = TerminologyETY.fromXML(raw, system, version, releaseDate);
-		// Execute and return size
-		return repository.updateBySystem(system, entities).size();
-	}
 
 	@Override
 	public SimpleImmutableEntry<Page<TerminologyETY>, List<TerminologyDocumentDTO>> getTerminologies(int page, int limit, String system) throws OperationException, DocumentNotFoundException, OutOfRangeException {
@@ -400,7 +342,7 @@ public class TerminologySRV implements ITerminologySRV {
 		// Remove extension
 		system = system.replace(FILE_CSV_EXT_DOTTED, "");
 		// Verify this system does not exist
-		if(repository.existsBySystem(system)) {
+		if(repository.existsBySystemVersionAndRelease(system,version,releaseDate)) {
 			throw new DocumentAlreadyPresentException(
 				String.format(ERR_SRV_SYSTEM_ALREADY_EXISTS, system)
 			);

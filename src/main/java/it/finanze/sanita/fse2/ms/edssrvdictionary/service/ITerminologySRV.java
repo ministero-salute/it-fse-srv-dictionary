@@ -84,34 +84,7 @@ public interface ITerminologySRV extends IChangeSetSRV {
 	 */
 	SimpleImmutableEntry<Page<TerminologyETY>, List<TerminologyDocumentDTO>> getTerminologies(int page, int limit, String system) throws OperationException, DocumentNotFoundException, OutOfRangeException;
 
-	/**
-	 * Insert terminologies inside the database using an .xml file
-	 * @param file An .xml file representing terminologies
-	 * @param version Version identifier
-	 * @param releaseDate Release Date of the CodeSystem
-	 * @return The number of terminologies inserted
-	 * @throws OperationException If a data-layer error occurs
-	 * @throws DocumentAlreadyPresentException If the given system is already inserted
-	 * @throws DataProcessingException If an error occurs while converting raw data to entity type
-	 * @throws InvalidContentException  If the file is empty or null
-	 */
-	int uploadTerminologyXml(MultipartFile file, String version, Date releaseDate) throws DocumentAlreadyPresentException, OperationException, DataProcessingException, InvalidContentException;
-
-	/**
-	 * Update given terminologies using the new version and the same system
-	 * @param file An .xml file representing terminologies
-	 * @param version Version identifier
-	 * @param releaseDate Release Date of the CodeSystem
-	 * @return The number of terminologies updated
-	 * @throws OperationException If a data-layer error occurs
-	 * @throws DocumentNotFoundException If no document matching system is found
-	 * @throws DataProcessingException If an error occurs while converting raw data to entity type
-	 * @throws DataIntegrityException If database output is not the expected one
-	 * @throws DocumentAlreadyPresentException If the given version already exists
-	 * @throws InvalidContentException If the file is empty or null
-	 */
-	int updateTerminologyXml(MultipartFile file, String version, Date releaseDate) throws DocumentNotFoundException, OperationException, DataProcessingException, DataIntegrityException, DocumentAlreadyPresentException, InvalidContentException;
-
+ 
 	/**
 	 * Insert terminologies inside the database using a .csv file
 	 * @param file A .csv file representing terminologies
