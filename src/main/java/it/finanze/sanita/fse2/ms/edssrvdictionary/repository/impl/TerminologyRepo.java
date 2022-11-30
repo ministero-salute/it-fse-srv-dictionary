@@ -355,19 +355,20 @@ public class TerminologyRepo implements ITerminologyRepo {
 		Query query = new Query();
 		query.addCriteria(where(FIELD_SYSTEM).is(system).and(FIELD_DELETED).is(false));
 		
-		Criteria criVersion = new Criteria();
+		List<Criteria> orCriteria = new ArrayList<>();
+		
 		if(!StringUtility.isNullOrEmpty(version)) {
-			criVersion = Criteria.where("version").is(version);
+			orCriteria.add(Criteria.where("version").is(version));
 		}
 		
-		Criteria criRel = new Criteria();
 		if(releaseDate!=null) {
-			criRel = Criteria.where("release_date").is(releaseDate); 
+			orCriteria.add(Criteria.where("release_date").is(releaseDate)); 
 		}
 		
-		Criteria or = new Criteria();
-		or.orOperator(criVersion,criRel);
-		query.addCriteria(or);
+		if (!orCriteria.isEmpty()) {
+			Criteria or = new Criteria().orOperator(orCriteria);
+			query.addCriteria(or);
+		}
 		
 		try {
 			output = mongo.exists(query, TerminologyETY.class);
