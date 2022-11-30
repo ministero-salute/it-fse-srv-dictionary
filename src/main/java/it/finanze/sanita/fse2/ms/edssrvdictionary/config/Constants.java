@@ -34,9 +34,9 @@ public final class Constants {
 	
 	public static final class Collections {
 
-		public static final String TERMINOLOGY = "terminology";
+		public static final String TERMINOLOGY = "terminology_eds";
 
-		public static final String SNAPSHOT = "snapshot";
+		public static final String SNAPSHOT = "snapshot_eds";
 
 		private Collections() {
 
