@@ -8,7 +8,7 @@ import java.io.Serializable;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import brave.Tracer;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.LogTraceInfoDTO; 
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.log.LogTraceInfoDTO;
 
 /**
  * 

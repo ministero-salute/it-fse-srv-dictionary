@@ -6,7 +6,7 @@ package it.finanze.sanita.fse2.ms.edssrvdictionary;
 
 import brave.Tracer;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.ChunksDTO;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.chunks.snapshot.ChunksDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.TerminologyDocumentDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes.base.ChangeSetDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.OutOfRangeException;

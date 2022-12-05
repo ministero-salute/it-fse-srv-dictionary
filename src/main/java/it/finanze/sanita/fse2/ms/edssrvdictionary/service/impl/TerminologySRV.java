@@ -38,11 +38,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.google.common.collect.Lists;
 
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.ChunksDTO;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.ChunksDTO.Chunk;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.chunks.snapshot.ChunksDTO;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.chunks.snapshot.ChunksDTO.Chunk;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.TerminologyDocumentDTO;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.TerminologyFileEntryDTO;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.VocabularyDTO;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.csv.vocabulary.TerminologyFileEntryDTO;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.csv.vocabulary.VocabularyDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes.base.ChangeSetDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DataIntegrityException;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DataProcessingException;

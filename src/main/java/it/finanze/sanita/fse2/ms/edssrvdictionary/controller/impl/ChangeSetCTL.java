@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import it.finanze.sanita.fse2.ms.edssrvdictionary.controller.AbstractCTL;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.controller.IChangeSetCTL;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.ChunksDTO;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.LogTraceInfoDTO;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.chunks.snapshot.ChunksDTO;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.log.LogTraceInfoDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes.chunks.ChangeSetChunkDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.chunks.GetTermsDelDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.chunks.GetTermsInsDTO;

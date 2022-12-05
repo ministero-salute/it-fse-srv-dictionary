@@ -4,11 +4,10 @@
 package it.finanze.sanita.fse2.ms.edssrvdictionary;
 
 import com.opencsv.bean.CsvToBeanBuilder;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.TerminologyBuilderDTO;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.csv.TerminologyBuilderDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.TerminologyETY;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.mock.web.MockMultipartFile;
 
 import java.io.Reader;
 import java.util.List;

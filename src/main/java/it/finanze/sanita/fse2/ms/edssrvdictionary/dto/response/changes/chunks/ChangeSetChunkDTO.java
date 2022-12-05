@@ -3,7 +3,7 @@
  */
 package it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes.chunks;
 
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.ChunksDTO;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.chunks.snapshot.ChunksDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

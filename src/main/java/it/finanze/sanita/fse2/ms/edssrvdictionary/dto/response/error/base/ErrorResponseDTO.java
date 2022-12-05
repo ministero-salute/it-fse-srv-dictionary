@@ -8,7 +8,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.LogTraceInfoDTO;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.log.LogTraceInfoDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.base.ResponseDTO;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

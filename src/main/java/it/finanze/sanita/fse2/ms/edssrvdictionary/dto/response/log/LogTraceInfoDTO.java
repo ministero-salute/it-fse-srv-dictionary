@@ -1,7 +1,7 @@
 /*
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
-package it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response;
+package it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.log;
 
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.AbstractDTO;
 import lombok.Data;

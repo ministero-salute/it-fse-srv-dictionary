@@ -3,7 +3,7 @@
  */
 package it.finanze.sanita.fse2.ms.edssrvdictionary.service;
 
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.ChunksDTO;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.chunks.snapshot.ChunksDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DocumentNotFoundException;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.snapshot.SnapshotETY;
 import org.springframework.lang.Nullable;

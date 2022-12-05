@@ -4,9 +4,9 @@
 package it.finanze.sanita.fse2.ms.edssrvdictionary;
 
 import it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.TerminologyBuilderDTO;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.TerminologyFileEntryDTO;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.VocabularyDTO;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.csv.TerminologyBuilderDTO;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.csv.vocabulary.TerminologyFileEntryDTO;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.csv.vocabulary.VocabularyDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.TerminologyETY;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.service.ITerminologySRV;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.utility.FileUtility;

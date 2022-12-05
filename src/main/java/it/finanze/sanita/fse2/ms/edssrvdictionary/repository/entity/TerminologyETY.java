@@ -22,7 +22,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
 
 import com.opencsv.bean.CsvToBeanBuilder;
 
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.TerminologyBuilderDTO;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.csv.TerminologyBuilderDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
