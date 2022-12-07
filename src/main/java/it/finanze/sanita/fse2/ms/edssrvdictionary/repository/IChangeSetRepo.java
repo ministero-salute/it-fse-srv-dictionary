@@ -4,11 +4,11 @@
 package it.finanze.sanita.fse2.ms.edssrvdictionary.repository;
 
 
-import java.util.Date;
-import java.util.List;
-
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.OperationException;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.snapshot.SnapshotETY;
+
+import java.util.Date;
+import java.util.List;
 
 public interface IChangeSetRepo<T> {
 
@@ -53,4 +53,12 @@ public interface IChangeSetRepo<T> {
      * @throws OperationException If a data-layer error occurs
      */
     SnapshotETY insertSnapshot(SnapshotETY entity) throws OperationException;
+
+    /**
+     * Count all the not-deleted extensions items
+     *
+     * @return Number of active documents
+     * @throws OperationException If a data-layer error occurs
+     */
+    long getActiveDocumentCount() throws OperationException;
 }

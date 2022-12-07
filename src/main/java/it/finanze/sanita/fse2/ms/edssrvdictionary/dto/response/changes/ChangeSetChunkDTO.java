@@ -1,7 +1,7 @@
 /*
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
-package it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes.chunks;
+package it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes;
 
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.chunks.snapshot.ChunksDTO;
 import lombok.AllArgsConstructor;
@@ -13,7 +13,6 @@ import java.util.Date;
 
 /**
  * DTO for Change Set status endpoint response.
- *
  *
  */
 @Getter
@@ -49,6 +48,10 @@ public class ChangeSetChunkDTO {
     /**
      * The total number of items returned (inserted/modified/deleted)
      */
-    private int totalNumberOfElements;
+    private long totalNumberOfElements;
 
+    /**
+     * The current active collection items
+     */
+    private long collectionSize;
 }

@@ -3,13 +3,12 @@
  */
 package it.finanze.sanita.fse2.ms.edssrvdictionary.service;
 
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes.ChangeSetDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.chunks.snapshot.ChunksDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DocumentNotFoundException;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.OperationException;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.snapshot.SnapshotETY;
 import org.springframework.lang.Nullable;
-
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes.base.ChangeSetDTO;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.OperationException;
 
 import java.util.Date;
 import java.util.List;
@@ -47,4 +46,11 @@ public interface IChangeSetSRV {
      * @throws DocumentNotFoundException If no snapshot exists matching the identifier
      */
     SnapshotETY getChunks(String id) throws OperationException, DocumentNotFoundException;
+
+    /**
+     * Retrieves the expected collection size after the alignment
+     * @return The collection size
+     * @throws OperationException If a data-layer error occurs
+     */
+    long getCollectionSize() throws OperationException;
 }

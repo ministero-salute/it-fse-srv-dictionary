@@ -3,23 +3,22 @@
  */
 package it.finanze.sanita.fse2.ms.edssrvdictionary.controller.impl;
 
-import java.util.Date;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RestController;
-
 import it.finanze.sanita.fse2.ms.edssrvdictionary.controller.AbstractCTL;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.controller.IChangeSetCTL;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.chunks.snapshot.ChunksDTO;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.log.LogTraceInfoDTO;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes.chunks.ChangeSetChunkDTO;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes.ChangeSetChunkDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.chunks.GetTermsDelDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.chunks.GetTermsInsDTO;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.chunks.snapshot.ChunksDTO;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.log.LogTraceInfoDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DataIntegrityException;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DocumentNotFoundException;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.OperationException;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.OutOfRangeException;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.service.ITerminologySRV;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Date;
 
 /** 
  * 
@@ -55,7 +54,7 @@ public class ChangeSetCTL extends AbstractCTL implements IChangeSetCTL{
     public ChangeSetChunkDTO changeSetChunks(Date lastUpdate) throws OperationException {
 
         ChunksDTO chunks = terminologySRV.createChunks(lastUpdate);
-
+        long collectionSize = terminologySRV.getCollectionSize();
         ChangeSetChunkDTO response = new ChangeSetChunkDTO();
         LogTraceInfoDTO info = getLogTraceInfo();
         response.setSpanID(info.getSpanID());
@@ -66,7 +65,7 @@ public class ChangeSetCTL extends AbstractCTL implements IChangeSetCTL{
         response.setTotalNumberOfElements(
             chunks.getInsertions().getChunksItems() + chunks.getDeletions().getChunksItems()
         );
-
+        response.setCollectionSize(collectionSize);
         return response;
     }
 

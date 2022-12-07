@@ -72,7 +72,6 @@ public final class Constants {
 		public static final String ERR_SRV_SYSTEM_ALREADY_EXISTS = "System %s già presente nel database";
 		public static final String ERR_SRV_DOCUMENT_NOT_EXIST = "Il documento richiesto non esiste";
 		public static final String ERR_SRV_FILE_NOT_VALID = "Il documento è nullo oppure vuoto";
-		public static final String ERR_SRV_SYSTEM_VERSION_ALREADY_EXISTS = "System %s con version %s già presente nel database";
 		public static final String ERR_SRV_SYSTEM_NOT_EXISTS = "System %s non presente nel database";
 		public static final String ERR_SRV_PAGE_NOT_EXISTS = "La pagina richiesta non esiste, range valido da <%d> a <%d>";
 		public static final String ERR_SRV_PAGE_IDX_LESS_ZERO = "L'indice pagina non può essere minore di zero";
@@ -81,7 +80,6 @@ public final class Constants {
 		public static final String ERR_REP_UNABLE_RETRIVE_FILENAME = "Impossibile recuperare il nome del file corrente";
 		public static final String ERR_REP_UNABLE_CHECK_SYSTEM = "Impossibile verificare l'esistenza del system";
 		public static final String ERR_REP_UNABLE_CHECK_SYSTEM_VERSION = "Impossibile verificare l'esistenza del system con version";
-		public static final String ERR_ETY_PARSE_XML = "Impossibile decodificare correttamente XML";
 		public static final String ERR_UTLS_IO_ERROR = "Impossibile estrarre i dati dal file";
 		public static final String ERR_UTLS_IO_EMPTY = "Il file risulta essere vuoto";
 		public static final String ERR_REP_UNABLE_INSERT_ENTITY = "Impossibile caricare l'entità nel database";
@@ -91,6 +89,7 @@ public final class Constants {
 		public static final String ERR_REP_CHANGESET_INSERT = "Impossibile recuperare il change-set degli inserimenti";
 		public static final String ERR_REP_CHANGESET_DELETE = "Impossibile recuperare il change-set delle cancellazioni";
 		public static final String ERR_REP_EVERY_ACTIVE_DOC = "Impossibile recuperare ogni terminologia attiva con i relativi documenti";
+		public static final String ERR_REP_COUNT_ACTIVE_DOC = "Impossibile conteggiare ogni estensione attiva";
 
 		private Logs() {
 			//This method is intentionally left blank. 
