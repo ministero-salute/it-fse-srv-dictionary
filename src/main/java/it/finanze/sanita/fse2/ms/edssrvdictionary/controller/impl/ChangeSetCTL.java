@@ -63,7 +63,7 @@ public class ChangeSetCTL extends AbstractCTL implements IChangeSetCTL{
         response.setTimestamp(new Date());
         response.setChunks(chunks);
         response.setTotalNumberOfElements(
-            chunks.getInsertions().getChunksItems() + chunks.getDeletions().getChunksItems()
+            (long) chunks.getInsertions().getChunksItems() + chunks.getDeletions().getChunksItems()
         );
         response.setCollectionSize(collectionSize);
         return response;
