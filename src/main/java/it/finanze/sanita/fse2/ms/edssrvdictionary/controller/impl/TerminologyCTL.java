@@ -15,11 +15,9 @@ import org.springframework.web.multipart.MultipartFile;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.controller.AbstractCTL;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.controller.ITerminologyCTL;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.TerminologyDocumentDTO;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.crud.DelTermsResDTO;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.crud.CrudDocumentResDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.crud.GetTermsPageResDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.crud.GetTermsResDTO;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.crud.PostTermsResDTO;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.crud.PutTermsResDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DataIntegrityException;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DataProcessingException;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DocumentAlreadyPresentException;
@@ -86,8 +84,8 @@ public class TerminologyCTL extends AbstractCTL implements ITerminologyCTL {
 	 * @throws InvalidContentException  If the file is empty or null
 	 */	
 	@Override
-	public PostTermsResDTO uploadTerminologies(MultipartFile file, String version, Date releaseDate) throws OperationException, DocumentAlreadyPresentException, DataProcessingException, InvalidContentException {
-		return new PostTermsResDTO(getLogTraceInfo(), service.uploadTerminologyCsv(file, version, releaseDate));
+	public CrudDocumentResDTO uploadTerminologies(MultipartFile file, String version, Date releaseDate) throws OperationException, DocumentAlreadyPresentException, DataProcessingException, InvalidContentException {
+		return new CrudDocumentResDTO(getLogTraceInfo(), service.uploadTerminologyCsv(file, version, releaseDate), null, null);
 	}
 
 	/**
@@ -103,8 +101,8 @@ public class TerminologyCTL extends AbstractCTL implements ITerminologyCTL {
 	 * @throws InvalidContentException If the file is empty or null
 	 */
 	@Override
-	public PutTermsResDTO updateTerminologies(MultipartFile file, String version, Date releaseDate) throws OperationException, DocumentNotFoundException, DataProcessingException, DataIntegrityException, DocumentAlreadyPresentException, InvalidContentException {
-		return new PutTermsResDTO(getLogTraceInfo(), service.updateTerminologyCsv(file, version, releaseDate));
+	public CrudDocumentResDTO updateTerminologies(MultipartFile file, String version, Date releaseDate) throws OperationException, DocumentNotFoundException, DataProcessingException, DataIntegrityException, DocumentAlreadyPresentException, InvalidContentException {
+		return new CrudDocumentResDTO(getLogTraceInfo(), null, service.updateTerminologyCsv(file, version, releaseDate), null);
 	}
 
 	/**
@@ -116,8 +114,8 @@ public class TerminologyCTL extends AbstractCTL implements ITerminologyCTL {
 	 * @throws DataIntegrityException If database output is not the expected one
 	 */
 	@Override
-	public DelTermsResDTO deleteTerminologies(String system) throws OperationException, DocumentNotFoundException, DataIntegrityException {
-		return new DelTermsResDTO(getLogTraceInfo(), service.deleteTerminologiesBySystem(system));
+	public CrudDocumentResDTO deleteTerminologies(String system) throws OperationException, DocumentNotFoundException, DataIntegrityException {
+		return new CrudDocumentResDTO(getLogTraceInfo(), null, null, service.deleteTerminologiesBySystem(system));
 	}
 
 	/**
@@ -128,8 +126,8 @@ public class TerminologyCTL extends AbstractCTL implements ITerminologyCTL {
 	 * @throws DocumentNotFoundException If no document matching id is found
 	 */
 	@Override
-	public DelTermsResDTO deleteTerminologyById(String id) throws DocumentNotFoundException, OperationException {
-		return new DelTermsResDTO(getLogTraceInfo(), service.deleteTerminologyById(id));
+	public CrudDocumentResDTO deleteTerminologyById(String id) throws DocumentNotFoundException, OperationException {
+		return new CrudDocumentResDTO(getLogTraceInfo(), null, null, service.deleteTerminologyById(id));
 	}
 
 }
