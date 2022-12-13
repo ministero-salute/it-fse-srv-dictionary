@@ -17,18 +17,18 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class DelTermsResDTO extends ResponseDTO {
+public class PostDocsResDTO extends ResponseDTO {
 
 	/**
 	 * Serial Version UID
 	 */
 	private static final long serialVersionUID = 5857199886068379718L;
 
-	private Integer deletedTerminologies;
+	private Integer insertedItems;
 
-	public DelTermsResDTO(final LogTraceInfoDTO traceInfo, final Integer deletedTerminologies) {
+	public PostDocsResDTO(final LogTraceInfoDTO traceInfo, final Integer insertedItems) {
 		super(traceInfo);
-		this.deletedTerminologies = deletedTerminologies;
+		this.insertedItems = insertedItems;
 	}
 	
 }
