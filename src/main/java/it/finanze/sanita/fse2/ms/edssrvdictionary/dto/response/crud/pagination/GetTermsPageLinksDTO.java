@@ -1,7 +1,7 @@
 /*
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
-package it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.crud;
+package it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.crud.pagination;
 
 import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.TerminologyETY;
 import lombok.AllArgsConstructor;
