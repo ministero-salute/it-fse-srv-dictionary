@@ -6,8 +6,8 @@ package it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.crud;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.TerminologyDocumentDTO;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.log.LogTraceInfoDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.base.ResponseDTO;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.log.LogTraceInfoDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.TerminologyETY;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -31,12 +31,11 @@ public class GetTermsPageResDTO extends ResponseDTO {
         LogTraceInfoDTO traceInfo,
         List<TerminologyDocumentDTO> items,
         String system,
-        Page<TerminologyETY> page,
-        long numberOfItems
+        Page<TerminologyETY> page
     ) {
         super(traceInfo);
         this.items = items;
         this.links = GetTermsPageLinksDTO.fromPage(system, page);
-        this.numberOfItems = numberOfItems;
+        this.numberOfItems = items.size();
     }
 }

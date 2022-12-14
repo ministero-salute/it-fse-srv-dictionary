@@ -3,32 +3,21 @@
  */
 package it.finanze.sanita.fse2.ms.edssrvdictionary.controller.impl;
 
-import java.util.AbstractMap.SimpleImmutableEntry;
-import java.util.Date;
-import java.util.List;
-
+import it.finanze.sanita.fse2.ms.edssrvdictionary.controller.AbstractCTL;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.controller.ITerminologyCTL;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.TerminologyDocumentDTO;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.crud.*;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.*;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.TerminologyETY;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.service.ITerminologySRV;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import it.finanze.sanita.fse2.ms.edssrvdictionary.controller.AbstractCTL;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.controller.ITerminologyCTL;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.TerminologyDocumentDTO;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.crud.DelDocsResDTO;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.crud.GetTermsPageResDTO;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.crud.GetTermsResDTO;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.crud.PostDocsResDTO;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.crud.PutDocsResDTO;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DataIntegrityException;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DataProcessingException;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DocumentAlreadyPresentException;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DocumentNotFoundException;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.InvalidContentException;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.OperationException;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.OutOfRangeException;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.TerminologyETY;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.service.ITerminologySRV;
+import java.util.AbstractMap.SimpleImmutableEntry;
+import java.util.Date;
+import java.util.List;
 
 
 /**
@@ -60,7 +49,7 @@ public class TerminologyCTL extends AbstractCTL implements ITerminologyCTL {
 		// Retrieve Pair<Page, Entities>
 		SimpleImmutableEntry<Page<TerminologyETY>, List<TerminologyDocumentDTO>> slice = service.getTerminologies(page, limit, system);
 		// When returning, it builds the URL according to provided values
-		return new GetTermsPageResDTO(getLogTraceInfo(), slice.getValue(), system, slice.getKey(), 0);
+		return new GetTermsPageResDTO(getLogTraceInfo(), slice.getValue(), system, slice.getKey());
 	}
 
 	/**
