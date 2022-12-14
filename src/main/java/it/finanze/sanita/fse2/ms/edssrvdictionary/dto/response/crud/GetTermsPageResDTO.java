@@ -23,17 +23,20 @@ import java.util.List;
 public class GetTermsPageResDTO extends ResponseDTO {
 
     @Schema(implementation = TerminologyDocumentDTO.class)
-    private List<TerminologyDocumentDTO> documents;
+    private List<TerminologyDocumentDTO> items;
     private GetTermsPageLinksDTO links;
-
+    private long numberOfItems;
+    
     public GetTermsPageResDTO(
         LogTraceInfoDTO traceInfo,
-        List<TerminologyDocumentDTO> documents,
+        List<TerminologyDocumentDTO> items,
         String system,
-        Page<TerminologyETY> page
+        Page<TerminologyETY> page,
+        long numberOfItems
     ) {
         super(traceInfo);
-        this.documents = documents;
+        this.items = items;
         this.links = GetTermsPageLinksDTO.fromPage(system, page);
+        this.numberOfItems = numberOfItems;
     }
 }
