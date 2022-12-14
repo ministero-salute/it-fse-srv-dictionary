@@ -12,10 +12,10 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.crud.DelDocsResDTO;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.crud.GetTermsResDTO;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.crud.GetDocsResDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.crud.PostDocsResDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.crud.PutDocsResDTO;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.crud.pagination.GetTermsPageResDTO;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.crud.pagination.GetDocsPageResDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.error.base.ErrorResponseDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.*;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.validators.NoFutureDate;
@@ -51,12 +51,12 @@ public interface ITerminologyCTL {
         description = "Servizio che consente di ritornare una terminologia dato il suo identificativo."
     )
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Documento presente sul database", content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = GetTermsResDTO.class))),
+        @ApiResponse(responseCode = "200", description = "Documento presente sul database", content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = GetDocsResDTO.class))),
         @ApiResponse(responseCode = "400", description = "I parametri forniti non sono validi", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = ErrorResponseDTO.class))),
         @ApiResponse(responseCode = "404", description = "Documento non trovato sul database", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = ErrorResponseDTO.class))),
         @ApiResponse(responseCode = "500", description = "Errore interno del server", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = ErrorResponseDTO.class)))
     })
-    GetTermsResDTO getTerminologyById(
+    GetDocsResDTO getTerminologyById(
         @PathVariable
         @Parameter(description = "Identificatore documento")
         @NotBlank(message = ERR_VAL_ID_BLANK)
@@ -122,12 +122,12 @@ public interface ITerminologyCTL {
         description = "Servizio che restituisce tutte le terminologie appartenenti ad un certo system con paginazione"
     )
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Documenti restituite correttamente", content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = GetTermsPageResDTO.class))),
+        @ApiResponse(responseCode = "200", description = "Documenti restituite correttamente", content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = GetDocsPageResDTO.class))),
         @ApiResponse(responseCode = "400", description = "I parametri forniti non sono validi", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = ErrorResponseDTO.class))),
         @ApiResponse(responseCode = "404", description = "System non trovato sul database", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = ErrorResponseDTO.class))),
         @ApiResponse(responseCode = "500", description = "Errore interno del server", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = ErrorResponseDTO.class)))
     })
-    GetTermsPageResDTO getTerminologies(
+    GetDocsPageResDTO getTerminologies(
         @PathVariable
         @Parameter(description = "Identificatore del dizionario")
         @NotBlank(message = ERR_VAL_SYSTEM_BLANK)

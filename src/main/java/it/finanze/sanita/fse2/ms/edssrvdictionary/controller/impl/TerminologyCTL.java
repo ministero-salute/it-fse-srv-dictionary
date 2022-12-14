@@ -7,10 +7,10 @@ import it.finanze.sanita.fse2.ms.edssrvdictionary.controller.AbstractCTL;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.controller.ITerminologyCTL;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.TerminologyDocumentDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.crud.DelDocsResDTO;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.crud.GetTermsResDTO;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.crud.GetDocsResDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.crud.PostDocsResDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.crud.PutDocsResDTO;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.crud.pagination.GetTermsPageResDTO;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.crud.pagination.GetDocsPageResDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.*;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.TerminologyETY;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.service.ITerminologySRV;
@@ -49,11 +49,11 @@ public class TerminologyCTL extends AbstractCTL implements ITerminologyCTL {
 	 * @throws OutOfRangeException If the provided page index is not valid
 	 */
 	@Override
-	public GetTermsPageResDTO getTerminologies(String system, int page, int limit) throws OperationException, DocumentNotFoundException, OutOfRangeException {
+	public GetDocsPageResDTO getTerminologies(String system, int page, int limit) throws OperationException, DocumentNotFoundException, OutOfRangeException {
 		// Retrieve Pair<Page, Entities>
 		SimpleImmutableEntry<Page<TerminologyETY>, List<TerminologyDocumentDTO>> slice = service.getTerminologies(page, limit, system);
 		// When returning, it builds the URL according to provided values
-		return new GetTermsPageResDTO(getLogTraceInfo(), slice.getValue(), system, slice.getKey());
+		return new GetDocsPageResDTO(getLogTraceInfo(), slice.getValue(), system, slice.getKey());
 	}
 
 	/**
@@ -64,8 +64,8 @@ public class TerminologyCTL extends AbstractCTL implements ITerminologyCTL {
 	 * @throws DocumentNotFoundException If no document matching the id is found
 	 */
 	@Override
-	public GetTermsResDTO getTerminologyById(String id) throws OperationException, DocumentNotFoundException {
-		return new GetTermsResDTO(getLogTraceInfo(), service.getTerminologyById(id));
+	public GetDocsResDTO getTerminologyById(String id) throws OperationException, DocumentNotFoundException {
+		return new GetDocsResDTO(getLogTraceInfo(), service.getTerminologyById(id));
 	}
 
 	/**

@@ -14,13 +14,13 @@ import static org.springframework.web.servlet.support.ServletUriComponentsBuilde
 
 @Data
 @AllArgsConstructor
-public class GetTermsPageLinksDTO {
+public class GetDocsPageLinksDTO {
 
     private String next;
     private String prev;
 
-    public static GetTermsPageLinksDTO fromPage(String system, Page<TerminologyETY> page) {
-        return new GetTermsPageLinksDTO(
+    public static GetDocsPageLinksDTO fromPage(String system, Page<TerminologyETY> page) {
+        return new GetDocsPageLinksDTO(
             getNext(system, page),
             getPrev(system, page)
         );

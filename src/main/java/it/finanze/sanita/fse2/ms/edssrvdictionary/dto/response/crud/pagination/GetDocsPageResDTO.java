@@ -21,14 +21,14 @@ import java.util.List;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class GetTermsPageResDTO extends ResponseDTO {
+public class GetDocsPageResDTO extends ResponseDTO {
 
     @ArraySchema(schema = @Schema(implementation = TerminologyDocumentDTO.class))
     private List<TerminologyDocumentDTO> items;
-    private GetTermsPageLinksDTO links;
+    private GetDocsPageLinksDTO links;
     private long numberOfItems;
     
-    public GetTermsPageResDTO(
+    public GetDocsPageResDTO(
         LogTraceInfoDTO traceInfo,
         List<TerminologyDocumentDTO> items,
         String system,
@@ -36,7 +36,7 @@ public class GetTermsPageResDTO extends ResponseDTO {
     ) {
         super(traceInfo);
         this.items = items;
-        this.links = GetTermsPageLinksDTO.fromPage(system, page);
+        this.links = GetDocsPageLinksDTO.fromPage(system, page);
         this.numberOfItems = items.size();
     }
 }
