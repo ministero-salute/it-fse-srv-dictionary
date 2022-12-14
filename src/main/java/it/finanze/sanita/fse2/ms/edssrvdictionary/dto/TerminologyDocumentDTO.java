@@ -3,17 +3,17 @@
  */
 package it.finanze.sanita.fse2.ms.edssrvdictionary.dto;
 
-import static it.finanze.sanita.fse2.ms.edssrvdictionary.utility.ValidationUtility.DEFAULT_STRING_MAX_SIZE;
-
-import java.io.Serializable;
-import java.time.OffsetDateTime;
-
 import io.swagger.v3.oas.annotations.media.Schema;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.TerminologyETY;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.utility.MiscUtility;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.io.Serializable;
+import java.time.OffsetDateTime;
+
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.utility.ValidationUtility.DEFAULT_STRING_MAX_SIZE;
 
 @Data
 @AllArgsConstructor
@@ -37,6 +37,7 @@ public class TerminologyDocumentDTO implements Serializable {
 	@Schema(maxLength = DEFAULT_STRING_MAX_SIZE)
 	private String description;
 	private OffsetDateTime releaseDate;
+	private OffsetDateTime insertionDate;
 	private OffsetDateTime lastUpdateDate;
 
 	public static TerminologyDocumentDTO fromEntity(TerminologyETY e) {
@@ -47,6 +48,7 @@ public class TerminologyDocumentDTO implements Serializable {
 				e.getCode(),
 				e.getDescription(),
 				MiscUtility.convertToOffsetDateTime(e.getReleaseDate()),
+				MiscUtility.convertToOffsetDateTime(e.getInsertionDate()),
 				MiscUtility.convertToOffsetDateTime(e.getLastUpdateDate()));
 	}
 
