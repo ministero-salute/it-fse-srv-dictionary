@@ -60,7 +60,7 @@ public class TerminologyCTL extends AbstractCTL implements ITerminologyCTL {
 		// Retrieve Pair<Page, Entities>
 		SimpleImmutableEntry<Page<TerminologyETY>, List<TerminologyDocumentDTO>> slice = service.getTerminologies(page, limit, system);
 		// When returning, it builds the URL according to provided values
-		return new GetTermsPageResDTO(getLogTraceInfo(), slice.getValue(), system, slice.getKey());
+		return new GetTermsPageResDTO(getLogTraceInfo(), slice.getValue(), system, slice.getKey(), 0);
 	}
 
 	/**
