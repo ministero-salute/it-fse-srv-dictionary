@@ -4,7 +4,7 @@
 package it.finanze.sanita.fse2.ms.edssrvdictionary.service;
 
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes.ChangeSetDTO;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.chunks.snapshot.ChunksDTO;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes.data.snapshot.ChunksDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DocumentNotFoundException;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.OperationException;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.snapshot.SnapshotETY;

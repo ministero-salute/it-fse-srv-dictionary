@@ -8,7 +8,7 @@ import brave.Tracer;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.TerminologyDocumentDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes.ChangeSetDTO;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.chunks.snapshot.ChunksDTO;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes.data.snapshot.ChunksDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.OutOfRangeException;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.ITerminologyRepo;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.TerminologyETY;

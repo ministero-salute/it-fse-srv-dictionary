@@ -1,7 +1,7 @@
 /*
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
-package it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.chunks.snapshot;
+package it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes.data.snapshot;
 
 import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.snapshot.ChunksETY;
 import lombok.AllArgsConstructor;
