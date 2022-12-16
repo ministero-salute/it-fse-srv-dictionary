@@ -64,28 +64,6 @@ public interface ITerminologyCTL {
         String id
     ) throws OperationException, DocumentNotFoundException;
 
-    @DeleteMapping(
-        value = API_TERMS_GET_ONE_BY_ID,
-        produces = { APPLICATION_JSON_VALUE }
-    )
-    @Operation(
-        summary = "Cancellazione di un terminology dato il suo identificativo",
-        description = "Servizio che consente di cancellare una terminologia dato il suo identificativo."
-    )
-    @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Documento cancellato correttamente", content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = DelDocsResDTO.class))),
-        @ApiResponse(responseCode = "400", description = "I parametri forniti non sono validi", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = ErrorResponseDTO.class))),
-        @ApiResponse(responseCode = "404", description = "Documento non trovato sul database", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = ErrorResponseDTO.class))),
-        @ApiResponse(responseCode = "500", description = "Errore interno del server", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = ErrorResponseDTO.class)))
-    })
-    DelDocsResDTO deleteTerminologyById(
-        @PathVariable
-        @Parameter(description = "Identificatore documento")
-        @NotBlank(message = ERR_VAL_ID_BLANK)
-        @ValidObjectId(message = ERR_VAL_ID_NOT_VALID)
-        String id
-    ) throws DocumentNotFoundException, OperationException;
-
     @PostMapping(
         produces = { APPLICATION_JSON_VALUE },
         consumes = { MULTIPART_FORM_DATA_VALUE }

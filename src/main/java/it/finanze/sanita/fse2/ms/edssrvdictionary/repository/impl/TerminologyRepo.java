@@ -271,26 +271,6 @@ public class TerminologyRepo implements ITerminologyRepo {
 	}
 
 	@Override
-	public TerminologyETY deleteById(String id) throws OperationException {
-		// Create query
-		Query query = new Query();
-		query.addCriteria(where(FIELD_ID).is(id));
-		query.addCriteria(where(FIELD_DELETED).is(false));
-		// Create update definition
-		Update update = new Update();
-		update.set(FIELD_LAST_UPDATE, new Date());
-		update.set(FIELD_DELETED, true);
-		// Execute
-		try {
-			mongo.updateFirst(query, update, TerminologyETY.class);
-		}catch (MongoException ex) {
-			throw new OperationException("Unable to delete document", ex);
-		}
-		// Retrieve update entity
-		return findById(id);
-	}
-
-	@Override
 	public List<TerminologyETY> deleteBySystem(String system) throws OperationException, DataIntegrityException {
 		// Working vars
 		List<TerminologyETY> entities;
@@ -320,8 +300,8 @@ public class TerminologyRepo implements ITerminologyRepo {
 	}
 
 	@Override
-	public List<TerminologyETY> updateBySystem(String system,String version,Date releaseDate, List<TerminologyETY> entities) throws OperationException, DataIntegrityException, DocumentNotFoundException {
-		List<TerminologyETY> output = new ArrayList<>();		
+	public List<TerminologyETY> updateBySystem(String system,String version,Date releaseDate, List<TerminologyETY> entities) throws OperationException, DocumentNotFoundException {
+		List<TerminologyETY> output;
 		boolean result = deleteBySystemForUpdate(system, version, releaseDate);
 		if(result) {
 			output = insertAll(entities);
@@ -384,8 +364,8 @@ public class TerminologyRepo implements ITerminologyRepo {
 	}
 
 	
-	private boolean deleteBySystemForUpdate(final String system, final String version, final Date releaseDate) throws OperationException, DataIntegrityException {
-		boolean output = false;
+	private boolean deleteBySystemForUpdate(final String system, final String version, final Date releaseDate) throws OperationException {
+		boolean output;
 		// Create query
 		Query query = new Query();
 		query.addCriteria(where(FIELD_SYSTEM).is(system).and(FIELD_DELETED).is(false));

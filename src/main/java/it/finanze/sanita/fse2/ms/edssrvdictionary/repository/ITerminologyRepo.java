@@ -3,17 +3,16 @@
  */
 package it.finanze.sanita.fse2.ms.edssrvdictionary.repository;
 
-import java.util.Date;
-import java.util.List;
-
-import org.bson.types.ObjectId;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DataIntegrityException;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DocumentNotFoundException;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.OperationException;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.TerminologyETY;
+import org.bson.types.ObjectId;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
+import java.util.Date;
+import java.util.List;
 
 /**
  *
@@ -91,14 +90,6 @@ public interface ITerminologyRepo extends IChangeSetRepo<TerminologyETY> {
 	List<TerminologyETY> findBySystem(String system) throws OperationException;
 
 	/**
-	 * Delete a given entity and returns it
-	 * @param id The document id
-	 * @return The deleted entity or {@code null}
-	 * @throws OperationException If a data-layer error occurs
-	 */
-	TerminologyETY deleteById(String id) throws OperationException;
-
-	/**
 	 * Delete entities matching system and returns them
 	 * @param system System identifier
 	 * @return The entities matching the system
@@ -113,9 +104,8 @@ public interface ITerminologyRepo extends IChangeSetRepo<TerminologyETY> {
 	 * @param entities Entities to insert
 	 * @return The inserted entities
 	 * @throws OperationException If a data-layer error occurs
-	 * @throws DataIntegrityException If database output is not the expected one
 	 */
-	List<TerminologyETY> updateBySystem(String system,String version,Date releaseDate, List<TerminologyETY> entities) throws OperationException, DataIntegrityException, DocumentNotFoundException;
+	List<TerminologyETY> updateBySystem(String system,String version,Date releaseDate, List<TerminologyETY> entities) throws OperationException, DocumentNotFoundException;
 	
 	/**
 	 * Returns terminologies matching system with pagination

@@ -92,11 +92,10 @@ public class TerminologyCTL extends AbstractCTL implements ITerminologyCTL {
 	 * @throws DocumentNotFoundException If no document matching system is found
 	 * @throws DataProcessingException If an error occurs while converting raw data to entity type
 	 * @throws DataIntegrityException If database output is not the expected one
-	 * @throws DocumentAlreadyPresentException If the given version already exists
 	 * @throws InvalidContentException If the file is empty or null
 	 */
 	@Override
-	public PutDocsResDTO updateTerminologies(MultipartFile file, String version, Date releaseDate) throws OperationException, DocumentNotFoundException, DataProcessingException, DataIntegrityException, DocumentAlreadyPresentException, InvalidContentException {
+	public PutDocsResDTO updateTerminologies(MultipartFile file, String version, Date releaseDate) throws OperationException, DocumentNotFoundException, DataProcessingException, DataIntegrityException, InvalidContentException {
 		return new PutDocsResDTO(getLogTraceInfo(), service.updateTerminologyCsv(file, version, releaseDate));
 	}
 
@@ -111,18 +110,6 @@ public class TerminologyCTL extends AbstractCTL implements ITerminologyCTL {
 	@Override
 	public DelDocsResDTO deleteTerminologies(String system) throws OperationException, DocumentNotFoundException, DataIntegrityException {
 		return new DelDocsResDTO(getLogTraceInfo(), service.deleteTerminologiesBySystem(system));
-	}
-
-	/**
-	 * Delete the document by identifier
-	 * @param id The document it
-	 * @return The number of terminologies deleted
-	 * @throws OperationException If a data-layer error occurs
-	 * @throws DocumentNotFoundException If no document matching id is found
-	 */
-	@Override
-	public DelDocsResDTO deleteTerminologyById(String id) throws DocumentNotFoundException, OperationException {
-		return new DelDocsResDTO(getLogTraceInfo(), service.deleteTerminologyById(id));
 	}
 
 }

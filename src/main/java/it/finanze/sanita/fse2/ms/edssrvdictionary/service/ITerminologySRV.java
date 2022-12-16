@@ -4,24 +4,17 @@
 package it.finanze.sanita.fse2.ms.edssrvdictionary.service;
 
 
-import java.util.AbstractMap.SimpleImmutableEntry;
-import java.util.Date;
-import java.util.List;
-
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.TerminologyDocumentDTO;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.csv.vocabulary.VocabularyDTO;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.*;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.TerminologyETY;
 import org.bson.types.ObjectId;
 import org.springframework.data.domain.Page;
 import org.springframework.web.multipart.MultipartFile;
 
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.TerminologyDocumentDTO;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.csv.vocabulary.VocabularyDTO;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DataIntegrityException;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DataProcessingException;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DocumentAlreadyPresentException;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DocumentNotFoundException;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.InvalidContentException;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.OperationException;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.OutOfRangeException;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.TerminologyETY;
+import java.util.AbstractMap.SimpleImmutableEntry;
+import java.util.Date;
+import java.util.List;
 
 /**
  *
@@ -39,15 +32,6 @@ public interface ITerminologySRV extends IChangeSetSRV {
 	 * @throws DocumentNotFoundException If no document matching the id is found
 	 */
 	TerminologyDocumentDTO getTerminologyById(String id) throws OperationException, DocumentNotFoundException;
-
-	/**
-	 * Delete the document by identifier
-	 * @param id The document it
-	 * @return The number of terminologies deleted
-	 * @throws OperationException If a data-layer error occurs
-	 * @throws DocumentNotFoundException If no document matching id is found
-	 */
-	int deleteTerminologyById(String id) throws DocumentNotFoundException, OperationException;
 
 	/**
 	 * Aggregates and return documents by chunk
@@ -108,10 +92,9 @@ public interface ITerminologySRV extends IChangeSetSRV {
 	 * @throws DocumentNotFoundException If no document matching system is found
 	 * @throws DataProcessingException If an error occurs while converting raw data to entity type
 	 * @throws DataIntegrityException If database output is not the expected one
-	 * @throws DocumentAlreadyPresentException If the given version already exists
 	 * @throws InvalidContentException If the file is empty or null
 	 */
-	int updateTerminologyCsv(MultipartFile file, String version, Date releaseDate) throws DocumentNotFoundException, OperationException, DataProcessingException, DataIntegrityException, DocumentAlreadyPresentException, InvalidContentException;
+	int updateTerminologyCsv(MultipartFile file, String version, Date releaseDate) throws DocumentNotFoundException, OperationException, DataProcessingException, DataIntegrityException, InvalidContentException;
 	
 	/**
 	 * Delete terminologies matching system

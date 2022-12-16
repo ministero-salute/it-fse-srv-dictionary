@@ -88,15 +88,6 @@ class TerminologyServiceTest extends AbstractTest {
 	}
 
     @Test
-    @DisplayName("Test Terminology elimination by id")
-    void deleteTerminologyByIdTest() throws Exception{
-        int size = terminologySRV.deleteTerminologyById(TEST_TERMINOLOGY_ID);
-        assertEquals(1, size);
-        List<TerminologyETY> deletions = terminologyRepo.getEveryActiveTerminology();
-        assertEquals(0, deletions.size());
-    }
-
-    @Test
     @DisplayName("Test Terminology elimination by System")
     void deleteTerminologyBySystemTest() throws Exception{
         int size = terminologySRV.deleteTerminologiesBySystem(TEST_TERMINOLOGY_SYSTEM);

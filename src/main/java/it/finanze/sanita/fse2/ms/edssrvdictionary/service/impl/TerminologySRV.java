@@ -3,7 +3,6 @@
  */
 package it.finanze.sanita.fse2.ms.edssrvdictionary.service.impl;
 
-import com.google.common.collect.Lists;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.TerminologyDocumentDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.csv.vocabulary.TerminologyFileEntryDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.csv.vocabulary.VocabularyDTO;
@@ -218,16 +217,6 @@ public class TerminologySRV implements ITerminologySRV {
 	}
 
 	@Override
-	public int deleteTerminologyById(String id) throws DocumentNotFoundException, OperationException {
-		TerminologyETY out = repository.deleteById(id);
-		if (out == null) {
-			throw new DocumentNotFoundException(ERR_SRV_DOCUMENT_NOT_EXIST);
-		}
-		return Lists.newArrayList(out).size();
-	}
-
-
-	@Override
 	public List<TerminologyDocumentDTO> getTermsByChunkIns(String id, int index) throws DocumentNotFoundException, OperationException, OutOfRangeException, DataIntegrityException {
 		// Retrieve document chunks
 		SnapshotETY chunks = getChunks(id);
@@ -349,7 +338,7 @@ public class TerminologySRV implements ITerminologySRV {
 	}
 	
 	@Override
-    public int updateTerminologyCsv(MultipartFile file, String version, Date releaseDate) throws DocumentNotFoundException, OperationException, DataProcessingException, DataIntegrityException, DocumentAlreadyPresentException, InvalidContentException {
+    public int updateTerminologyCsv(MultipartFile file, String version, Date releaseDate) throws DocumentNotFoundException, OperationException, DataProcessingException, InvalidContentException {
 		// Check file integrity
 		if(file == null || file.isEmpty()) throw new InvalidContentException(ERR_SRV_FILE_NOT_VALID, FILE);
 		// Extract system from filename
