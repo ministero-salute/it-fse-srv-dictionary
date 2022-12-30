@@ -4,9 +4,13 @@
 package it.finanze.sanita.fse2.ms.edssrvdictionary.base;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+
+import java.util.Date;
 
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
+import org.springframework.web.multipart.MultipartFile;
 
 public final class MockRequests {
 
@@ -26,4 +30,8 @@ public final class MockRequests {
 
     }
     
+    public static MockHttpServletRequestBuilder uploadTerminologiesCsv(MultipartFile file, String version, Date releaseDate){
+        return post("http://127.0.0.1:9088/v1/terminology").contentType(MediaType.APPLICATION_JSON_VALUE);
+
+    }
 }
