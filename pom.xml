@@ -179,6 +179,20 @@
 				</executions>
 			</plugin>
 
+			<!-- Security check -->
+			<plugin>
+				<groupId>org.owasp</groupId>
+				<artifactId>dependency-check-maven</artifactId>
+				<version>7.1.2</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>check</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
 			<!-- Build -->
 			<plugin>
 				<artifactId>maven-antrun-plugin</artifactId>
