@@ -17,7 +17,7 @@ public final class ChangeSetUtility {
 	public static final int CHUNKS_SIZE = 10000;
 
 	private ChangeSetUtility() {
-		
+		// This method is intentionally left blank.
 	}
 
 	/**

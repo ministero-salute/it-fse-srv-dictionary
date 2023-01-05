@@ -16,8 +16,8 @@ import java.time.OffsetDateTime;
 import static it.finanze.sanita.fse2.ms.edssrvdictionary.utility.ValidationUtility.DEFAULT_STRING_MAX_SIZE;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 public class TerminologyDocumentDTO implements Serializable {
 
 	/**

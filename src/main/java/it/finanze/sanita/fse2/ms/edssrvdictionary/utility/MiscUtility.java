@@ -13,7 +13,9 @@ public final class MiscUtility {
     /**
      * Private constructor to disallow to access from other classes
      */
-    private MiscUtility() {}
+    private MiscUtility() {
+        // This method is intentionally left blank.
+    }
 
     public static OffsetDateTime convertToOffsetDateTime(Date dateToConvert) {
     	if (dateToConvert == null) return null;
@@ -26,7 +28,4 @@ public final class MiscUtility {
         return field;
     }
 
-    public static boolean isNullOrEmpty(final String str) {
-        return str == null || str.isEmpty();
-    }
 }

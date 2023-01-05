@@ -4,14 +4,12 @@
 package it.finanze.sanita.fse2.ms.edssrvdictionary.config;
 
 /**
- * 
- *
  * Constants application.
  */
 public final class Constants {
 
 	/**
-	 *	Path scan.
+	 * Path scan.
 	 */
 	public static final class ComponentScan {
 
@@ -19,19 +17,18 @@ public final class Constants {
 		 * Base path.
 		 */
 		public static final String BASE = "it.finanze.sanita.fse2.ms.edssrvdictionary";
-		
+
 		/**
 		 * Configuration mongo path.
 		 */
 		public static final String CONFIG_MONGO = "it.finanze.sanita.fse2.ms.edssrvdictionary.config.mongo";
 
-		
 		private ComponentScan() {
-			//This method is intentionally left blank.
+			// This method is intentionally left blank.
 		}
 
 	}
-	
+
 	public static final class Collections {
 
 		public static final String TERMINOLOGY = "terminology_eds";
@@ -39,21 +36,21 @@ public final class Constants {
 		public static final String SNAPSHOT = "snapshot_eds";
 
 		private Collections() {
-
+			// Private constructor to hide the implicit public one.
 		}
 	}
- 
+
 	public static final class Profile {
+
 		public static final String TEST = "test";
 
 		public static final String TEST_PREFIX = "test_";
 
-
-		/** 
+		/**
 		 * Constructor.
 		 */
 		private Profile() {
-			//This method is intentionally left blank.
+			// This method is intentionally left blank.
 		}
 
 	}
@@ -75,7 +72,7 @@ public final class Constants {
 		public static final String ERR_SRV_SYSTEM_NOT_EXISTS = "System %s non presente nel database";
 		public static final String ERR_SRV_PAGE_NOT_EXISTS = "La pagina richiesta non esiste, range valido da <%d> a <%d>";
 		public static final String ERR_SRV_PAGE_IDX_LESS_ZERO = "L'indice pagina non può essere minore di zero";
-		public static final String ERR_SRV_CHUNK_MISMATCH =  "Il numero dei documenti richiesti <%d> non coincide con quelli ottenuti <%d>";
+		public static final String ERR_SRV_CHUNK_MISMATCH = "Il numero dei documenti richiesti <%d> non coincide con quelli ottenuti <%d>";
 		public static final String ERR_SRV_PAGE_LIMIT_LESS_ZERO = "Il limite pagina non può essere minore o uguale a zero";
 		public static final String ERR_REP_UNABLE_RETRIVE_FILENAME = "Impossibile recuperare il nome del file corrente";
 		public static final String ERR_REP_UNABLE_CHECK_SYSTEM = "Impossibile verificare l'esistenza del system";
@@ -84,7 +81,7 @@ public final class Constants {
 		public static final String ERR_UTLS_IO_EMPTY = "Il file risulta essere vuoto";
 		public static final String ERR_REP_UNABLE_INSERT_ENTITY = "Impossibile caricare l'entità nel database";
 		public static final String ERR_REP_DOCS_NOT_FOUND = "Impossibile recuperare i documenti del system richiesto";
-		public static final String ERR_REP_DEL_MISMATCH =  "Il numero delle cancellazioni eseguite <%d> non coincide con quelle richieste <%d>";
+		public static final String ERR_REP_DEL_MISMATCH = "Il numero delle cancellazioni eseguite <%d> non coincide con quelle richieste <%d>";
 		public static final String ERR_REP_DEL_DOCS_BY_SYS = "Impossibile cancellare i documenti del system richiesto";
 		public static final String ERR_REP_CHANGESET_INSERT = "Impossibile recuperare il change-set degli inserimenti";
 		public static final String ERR_REP_CHANGESET_DELETE = "Impossibile recuperare il change-set delle cancellazioni";
@@ -92,15 +89,15 @@ public final class Constants {
 		public static final String ERR_REP_COUNT_ACTIVE_DOC = "Impossibile conteggiare ogni estensione attiva";
 
 		private Logs() {
-			//This method is intentionally left blank. 
+			// This method is intentionally left blank.
 		}
 	}
-  
+
 	/**
-	 *	Constants.
+	 * Constants.
 	 */
 	private Constants() {
-
+		// This method is intentionally left blank.
 	}
 
 }

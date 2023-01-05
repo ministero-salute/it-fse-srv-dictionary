@@ -4,15 +4,23 @@
 package it.finanze.sanita.fse2.ms.edssrvdictionary.repository.impl;
 
 
-import com.mongodb.MongoException;
-import com.mongodb.client.result.UpdateResult;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DataIntegrityException;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DocumentNotFoundException;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.OperationException;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.ITerminologyRepo;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.TerminologyETY;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.snapshot.SnapshotETY;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.utility.StringUtility;
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Logs.ERR_REP_CHANGESET_DELETE;
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Logs.ERR_REP_CHANGESET_INSERT;
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Logs.ERR_REP_COUNT_ACTIVE_DOC;
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Logs.ERR_REP_DEL_DOCS_BY_SYS;
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Logs.ERR_REP_DEL_MISMATCH;
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Logs.ERR_REP_DOCS_NOT_FOUND;
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Logs.ERR_REP_EVERY_ACTIVE_DOC;
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Logs.ERR_REP_UNABLE_CHECK_SYSTEM;
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Logs.ERR_REP_UNABLE_INSERT_ENTITY;
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.TerminologyETY.FIELD_SYSTEM;
+import static org.springframework.data.mongodb.core.query.Criteria.where;
+import static org.springframework.data.mongodb.core.query.Query.query;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -24,14 +32,16 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import com.mongodb.MongoException;
+import com.mongodb.client.result.UpdateResult;
 
-import static it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Logs.*;
-import static it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.TerminologyETY.*;
-import static org.springframework.data.mongodb.core.query.Criteria.where;
-import static org.springframework.data.mongodb.core.query.Query.query;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DataIntegrityException;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DocumentNotFoundException;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.OperationException;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.ITerminologyRepo;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.TerminologyETY;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.snapshot.SnapshotETY;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.utility.StringUtility;
 
 /**
  *
@@ -43,7 +53,6 @@ public class TerminologyRepo implements ITerminologyRepo {
 	@Autowired
 	private MongoTemplate mongo;
 	 
-
 	@Override
 	public TerminologyETY findById(String pk) throws OperationException {
 		TerminologyETY out;
@@ -82,47 +91,6 @@ public class TerminologyRepo implements ITerminologyRepo {
 		}
 		return output;
 	}
-
-	/**
-	 * Check if a given system is already present
-	 *
-	 * @param system  The system parameter
-	 * @param version The system version parameter
-	 * @return True if exists at least one term with the given system, otherwise false
-	 * @throws OperationException If a data-layer error occurs
-	 */
-	@Override
-	public boolean existsBySystemAndVersion(String system, String version) throws OperationException {
-		// Working var
-		boolean output;
-		// Create query
-		Query query = new Query();
-		query.addCriteria(
-			where(FIELD_SYSTEM).is(system)
-			.and(FIELD_VERSION).is(version)
-			.and(FIELD_DELETED).is(false)
-		);
-		try {
-			output = mongo.exists(query, TerminologyETY.class);
-		} catch(MongoException ex) {
-			throw new OperationException(ERR_REP_UNABLE_CHECK_SYSTEM_VERSION, ex);
-		}
-		return output;
-	}
-
-	@Override
-	public List<TerminologyETY> findByInCodeAndSystem(final List<String> codes, final String system) throws OperationException {
-		List<TerminologyETY> output;
-		try {
-			Query query = new Query();
-			query.addCriteria(where(FIELD_CODE).in(codes).and(FIELD_SYSTEM).is(system));
-			output = mongo.find(query, TerminologyETY.class);
-		} catch(MongoException ex) {
-			throw new OperationException("Unable to retrieve by code and system", ex);
-		}
-		return output;
-	}
-
 
 	/**
      * Retrieves the latest insertions according to the given timeframe

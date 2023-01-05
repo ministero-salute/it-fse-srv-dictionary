@@ -33,6 +33,7 @@ public final class FileUtility {
 	 * Constructor.
 	 */
 	private FileUtility() {
+		// This method is intentionally left blank.
 	}
 
 	/**

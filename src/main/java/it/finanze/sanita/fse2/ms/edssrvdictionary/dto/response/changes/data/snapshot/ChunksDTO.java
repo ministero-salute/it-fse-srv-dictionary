@@ -6,12 +6,14 @@ package it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes.data.sna
 import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.snapshot.ChunksETY;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.Value;
 
 /**
  * The changeset chunk DTO
  */
 @Data
+@NoArgsConstructor
 @AllArgsConstructor
 public class ChunksDTO {
 

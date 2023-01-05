@@ -3,16 +3,17 @@
  */
 package it.finanze.sanita.fse2.ms.edssrvdictionary.repository;
 
-import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DataIntegrityException;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DocumentNotFoundException;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.OperationException;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.TerminologyETY;
+import java.util.Date;
+import java.util.List;
+
 import org.bson.types.ObjectId;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import java.util.Date;
-import java.util.List;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DataIntegrityException;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DocumentNotFoundException;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.OperationException;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.TerminologyETY;
 
 /**
  *
@@ -46,25 +47,6 @@ public interface ITerminologyRepo extends IChangeSetRepo<TerminologyETY> {
 	 */
 	boolean existsBySystem(String system) throws OperationException;
 	
-
-	/**
-	 * Check if a given system is already present
-	 * @param system The system parameter
-	 * @param version The system version parameter
-	 * @return True if exists at least one term with the given system, otherwise false
-	 * @throws OperationException If a data-layer error occurs
-	 */
-	boolean existsBySystemAndVersion(String system, String version) throws OperationException;
-
-	/**
-	 * Returns all the entities matching the given codes and system
-	 * @param codes List containing code identifiers
-	 * @param system System identifier
-	 * @return List containing the entities matching code and system
-	 * @throws OperationException If a data-layer error occurs
-	 */
-	List<TerminologyETY> findByInCodeAndSystem(List<String> codes, String system) throws OperationException;
-
 	/**
      * Retrieves all the not-deleted terminologies
      *

@@ -4,25 +4,29 @@
 package it.finanze.sanita.fse2.ms.edssrvdictionary.service;
 
 
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.TerminologyDocumentDTO;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.csv.vocabulary.VocabularyDTO;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.*;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.TerminologyETY;
+import java.util.AbstractMap.SimpleImmutableEntry;
+import java.util.Date;
+import java.util.List;
+
 import org.bson.types.ObjectId;
 import org.springframework.data.domain.Page;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.AbstractMap.SimpleImmutableEntry;
-import java.util.Date;
-import java.util.List;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.TerminologyDocumentDTO;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DataIntegrityException;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DataProcessingException;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DocumentAlreadyPresentException;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DocumentNotFoundException;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.InvalidContentException;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.OperationException;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.OutOfRangeException;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.TerminologyETY;
 
 /**
  *
  *	Vocabulary interface service.
  */
 public interface ITerminologySRV extends IChangeSetSRV {
-
-	Integer saveNewVocabularySystems(List<VocabularyDTO> vocabulariesDTO) throws OperationException;
 
 	/**
 	 * Retrieves the document by identifier
@@ -68,7 +72,6 @@ public interface ITerminologySRV extends IChangeSetSRV {
 	 */
 	SimpleImmutableEntry<Page<TerminologyETY>, List<TerminologyDocumentDTO>> getTerminologies(int page, int limit, String system) throws OperationException, DocumentNotFoundException, OutOfRangeException;
 
- 
 	/**
 	 * Insert terminologies inside the database using a .csv file
 	 * @param file A .csv file representing terminologies

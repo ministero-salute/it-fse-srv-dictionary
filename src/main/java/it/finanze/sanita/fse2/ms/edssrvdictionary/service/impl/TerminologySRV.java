@@ -3,27 +3,24 @@
  */
 package it.finanze.sanita.fse2.ms.edssrvdictionary.service.impl;
 
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.TerminologyDocumentDTO;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.csv.vocabulary.TerminologyFileEntryDTO;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.csv.vocabulary.VocabularyDTO;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes.ChangeSetDTO;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes.data.snapshot.ChunksDTO;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes.data.snapshot.ChunksDTO.Chunk;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.*;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.ITerminologyRepo;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.TerminologyETY;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.snapshot.ChunksETY;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.snapshot.SnapshotETY;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.service.ITerminologySRV;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.utility.ChangeSetUtility;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.utility.FileUtility;
-import lombok.extern.slf4j.Slf4j;
-import org.bson.types.ObjectId;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Logs.ERR_REP_UNABLE_RETRIVE_FILENAME;
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Logs.ERR_SRV_CHUNK_MISMATCH;
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Logs.ERR_SRV_DOCUMENT_NOT_EXIST;
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Logs.ERR_SRV_FILE_NOT_VALID;
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Logs.ERR_SRV_PAGE_IDX_LESS_ZERO;
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Logs.ERR_SRV_PAGE_LIMIT_LESS_ZERO;
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Logs.ERR_SRV_PAGE_NOT_EXISTS;
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Logs.ERR_SRV_SYSTEM_ALREADY_EXISTS;
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Logs.ERR_SRV_SYSTEM_NOT_EXISTS;
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Logs.ERR_VAL_IDX_CHUNK_NOT_VALID;
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.error.ErrorInstance.Fields.FILE;
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.TerminologyETY.FILE_CSV_EXT_DOTTED;
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.utility.ChangeSetUtility.CHUNKS_SIZE;
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.utility.ChangeSetUtility.chunks;
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.utility.RoutesUtility.API_PATH_IDX_VAR;
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.utility.RoutesUtility.API_QP_LIMIT;
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.utility.RoutesUtility.API_QP_PAGE;
+import static java.lang.String.format;
 
 import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.ArrayList;
@@ -32,74 +29,41 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Logs.*;
-import static it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.error.ErrorInstance.Fields.FILE;
-import static it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.TerminologyETY.FILE_CSV_EXT_DOTTED;
-import static it.finanze.sanita.fse2.ms.edssrvdictionary.utility.ChangeSetUtility.CHUNKS_SIZE;
-import static it.finanze.sanita.fse2.ms.edssrvdictionary.utility.ChangeSetUtility.chunks;
-import static it.finanze.sanita.fse2.ms.edssrvdictionary.utility.RoutesUtility.*;
-import static java.lang.String.format;
+import org.bson.types.ObjectId;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.TerminologyDocumentDTO;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes.ChangeSetDTO;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes.data.snapshot.ChunksDTO;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes.data.snapshot.ChunksDTO.Chunk;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DataIntegrityException;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DataProcessingException;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DocumentAlreadyPresentException;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DocumentNotFoundException;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.InvalidContentException;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.OperationException;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.OutOfRangeException;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.ITerminologyRepo;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.TerminologyETY;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.snapshot.ChunksETY;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.snapshot.SnapshotETY;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.service.ITerminologySRV;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.utility.ChangeSetUtility;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.utility.FileUtility;
 
 /**
  
  *	Terminology service.
  */
 @Service
-@Slf4j
 public class TerminologySRV implements ITerminologySRV {
 
 	@Autowired
 	private ITerminologyRepo repository;
-
-	@Override
-	public Integer saveNewVocabularySystems(final List<VocabularyDTO> vocabulariesDTO) throws OperationException {
-		int recordSaved = 0;
-		if(vocabulariesDTO!=null && !vocabulariesDTO.isEmpty()) {
-			for(VocabularyDTO entry : vocabulariesDTO) {
-				boolean exist = repository.existsBySystem(entry.getSystem());
-				
-				List<TerminologyETY> vocabularyETYS = buildDtoToETY(entry.getEntryDTO(), entry.getSystem());
-				if(Boolean.TRUE.equals(exist)) {
-					log.info("Save new version vocabulary");
-					List<String> codeList = vocabularyETYS.stream().map(TerminologyETY::getCode).collect(Collectors.toList());
-					List<TerminologyETY> vocabularyFinded = repository.findByInCodeAndSystem(codeList,entry.getSystem());
-					List<TerminologyETY> vocabularyToSave = minus(vocabularyETYS, vocabularyFinded);
-					repository.insertAll(vocabularyToSave);
-					recordSaved = recordSaved+vocabularyToSave.size();
-				} else {
-					repository.insertAll(vocabularyETYS);
-					recordSaved = recordSaved+vocabularyETYS.size();
-				}
-			}
-		}
-		log.info("Vocabulary saved on db : " + recordSaved);
-		return recordSaved;
-	}
-	
-	
-	private List<TerminologyETY> minus(List<TerminologyETY> base, List<TerminologyETY> toRemove) {
-		List<TerminologyETY> out = new ArrayList<>(); 
-		for (TerminologyETY s:base) {
-			if (!toRemove.contains(s) && s!=null) {
-				out.add(s);
-			} 
-		}
-		return out;    
-	}
-	
-	private List<TerminologyETY> buildDtoToETY(List<TerminologyFileEntryDTO> vocabularyEntriesDTO, String system) {
-		List<TerminologyETY> output = new ArrayList<>();
-		for(TerminologyFileEntryDTO vocabularyEntryDTO : vocabularyEntriesDTO) {
-			TerminologyETY ety = new TerminologyETY();
-			ety.setId(null);
-			ety.setCode(vocabularyEntryDTO.getCode());
-			ety.setDescription(vocabularyEntryDTO.getDescription());
-			ety.setSystem(system);
-			output.add(ety);
-		}
-		return output;
-	}
-
 
 	@Override
 	public List<ChangeSetDTO> getInsertions(Date lastUpdate) throws OperationException {

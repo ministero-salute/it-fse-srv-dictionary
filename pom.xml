@@ -100,7 +100,7 @@
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
-			<optional>true</optional>
+			<scope>provided</scope>
 		</dependency>
 
 		<!-- TEST -->
@@ -133,7 +133,12 @@
 			<version>5.6</version>
 		</dependency>
 
-	</dependencies>
+		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+			<version>2.10</version>
+		</dependency>
+ </dependencies>
 
 	<dependencyManagement>
 		<dependencies>

@@ -3,10 +3,11 @@
  */
 package it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions;
 
-
+import lombok.Getter;
 
 public class InvalidContentException extends Exception {
 
+    @Getter
     private final String field;
 
 	/**
@@ -19,7 +20,4 @@ public class InvalidContentException extends Exception {
         this.field = field;
     }
 
-    public String getField() {
-        return field;
-    }
 }

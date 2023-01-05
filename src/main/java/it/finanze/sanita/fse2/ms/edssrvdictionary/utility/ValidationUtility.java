@@ -6,7 +6,7 @@ package it.finanze.sanita.fse2.ms.edssrvdictionary.utility;
 public class ValidationUtility {
 	
 	private ValidationUtility() {
-		
+		// Constructor intentionally empty.
 	} 
 	
 	

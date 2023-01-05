@@ -23,6 +23,5 @@ public final class StringUtility {
 	public static boolean isNullOrEmpty(final String str) {
 		return str == null || str.isEmpty();
 	}
-
 	 
 }
