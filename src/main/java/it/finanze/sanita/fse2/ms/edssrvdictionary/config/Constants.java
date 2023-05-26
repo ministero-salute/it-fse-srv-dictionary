@@ -34,6 +34,8 @@ public final class Constants {
 		public static final String TERMINOLOGY = "terminology_eds";
 
 		public static final String SNAPSHOT = "snapshot_eds";
+		
+		public static final String WEB_SCRAPING = "web_scraping";
 
 		private Collections() {
 			// Private constructor to hide the implicit public one.

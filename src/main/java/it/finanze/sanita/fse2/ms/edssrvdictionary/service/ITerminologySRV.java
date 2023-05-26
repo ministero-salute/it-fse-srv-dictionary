@@ -12,6 +12,7 @@ import org.bson.types.ObjectId;
 import org.springframework.data.domain.Page;
 import org.springframework.web.multipart.MultipartFile;
 
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.MetadataResourceResponseDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.TerminologyDocumentDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DataIntegrityException;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DataProcessingException;
@@ -108,5 +109,7 @@ public interface ITerminologySRV extends IChangeSetSRV {
 	 * @throws DataIntegrityException If database output is not the expected one
 	 */
 	int deleteTerminologiesBySystem(String system) throws DocumentNotFoundException, OperationException, DataIntegrityException;
+	
+	MetadataResourceResponseDTO  callQueryToManageMetadataResource();
 
 }

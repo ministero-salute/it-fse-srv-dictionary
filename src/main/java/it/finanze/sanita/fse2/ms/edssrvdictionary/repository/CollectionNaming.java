@@ -32,5 +32,13 @@ public class CollectionNaming {
         return Constants.Collections.SNAPSHOT;
     }
     
+    @Bean("webScrapingBean")
+    public String getWebScrapingBeanCollection() {
+        if (profileUtility.isTestProfile()) {
+            return Constants.Profile.TEST_PREFIX + Constants.Collections.WEB_SCRAPING;
+        }
+        return Constants.Collections.WEB_SCRAPING;
+    }
+    
     
 }

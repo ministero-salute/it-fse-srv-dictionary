@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -32,6 +33,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
 
+import com.mongodb.DBObject;
 import com.mongodb.MongoException;
 import com.mongodb.client.result.UpdateResult;
 
@@ -200,6 +202,8 @@ public class TerminologyRepo implements ITerminologyRepo {
         
         try {
             objects = mongo.find(q, TerminologyETY.class);
+            Document queryDocument = q.getQueryObject();
+            System.out.println(queryDocument.toJson());
         } catch (MongoException e) {
             throw new OperationException(ERR_REP_EVERY_ACTIVE_DOC, e);
         }
