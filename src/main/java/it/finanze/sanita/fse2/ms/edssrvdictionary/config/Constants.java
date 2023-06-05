@@ -65,6 +65,7 @@ public final class Constants {
 		public static final String ERR_VAL_MISSING_PART = "Il campo richiesto '%s' non è presente";
 		public static final String ERR_VAL_MISSING_PARAMETER = "Il parametro richiesto '%s' non è presente";
 		public static final String ERR_VAL_SYSTEM_BLANK = "Il system non può essere vuoto";
+		public static final String ERR_VAL_URL_BLANK = "L'url non può essere vuoto";
 		public static final String ERR_VAL_IDX_CHUNK_NOT_VALID = "L'indice chunk non è valido (minore di zero o maggiore dei chunk disponibili)";
 		public static final String ERR_VAL_FUTURE_DATE = "La data del ultimo aggiornamento non può essere nel futuro";
 		public static final String ERR_VAL_FUTURE_RELEASE_DATE = "La data di rilascio non può essere nel futuro";

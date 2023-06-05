@@ -18,12 +18,14 @@ public final class RoutesUtility {
     public static final String API_CHUNKS_INS = "ins";
     public static final String API_CHUNKS_DEL = "del";
     public static final String API_TERMINOLOGY = "terminology";
+    public static final String WEB_SCRAPING = "web-scraping";
     public static final String API_CSV = "csv";
     public static final String API_XML = "xml";
 
     public static final String API_PATH_ID_VAR = "id";
     public static final String API_PATH_IDX_VAR = "idx";
     public static final String API_PATH_SYSTEM_VAR = "system";
+    public static final String API_PATH_URL = "url";
 
     public static final String API_QP_LAST_UPDATE = "lastUpdate";
     public static final String API_QP_PAGE = "page";
@@ -31,6 +33,7 @@ public final class RoutesUtility {
     public static final String API_SYSTEM_EXTS = "/{" + API_PATH_SYSTEM_VAR + "}";
     public static final String API_IDX_EXTS = "/{" + API_PATH_IDX_VAR + "}";
     public static final String API_ID_EXTS = "/{" + API_PATH_ID_VAR + "}";
+    public static final String API_URL_EXTS = "/{" + API_PATH_URL + "}";
     public static final String API_TERMS_MAPPER = API_VERSION + "/" + API_TERMINOLOGY;
     public static final String API_TERMS_GET_ONE_BY_ID = API_ID + API_ID_EXTS;
     public static final String API_TERMS_GET_BY_CSV = "/" + API_CSV;
@@ -46,6 +49,12 @@ public final class RoutesUtility {
 
     public static final String API_CHANGESET_TAG = "ChangeSet";
     public static final String API_CHANGESET_CHUNKS_TAG = "ChangeSet - Chunks";
+
+    public static final String API_WEB_SCRAPING = API_VERSION + "/" + WEB_SCRAPING;
+    public static final String API_WEB_DELETE_SYSTEM = "/delete" + API_SYSTEM_EXTS;
+    public static final String API_WEB_DELETE_MULTI = "/delete-multi";
+    public static final String API_WEB_SYSTEM_URL = API_SYSTEM_EXTS + API_URL_EXTS;
+    public static final String API_WEB_INSERT_MULTI = "/insert-multi";
 
     public static final String API_DOCUMENTS_TAG = "Documents";
 

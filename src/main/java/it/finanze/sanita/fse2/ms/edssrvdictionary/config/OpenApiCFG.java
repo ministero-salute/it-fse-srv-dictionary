@@ -22,6 +22,7 @@ import io.swagger.v3.oas.models.info.Contact;
 import io.swagger.v3.oas.models.media.ArraySchema;
 import io.swagger.v3.oas.models.media.Schema;
 import io.swagger.v3.oas.models.media.StringSchema;
+import io.swagger.v3.oas.models.parameters.RequestBody;
 import io.swagger.v3.oas.models.servers.Server;
 import io.swagger.v3.oas.models.media.MediaType;
 import io.swagger.v3.oas.models.media.Content;
@@ -107,14 +108,18 @@ public class OpenApiCFG {
 
 			openApi.getPaths().values().stream().filter(item -> item.getPost() != null).forEach(item -> {
 
-				final Schema<MediaType> schema = item.getPost().getRequestBody().getContent().get(org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE).getSchema();
-
-				schema.additionalProperties(false);
-				if(schema.getProperties().get("content_schematron") != null){
-					schema.getProperties().get("content_schematron").setMaxLength(customOpenapi.getFileMaxLength());
-				}
+				final RequestBody rb = item.getPost().getRequestBody();
+				if(rb!=null) {
+					MediaType mediaType = rb.getContent().get(org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE);
+					if(mediaType != null) {
+						final Schema<MediaType> schema = mediaType.getSchema();
 				
-
+						schema.additionalProperties(false);
+						if(schema.getProperties().get("content_schematron") != null){
+							schema.getProperties().get("content_schematron").setMaxLength(customOpenapi.getFileMaxLength());
+						}
+					}
+				}
 			});
 
 			openApi.getPaths().values().stream().filter(item -> item.getPut() != null).forEach(item -> {

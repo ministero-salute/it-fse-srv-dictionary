@@ -33,7 +33,6 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
 
-import com.mongodb.DBObject;
 import com.mongodb.MongoException;
 import com.mongodb.client.result.UpdateResult;
 
