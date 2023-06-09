@@ -1,6 +1,7 @@
 package it.finanze.sanita.fse2.ms.edssrvdictionary.client.impl;
 
 import java.io.IOException;
+import java.net.URI;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
+import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
@@ -52,42 +54,63 @@ public class QueryClient implements IQueryClient {
 		} catch(ResourceAccessException ex) {
 			//TODO - Gestisci Timeout
 		}
-		
+
+		return out;
+	}
+
+	@Override
+	public PostDocsResDTO callUploadTerminology(FormatEnum format, RequestDTO creationInfo, MultipartFile file) throws IOException {
+
+		// Crea il corpo della richiesta
+		MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
+		body.add("creationInfo", creationInfo);
+		body.add("file", new ByteArrayResource(file.getBytes()) {
+			@Override
+			public String getFilename() {
+				return file.getOriginalFilename();
+			}
+		});
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+		HttpEntity<MultiValueMap<String, Object>> entity = new HttpEntity<>(body, headers);
+
+		String url = msUrlCFG.getQueryHost() + "/v1/terminology/upload/"+format.toString();
+
+		PostDocsResDTO out = null;
+		try {
+			out = restTemplate.postForObject(url, entity, PostDocsResDTO.class);
+		} catch(ResourceAccessException ex) {
+			//TODO - Gestisci Timeout
+		}
 		return out;
 	}
 	
 	@Override
-	public PostDocsResDTO callUploadTerminology(FormatEnum format, RequestDTO creationInfo, MultipartFile file) throws IOException {
+	public void deleteTerminology(String resourceId) {
+		String url = msUrlCFG.getQueryHost() + "/v1/terminology";
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
 
-	    // Crea il corpo della richiesta
-	    MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
-	    body.add("creationInfo", creationInfo);
-	    body.add("file", new ByteArrayResource(file.getBytes()) {
-	        @Override
-	        public String getFilename() {
-	            return file.getOriginalFilename();
-	        }
-	    });
+		RequestEntity<Void> requestEntity = new RequestEntity<>(headers, HttpMethod.DELETE, URI.create(url + "/" + resourceId));
 
-	    HttpHeaders headers = new HttpHeaders();
-	    headers.setContentType(MediaType.MULTIPART_FORM_DATA);
-	    HttpEntity<MultiValueMap<String, Object>> entity = new HttpEntity<>(body, headers);
-
-	    String url = msUrlCFG.getQueryHost() + "/v1/terminology/upload/"+format.toString();
-	    
-	    PostDocsResDTO out = null;
-	    try {
-	    	out = restTemplate.postForObject(url, entity, PostDocsResDTO.class);
-	    } catch(ResourceAccessException ex) {
-	    	//TODO - Gestisci Timeout
-	    }
-	    return out;
+		ResponseEntity<Void> responseEntity = restTemplate.exchange(requestEntity, Void.class);
+		if (responseEntity.getStatusCode().is2xxSuccessful()) {
+			System.out.println("Delete avvenuta con successo");
+		} else if (responseEntity.getStatusCode().is4xxClientError()) {
+			System.out.println("Bad Request");
+		} else if (responseEntity.getStatusCode().is5xxServerError()) {
+			System.out.println("Internal Server Error");
+		}
 	}
-	
-	public GetResponseDTO getTerminology(String oid, String version) {
-        String url = msUrlCFG.getQueryHost() + "/v1/terminology/" + oid + "/" + version;
-        ResponseEntity<GetResponseDTO> response = restTemplate.exchange(url, HttpMethod.GET, null, GetResponseDTO.class);
-        return response.getBody();
-    }
 
+
+	public GetResponseDTO getTerminology(String oid, String version) {
+		String url = msUrlCFG.getQueryHost() + "/v1/terminology/" + oid + "/" + version;
+		ResponseEntity<GetResponseDTO> response = restTemplate.exchange(url, HttpMethod.GET, null, GetResponseDTO.class);
+		return response.getBody();
+	}
+
+
+	
 }

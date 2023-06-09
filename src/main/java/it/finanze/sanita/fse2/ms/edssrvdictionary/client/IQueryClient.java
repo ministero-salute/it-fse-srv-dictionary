@@ -20,4 +20,6 @@ public interface IQueryClient {
 	
 	GetResponseDTO getTerminology(String oid, String version);
 	
+	void deleteTerminology(String resourceId);
+	
 }

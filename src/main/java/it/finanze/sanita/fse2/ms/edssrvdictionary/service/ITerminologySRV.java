@@ -112,7 +112,7 @@ public interface ITerminologySRV extends IChangeSetSRV {
 	 * @throws DocumentNotFoundException If no document matching system is found
 	 * @throws DataIntegrityException If database output is not the expected one
 	 */
-	int deleteTerminologiesBySystem(String system) throws DocumentNotFoundException, OperationException, DataIntegrityException;
+	int deleteTerminologiesBySystem(String oid, String version) throws DocumentNotFoundException, OperationException, DataIntegrityException, DocumentAlreadyPresentException;
 	
 	MetadataResourceResponseDTO  callQueryToManageMetadataResource();
 

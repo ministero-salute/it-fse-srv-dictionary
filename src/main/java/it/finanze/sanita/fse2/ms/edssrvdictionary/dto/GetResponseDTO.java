@@ -12,9 +12,12 @@ public class GetResponseDTO extends ResponseDTO {
 
 	private boolean isPresent;
 	
-	public GetResponseDTO(final LogTraceInfoDTO traceInfo, final boolean inIsPresent) {
+	private String id;
+	
+	public GetResponseDTO(final LogTraceInfoDTO traceInfo, final boolean inIsPresent, final String inId) {
 		super(traceInfo);
 		isPresent = inIsPresent;
+		id = inId;
 	}
 	
 }

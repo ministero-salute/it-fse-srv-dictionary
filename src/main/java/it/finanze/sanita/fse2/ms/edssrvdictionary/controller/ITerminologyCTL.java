@@ -28,7 +28,6 @@ import javax.validation.constraints.NotBlank;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -81,10 +80,21 @@ public interface ITerminologyCTL {
 			@ApiResponse(responseCode = "409", description = "System già presente sul database", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = ErrorResponseDTO.class))),
 			@ApiResponse(responseCode = "500", description = "Errore interno del server", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = ErrorResponseDTO.class)))
 	}) 
-	PostDocsResDTO uploadTerminology(
-			@PathVariable FormatEnum format,
-			@Valid@RequestPart RequestDTO creationInfo,
+	PostDocsResDTO uploadTerminology(@PathVariable FormatEnum format, @Valid@RequestPart RequestDTO creationInfo,
 			@RequestPart(name = "file") MultipartFile file,HttpServletRequest request) throws OperationException, DocumentAlreadyPresentException, DataProcessingException, InvalidContentException,IOException ;
+
+	@DeleteMapping(value = "/{oid}/{version}",produces = { APPLICATION_JSON_VALUE })
+	@Operation(summary = "Cancellazione terminologie attraverso il system",description = "Servizio che consente di cancellare un certo system dalla base dati")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "Documenti cancellati correttamente", content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = DelDocsResDTO.class))),
+			@ApiResponse(responseCode = "400", description = "I parametri forniti non sono validi", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = ErrorResponseDTO.class))),
+			@ApiResponse(responseCode = "404", description = "System non presente sul database", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = ErrorResponseDTO.class))),
+			@ApiResponse(responseCode = "500", description = "Errore interno del server", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = ErrorResponseDTO.class)))
+	})
+	DelDocsResDTO deleteTerminologies(
+			@PathVariable@Parameter(description = "Identificatore del dizionario")@NotBlank(message = ERR_VAL_SYSTEM_BLANK)String oid,
+			@PathVariable@Parameter(description = "Identificatore della version del dizionario")@NotBlank(message = ERR_VAL_SYSTEM_BLANK)String version) throws OperationException, DocumentNotFoundException, DataIntegrityException, DocumentAlreadyPresentException;
+	
 
 
 	@GetMapping(
@@ -164,26 +174,5 @@ public interface ITerminologyCTL {
 			@NoFutureDate(message = ERR_VAL_FUTURE_RELEASE_DATE)
 			Date releaseDate
 			) throws OperationException, DocumentNotFoundException, DataProcessingException, DataIntegrityException, DocumentAlreadyPresentException, InvalidContentException;
-
-	@DeleteMapping(
-			value = API_SYSTEM_EXTS,
-			produces = { APPLICATION_JSON_VALUE }
-			)
-	@Operation(
-			summary = "Cancellazione terminologie attraverso il system",
-			description = "Servizio che consente di cancellare un certo system dalla base dati"
-			)
-	@ApiResponses(value = {
-			@ApiResponse(responseCode = "200", description = "Documenti cancellati correttamente", content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = DelDocsResDTO.class))),
-			@ApiResponse(responseCode = "400", description = "I parametri forniti non sono validi", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = ErrorResponseDTO.class))),
-			@ApiResponse(responseCode = "404", description = "System non presente sul database", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = ErrorResponseDTO.class))),
-			@ApiResponse(responseCode = "500", description = "Errore interno del server", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = ErrorResponseDTO.class)))
-	})
-	DelDocsResDTO deleteTerminologies(
-			@PathVariable
-			@Parameter(description = "Identificatore del dizionario")
-			@NotBlank(message = ERR_VAL_SYSTEM_BLANK)
-			String system
-			) throws OperationException, DocumentNotFoundException, DataIntegrityException;
 
 }

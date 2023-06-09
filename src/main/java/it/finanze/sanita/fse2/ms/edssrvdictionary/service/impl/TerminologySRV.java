@@ -36,10 +36,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.webjars.NotFoundException;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 
 import it.finanze.sanita.fse2.ms.edssrvdictionary.client.IQueryClient;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.GetResponseDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.MetadataResourceResponseDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.RequestDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.SystemUrlDTO;
@@ -92,6 +94,7 @@ public class TerminologySRV implements ITerminologySRV {
 		// Iterate and populate
 		return insertions.stream().map(ChangeSetUtility::toChangeset).collect(Collectors.toList());
 	}
+	
 
 	@Override
 	public List<ChangeSetDTO> getDeletions(Date lastUpdate) throws OperationException {
@@ -245,17 +248,6 @@ public class TerminologySRV implements ITerminologySRV {
 		return chunk;
 	}
 
-	@Override
-	public int deleteTerminologiesBySystem(String system) throws DocumentNotFoundException, OperationException, DataIntegrityException {
-		// Check system exists
-		if(!repository.existsBySystem(system)) {
-			// Let the caller know about it
-			throw new DocumentNotFoundException(String.format(ERR_SRV_SYSTEM_NOT_EXISTS, system));
-		}
-		// Delete any matching document system (then return size)
-		return repository.deleteBySystem(system).size();
-	}
-
 
 	@Override
 	public SimpleImmutableEntry<Page<TerminologyETY>, List<TerminologyDocumentDTO>> getTerminologies(int page, int limit, String system) throws OperationException, DocumentNotFoundException, OutOfRangeException {
@@ -299,6 +291,21 @@ public class TerminologySRV implements ITerminologySRV {
 
 		return queryClient.callUploadTerminology(formatEnum, requestDTO, file);
 	}
+	
+
+	@Override
+	public int deleteTerminologiesBySystem(String oid, String version) throws DocumentNotFoundException,
+			OperationException, DataIntegrityException, DocumentAlreadyPresentException {
+		// Check oid exists
+		
+		GetResponseDTO res = queryClient.getTerminology(oid, version);
+		if(!res.isPresent()) {
+			throw new NotFoundException(String.format(ERR_SRV_SYSTEM_ALREADY_EXISTS, oid));
+		}
+		// Delete any matching document system (then return size)
+		queryClient.deleteTerminology(res.getId());
+		return 0;
+	}
 
 	@Override
 	public int updateTerminologyCsv(MultipartFile file, String version, Date releaseDate) throws DocumentNotFoundException, OperationException, DataProcessingException, InvalidContentException {
@@ -332,5 +339,6 @@ public class TerminologySRV implements ITerminologySRV {
 		List<SystemUrlDTO> listCodeSystemUrls = StringUtility.fromJsonForList(jsonFile, new TypeReference<List<SystemUrlDTO>>() {});
 		return queryClient.callMetadataResourceEp(listCodeSystemUrls);
 	}
+
 
 }
