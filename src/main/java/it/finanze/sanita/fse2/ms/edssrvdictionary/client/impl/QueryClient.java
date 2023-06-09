@@ -15,7 +15,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -41,7 +40,6 @@ public class QueryClient implements IQueryClient {
 
 	@Override
 	public MetadataResourceResponseDTO  callMetadataResourceEp(List<SystemUrlDTO> systemUrlDTO) {
-		MetadataResourceResponseDTO out = null;
 		log.debug("Query Client - Calling query client");
 
 		HttpHeaders headers = new HttpHeaders();
@@ -49,13 +47,7 @@ public class QueryClient implements IQueryClient {
 
 		HttpEntity<?> entity = new HttpEntity<>(systemUrlDTO, headers);
 		String fullUrl = msUrlCFG.getQueryHost() + "/v1/metadata-resource";
-		try {
-			out = restTemplate.postForObject(fullUrl , entity, MetadataResourceResponseDTO.class);
-		} catch(ResourceAccessException ex) {
-			//TODO - Gestisci Timeout
-		}
-
-		return out;
+		return restTemplate.postForObject(fullUrl , entity, MetadataResourceResponseDTO.class);
 	}
 
 	@Override
@@ -77,15 +69,9 @@ public class QueryClient implements IQueryClient {
 
 		String url = msUrlCFG.getQueryHost() + "/v1/terminology/upload/"+format.toString();
 
-		PostDocsResDTO out = null;
-		try {
-			out = restTemplate.postForObject(url, entity, PostDocsResDTO.class);
-		} catch(ResourceAccessException ex) {
-			//TODO - Gestisci Timeout
-		}
-		return out;
+		return restTemplate.postForObject(url, entity, PostDocsResDTO.class);
 	}
-	
+
 	@Override
 	public void deleteTerminology(String resourceId) {
 		String url = msUrlCFG.getQueryHost() + "/v1/terminology";
@@ -94,14 +80,7 @@ public class QueryClient implements IQueryClient {
 
 		RequestEntity<Void> requestEntity = new RequestEntity<>(headers, HttpMethod.DELETE, URI.create(url + "/" + resourceId));
 
-		ResponseEntity<Void> responseEntity = restTemplate.exchange(requestEntity, Void.class);
-		if (responseEntity.getStatusCode().is2xxSuccessful()) {
-			System.out.println("Delete avvenuta con successo");
-		} else if (responseEntity.getStatusCode().is4xxClientError()) {
-			System.out.println("Bad Request");
-		} else if (responseEntity.getStatusCode().is5xxServerError()) {
-			System.out.println("Internal Server Error");
-		}
+		restTemplate.exchange(requestEntity, Object.class);
 	}
 
 
@@ -112,5 +91,5 @@ public class QueryClient implements IQueryClient {
 	}
 
 
-	
+
 }

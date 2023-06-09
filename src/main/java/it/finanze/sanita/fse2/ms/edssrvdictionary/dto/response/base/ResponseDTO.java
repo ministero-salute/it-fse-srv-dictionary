@@ -5,19 +5,16 @@ package it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.base;
 
 import javax.validation.constraints.Size;
 
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.AbstractDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.log.LogTraceInfoDTO;
 import lombok.Getter;
 import lombok.Setter;
 
 /**
- * 
- *
- *         Base response.
+ * Base response.
  */
 @Getter
 @Setter
-public class ResponseDTO implements AbstractDTO {
+public class ResponseDTO {
 
 	/**
 	 * Trace id log.

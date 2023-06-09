@@ -4,8 +4,6 @@
 package it.finanze.sanita.fse2.ms.edssrvdictionary.config.mongo;
 
 
-import it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,6 +17,8 @@ import org.springframework.data.mongodb.core.convert.MappingMongoConverter;
 import org.springframework.data.mongodb.core.mapping.MongoMappingContext;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
+import it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants;
+
 
 /**
  * Factory to create database instances
@@ -27,11 +27,6 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 @EnableMongoRepositories(basePackages = Constants.ComponentScan.CONFIG_MONGO)
 public class MongoDatabaseCFG {
 
-	@Autowired
-	private MongoPropertiesCFG props;
-
-    @Autowired
-    private ApplicationContext appContext;
 
     /**
      * Creates a new factory instance with the given connection string (properties.yml)
@@ -48,9 +43,7 @@ public class MongoDatabaseCFG {
      */
     @Bean
     @Primary
-    public MongoTemplate createTemplate() {
-        // Create new connection instance
-        MongoDatabaseFactory factory = createFactory(props);
+    public MongoTemplate createTemplate(MongoDatabaseFactory factory,ApplicationContext appContext) {
         // Assign application context to mongo
         final MongoMappingContext mongoMappingContext = new MongoMappingContext();
         mongoMappingContext.setApplicationContext(appContext);

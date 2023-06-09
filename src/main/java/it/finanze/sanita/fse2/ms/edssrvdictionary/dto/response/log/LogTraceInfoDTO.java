@@ -3,13 +3,12 @@
  */
 package it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.log;
 
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.AbstractDTO;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class LogTraceInfoDTO implements AbstractDTO {
+public class LogTraceInfoDTO {
 
 	/**
 	 * Span.

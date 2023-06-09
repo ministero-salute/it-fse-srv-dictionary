@@ -12,6 +12,11 @@ import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.ResponseErrorHandler;
 
+import com.google.gson.Gson;
+
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.error.base.ErrorResponseDTO;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.ClientException;
+
 @Component
 public class RestTemplateResponseErrorHandler implements ResponseErrorHandler {
 
@@ -24,15 +29,9 @@ public class RestTemplateResponseErrorHandler implements ResponseErrorHandler {
 	@Override
 	public void handleError(ClientHttpResponse httpResponse) throws IOException {
 		String result = IOUtils.toString(httpResponse.getBody(), StandardCharsets.UTF_8);
-//		ErrorResponseDTO error = new Gson().fromJson(result, ErrorResponseDTO.class);
-//		Integer status = httpResponse.getStatusCode().value();
-//		if (httpResponse.getStatusCode() == HttpStatus.NOT_FOUND) {
-//			ErrorDTO e = new ErrorDTO("type", "title", "detail", "instance");
-//			throw new NotFoundException(e);
-//		} else {
-//			throw new BusinessException("");
-//		}
-		System.out.println("Sono qui");
+		ErrorResponseDTO error = new Gson().fromJson(result, ErrorResponseDTO.class);
+		Integer statusCode = httpResponse.getStatusCode().value();
+		throw new ClientException(error,statusCode);
 	}
 
 }

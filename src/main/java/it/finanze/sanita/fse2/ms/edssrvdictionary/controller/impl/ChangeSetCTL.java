@@ -26,10 +26,6 @@ import java.util.Date;
 @RestController
 public class ChangeSetCTL extends AbstractCTL implements IChangeSetCTL{
 
-    /**
-	 * Serial Version UID 
-	 */
-	private static final long serialVersionUID = -805992420464600570L;
 
     @Autowired
     private transient ITerminologySRV terminologySRV;
