@@ -5,12 +5,15 @@ package it.finanze.sanita.fse2.ms.edssrvdictionary.controller.impl;
 
 import it.finanze.sanita.fse2.ms.edssrvdictionary.controller.AbstractCTL;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.controller.ITerminologyCTL;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.RequestDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.TerminologyDocumentDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.crud.DelDocsResDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.crud.GetDocsResDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.crud.PostDocsResDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.crud.PutDocsResDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.crud.pagination.GetDocsPageResDTO;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.log.LogTraceInfoDTO;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.enums.FormatEnum;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.*;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.TerminologyETY;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.service.ITerminologySRV;
@@ -19,9 +22,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.Date;
 import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
 
 
 /**
@@ -67,21 +73,7 @@ public class TerminologyCTL extends AbstractCTL implements ITerminologyCTL {
 	public GetDocsResDTO getTerminologyById(String id) throws OperationException, DocumentNotFoundException {
 		return new GetDocsResDTO(getLogTraceInfo(), service.getTerminologyById(id));
 	}
-
-	/**
-	 * Insert terminologies inside the database using a .csv file
-	 * @param file A .csv file representing terminologies
-	 * @param version Version identifier
-	 * @return The number of terminologies inserted
-	 * @throws OperationException If a data-layer error occurs
-	 * @throws DocumentAlreadyPresentException If the given system is already inserted
-	 * @throws DataProcessingException If an error occurs while converting raw data to entity type
-	 * @throws InvalidContentException  If the file is empty or null
-	 */	
-	@Override
-	public PostDocsResDTO uploadTerminologies(MultipartFile file, String version, Date releaseDate) throws OperationException, DocumentAlreadyPresentException, DataProcessingException, InvalidContentException {
-		return new PostDocsResDTO(getLogTraceInfo(), service.uploadTerminologyCsv(file, version, releaseDate));
-	}
+ 
 
 	/**
 	 * Update given terminologies using the new version and the same system
@@ -110,6 +102,18 @@ public class TerminologyCTL extends AbstractCTL implements ITerminologyCTL {
 	@Override
 	public DelDocsResDTO deleteTerminologies(String system) throws OperationException, DocumentNotFoundException, DataIntegrityException {
 		return new DelDocsResDTO(getLogTraceInfo(), service.deleteTerminologiesBySystem(system));
+	}
+
+ 
+	@Override
+	public PostDocsResDTO uploadTerminology(FormatEnum format, RequestDTO creationInfo, MultipartFile file,
+			HttpServletRequest request) throws OperationException, DocumentAlreadyPresentException,
+			DataProcessingException, InvalidContentException, IOException {
+		LogTraceInfoDTO traceInfoDTO = getLogTraceInfo();
+		PostDocsResDTO out = service.uploadTerminologyCsv(format,file, creationInfo);
+		out.setSpanID(traceInfoDTO.getSpanID());
+		out.setTraceID(traceInfoDTO.getTraceID());
+		return out;
 	}
 
 }

@@ -30,7 +30,8 @@ public class WebScrapingCTL extends AbstractCTL implements IWebScrapingCTL {
 
     @Override
     public PostDocsResDTO insertMultiWebScraping(MultipartFile file) throws DataProcessingException, DocumentAlreadyPresentException, OperationException, InvalidContentException {
-        return new PostDocsResDTO(getLogTraceInfo(), service.insertMultiWebScraping(file));
+//        return new PostDocsResDTO(getLogTraceInfo(), service.insertMultiWebScraping(file));
+    	return null;
     }
 
     @Override

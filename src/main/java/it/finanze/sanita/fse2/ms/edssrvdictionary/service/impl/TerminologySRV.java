@@ -10,9 +10,9 @@ import static it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Logs.E
 import static it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Logs.ERR_SRV_PAGE_IDX_LESS_ZERO;
 import static it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Logs.ERR_SRV_PAGE_LIMIT_LESS_ZERO;
 import static it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Logs.ERR_SRV_PAGE_NOT_EXISTS;
-import static it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Logs.ERR_SRV_SYSTEM_ALREADY_EXISTS;
 import static it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Logs.ERR_SRV_SYSTEM_NOT_EXISTS;
 import static it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Logs.ERR_VAL_IDX_CHUNK_NOT_VALID;
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Logs.ERR_SRV_SYSTEM_ALREADY_EXISTS;
 import static it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.error.ErrorInstance.Fields.FILE;
 import static it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.TerminologyETY.FILE_CSV_EXT_DOTTED;
 import static it.finanze.sanita.fse2.ms.edssrvdictionary.utility.ChangeSetUtility.CHUNKS_SIZE;
@@ -22,10 +22,10 @@ import static it.finanze.sanita.fse2.ms.edssrvdictionary.utility.RoutesUtility.A
 import static it.finanze.sanita.fse2.ms.edssrvdictionary.utility.RoutesUtility.API_QP_PAGE;
 import static java.lang.String.format;
 
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -41,11 +41,15 @@ import com.fasterxml.jackson.core.type.TypeReference;
 
 import it.finanze.sanita.fse2.ms.edssrvdictionary.client.IQueryClient;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.MetadataResourceResponseDTO;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.RequestDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.SystemUrlDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.TerminologyDocumentDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes.ChangeSetDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes.data.snapshot.ChunksDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes.data.snapshot.ChunksDTO.Chunk;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.crud.PostDocsResDTO;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.enums.FormatEnum;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.enums.TypeEnum;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DataIntegrityException;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DataProcessingException;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DocumentAlreadyPresentException;
@@ -63,7 +67,7 @@ import it.finanze.sanita.fse2.ms.edssrvdictionary.utility.FileUtility;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.utility.StringUtility;
 
 /**
- 
+
  *	Terminology service.
  */
 @Service
@@ -71,7 +75,7 @@ public class TerminologySRV implements ITerminologySRV {
 
 	@Autowired
 	private ITerminologyRepo repository;
-	
+
 	@Autowired
 	private IQueryClient queryClient;
 
@@ -89,7 +93,7 @@ public class TerminologySRV implements ITerminologySRV {
 		return insertions.stream().map(ChangeSetUtility::toChangeset).collect(Collectors.toList());
 	}
 
-    @Override
+	@Override
 	public List<ChangeSetDTO> getDeletions(Date lastUpdate) throws OperationException {
 		// Create empty container
 		List<ChangeSetDTO> changes = new ArrayList<>();
@@ -183,10 +187,10 @@ public class TerminologySRV implements ITerminologySRV {
 
 		TerminologyETY output = repository.findById(id);
 
-        if (output == null) {
-            throw new DocumentNotFoundException(ERR_SRV_DOCUMENT_NOT_EXIST);
-        }
-		
+		if (output == null) {
+			throw new DocumentNotFoundException(ERR_SRV_DOCUMENT_NOT_EXIST);
+		}
+
 		return TerminologyDocumentDTO.fromEntity(output);
 	}
 
@@ -208,8 +212,8 @@ public class TerminologySRV implements ITerminologySRV {
 		// Verify it matches the expected size
 		if(chunk.size() != docs.size()) {
 			throw new DataIntegrityException(
-				format(ERR_SRV_CHUNK_MISMATCH, chunk.size(), docs.size())
-			);
+					format(ERR_SRV_CHUNK_MISMATCH, chunk.size(), docs.size())
+					);
 		}
 		// Return mapping back to DTO type
 		return docs.stream().map(TerminologyDocumentDTO::fromEntity).collect(Collectors.toList());
@@ -284,35 +288,20 @@ public class TerminologySRV implements ITerminologySRV {
 	}
 
 	@Override
-	public int uploadTerminologyCsv(MultipartFile file, String version, Date releaseDate) throws DocumentAlreadyPresentException, OperationException, DataProcessingException, InvalidContentException {
+	public PostDocsResDTO uploadTerminologyCsv(FormatEnum formatEnum, MultipartFile file, RequestDTO requestDTO) throws DocumentAlreadyPresentException, OperationException, InvalidContentException, IOException {
 		// Check file integrity
 		if(file == null || file.isEmpty()) throw new InvalidContentException(ERR_SRV_FILE_NOT_VALID, FILE);
-		// Extract system from filename
-		String system = file.getOriginalFilename();
-		// Check we got the original filename
-		if (system == null || system.isEmpty()) {
-			throw new DataProcessingException(ERR_REP_UNABLE_RETRIVE_FILENAME);
-		}
-		// Remove extension
-		system = system.replace(FILE_CSV_EXT_DOTTED, "");
+		 
 		// Verify this system does not exist
-		if(repository.existsBySystemVersionAndRelease(system,version,releaseDate)) {
-			throw new DocumentAlreadyPresentException(
-				String.format(ERR_SRV_SYSTEM_ALREADY_EXISTS, system)
-			);
+		if(queryClient.getTerminology(requestDTO.getOid(), requestDTO.getVersion()).isPresent()) {
+			throw new DocumentAlreadyPresentException(String.format(ERR_SRV_SYSTEM_ALREADY_EXISTS, requestDTO.getOid()));
 		}
-		// Extract binary content
-		byte[] raw = FileUtility.throwIfEmpty(file);
-		// Parse entities
-		List<TerminologyETY> entities = TerminologyETY.fromCSV(raw, system, version, releaseDate);
-		// Insert
-		Collection<TerminologyETY> insertions = repository.insertAll(entities);
-		// Return size
-		return insertions.size();
+
+		return queryClient.callUploadTerminology(formatEnum, requestDTO, file);
 	}
-	
+
 	@Override
-    public int updateTerminologyCsv(MultipartFile file, String version, Date releaseDate) throws DocumentNotFoundException, OperationException, DataProcessingException, InvalidContentException {
+	public int updateTerminologyCsv(MultipartFile file, String version, Date releaseDate) throws DocumentNotFoundException, OperationException, DataProcessingException, InvalidContentException {
 		// Check file integrity
 		if(file == null || file.isEmpty()) throw new InvalidContentException(ERR_SRV_FILE_NOT_VALID, FILE);
 		// Extract system from filename
@@ -328,7 +317,7 @@ public class TerminologySRV implements ITerminologySRV {
 			// Let the caller know about it
 			throw new DocumentNotFoundException(String.format(ERR_SRV_SYSTEM_NOT_EXISTS, system));
 		}
-	 
+
 		// Extract binary content
 		byte[] raw = FileUtility.throwIfEmpty(file);
 		// Parse entities
@@ -336,12 +325,12 @@ public class TerminologySRV implements ITerminologySRV {
 		// Execute and return size
 		return repository.updateBySystem(system,version,releaseDate, entities).size();
 	}
-	
+
 	@Override
 	public MetadataResourceResponseDTO  callQueryToManageMetadataResource() {
 		String jsonFile = new String(FileUtility.getFileFromInternalResources("dictionary.json"), StandardCharsets.UTF_8);
 		List<SystemUrlDTO> listCodeSystemUrls = StringUtility.fromJsonForList(jsonFile, new TypeReference<List<SystemUrlDTO>>() {});
-		return queryClient.callMsQuery(listCodeSystemUrls);
+		return queryClient.callMetadataResourceEp(listCodeSystemUrls);
 	}
-	
+
 }

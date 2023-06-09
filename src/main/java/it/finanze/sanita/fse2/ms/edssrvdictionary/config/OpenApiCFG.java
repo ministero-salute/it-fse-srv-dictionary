@@ -5,12 +5,14 @@ package it.finanze.sanita.fse2.ms.edssrvdictionary.config;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import org.springdoc.core.customizers.OpenApiCustomiser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 
 import static it.finanze.sanita.fse2.ms.edssrvdictionary.utility.ValidationUtility.DEFAULT_ARRAY_MAX_SIZE;
 import static it.finanze.sanita.fse2.ms.edssrvdictionary.utility.ValidationUtility.DEFAULT_ARRAY_MIN_SIZE;
@@ -172,4 +174,11 @@ public class OpenApiCFG {
 	    catch(ClassCastException e) { return null; }
 	}
 
+	   @Bean
+	    public MappingJackson2HttpMessageConverter octetStreamJsonConverter() {
+	        MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
+	        converter.setSupportedMediaTypes(
+	                Collections.singletonList(org.springframework.http.MediaType.APPLICATION_OCTET_STREAM));
+	        return converter;
+	    }
 }

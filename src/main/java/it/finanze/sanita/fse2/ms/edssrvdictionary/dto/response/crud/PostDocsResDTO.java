@@ -7,6 +7,7 @@ import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.base.ResponseDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.log.LogTraceInfoDTO;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 
 /**
@@ -15,12 +16,16 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
+@NoArgsConstructor
 public class PostDocsResDTO extends ResponseDTO {
 
-	private int insertedItems;
+	private String location;
+	
+	private Integer insertedItems;
 
-	public PostDocsResDTO(final LogTraceInfoDTO traceInfo, final int insertedItems) {
+	public PostDocsResDTO(final LogTraceInfoDTO traceInfo,final String location, final Integer insertedItems) {
 		super(traceInfo);
+		this.location = location;
 		this.insertedItems = insertedItems;
 	}
 	

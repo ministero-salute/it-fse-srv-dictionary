@@ -9,6 +9,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.client.RestTemplate;
 
+import it.finanze.sanita.fse2.ms.edssrvdictionary.client.handler.RestTemplateResponseErrorHandler;
+
 @SpringBootApplication
 public class SrvDictionaryApplication {
 
@@ -25,6 +27,8 @@ public class SrvDictionaryApplication {
 	@Bean 
 	@Qualifier("restTemplate")
 	public RestTemplate restTemplate() {
-		return new RestTemplate();
+		RestTemplate restTemplate = new RestTemplate();
+		restTemplate.setErrorHandler(new RestTemplateResponseErrorHandler());
+		return restTemplate;
 	} 
 }
