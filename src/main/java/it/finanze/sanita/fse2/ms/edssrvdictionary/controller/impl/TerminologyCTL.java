@@ -19,6 +19,7 @@ import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.TerminologyE
 import it.finanze.sanita.fse2.ms.edssrvdictionary.service.ITerminologySRV;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -28,12 +29,14 @@ import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 
 /**
  * Terminologies handler
  */
 @RestController
+@Validated
 public class TerminologyCTL extends AbstractCTL implements ITerminologyCTL {
 
     /**
@@ -106,9 +109,7 @@ public class TerminologyCTL extends AbstractCTL implements ITerminologyCTL {
 
  
 	@Override
-	public PostDocsResDTO uploadTerminology(FormatEnum format, RequestDTO creationInfo, MultipartFile file,
-			HttpServletRequest request) throws OperationException, DocumentAlreadyPresentException,
-			DataProcessingException, InvalidContentException, IOException {
+	public PostDocsResDTO uploadTerminology(FormatEnum format, @Valid RequestDTO creationInfo, MultipartFile file,HttpServletRequest request) throws OperationException, DocumentAlreadyPresentException,DataProcessingException, InvalidContentException, IOException {
 		LogTraceInfoDTO traceInfoDTO = getLogTraceInfo();
 		PostDocsResDTO out = service.uploadTerminologyCsv(format,file, creationInfo);
 		out.setSpanID(traceInfoDTO.getSpanID());

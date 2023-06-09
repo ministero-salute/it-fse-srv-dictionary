@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 
 import org.springframework.format.annotation.DateTimeFormat;
@@ -66,125 +67,123 @@ import it.finanze.sanita.fse2.ms.edssrvdictionary.validators.ValidObjectId;
 
 /**
  * Terminology controller
- *
  */
 @RequestMapping(path = API_TERMS_MAPPER)
 @Tag(name = API_DOCUMENTS_TAG)
-@Validated
 public interface ITerminologyCTL {
 
-    @GetMapping(
-        value = API_TERMS_GET_ONE_BY_ID,
-        produces = { APPLICATION_JSON_VALUE }
-    )
-    @Operation(
-        summary = "Restituisce un terminology dato il suo identificativo",
-        description = "Servizio che consente di ritornare una terminologia dato il suo identificativo."
-    )
-    @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Documento presente sul database", content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = GetDocsResDTO.class))),
-        @ApiResponse(responseCode = "400", description = "I parametri forniti non sono validi", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = ErrorResponseDTO.class))),
-        @ApiResponse(responseCode = "404", description = "Documento non trovato sul database", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = ErrorResponseDTO.class))),
-        @ApiResponse(responseCode = "500", description = "Errore interno del server", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = ErrorResponseDTO.class)))
-    })
-    GetDocsResDTO getTerminologyById(
-        @PathVariable
-        @Parameter(description = "Identificatore documento")
-        @NotBlank(message = ERR_VAL_ID_BLANK)
-        @ValidObjectId(message = ERR_VAL_ID_NOT_VALID)
-        String id
-    ) throws OperationException, DocumentNotFoundException;
-
- 
-    @PostMapping(path = "/{format}", produces = { MediaType.APPLICATION_JSON_VALUE }, consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
-	@Operation(summary = "Upload avvenuta con successo", description = "Conversione in formato FHIR json.")
+	@PostMapping(path = "/{format}", produces = { MediaType.APPLICATION_JSON_VALUE }, consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
+	@Operation(summary = "Upload avvenuta con successo", description = "Upload avvenuta con successo.")
 	@ApiResponse(content = @Content(mediaType = MediaType.APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = ErrorResponseDTO.class)))
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Documenti caricati correttamente", content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = PostDocsResDTO.class))),
-            @ApiResponse(responseCode = "400", description = "I parametri forniti non sono validi", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = ErrorResponseDTO.class))),
-            @ApiResponse(responseCode = "409", description = "System già presente sul database", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = ErrorResponseDTO.class))),
-            @ApiResponse(responseCode = "500", description = "Errore interno del server", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = ErrorResponseDTO.class)))
-        }) 
-    PostDocsResDTO uploadTerminology(
-    		@PathVariable FormatEnum format,
-			@RequestPart RequestDTO creationInfo,
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "201", description = "Documenti caricati correttamente", content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = PostDocsResDTO.class))),
+			@ApiResponse(responseCode = "400", description = "I parametri forniti non sono validi", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = ErrorResponseDTO.class))),
+			@ApiResponse(responseCode = "409", description = "System già presente sul database", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = ErrorResponseDTO.class))),
+			@ApiResponse(responseCode = "500", description = "Errore interno del server", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = ErrorResponseDTO.class)))
+	}) 
+	PostDocsResDTO uploadTerminology(
+			@PathVariable FormatEnum format,
+			@Valid@RequestPart RequestDTO creationInfo,
 			@RequestPart(name = "file") MultipartFile file,HttpServletRequest request) throws OperationException, DocumentAlreadyPresentException, DataProcessingException, InvalidContentException,IOException ;
-    
-    
-    @GetMapping(
-        value = API_SYSTEM_EXTS,
-        produces = { APPLICATION_JSON_VALUE }
-    )
-    @Operation(
-        summary = "Restituisce le terminologie appartenenti al system richiesto con paginazione",
-        description = "Servizio che restituisce tutte le terminologie appartenenti ad un certo system con paginazione"
-    )
-    @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Documenti restituite correttamente", content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = GetDocsPageResDTO.class))),
-        @ApiResponse(responseCode = "400", description = "I parametri forniti non sono validi", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = ErrorResponseDTO.class))),
-        @ApiResponse(responseCode = "404", description = "System non trovato sul database", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = ErrorResponseDTO.class))),
-        @ApiResponse(responseCode = "500", description = "Errore interno del server", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = ErrorResponseDTO.class)))
-    })
-    GetDocsPageResDTO getTerminologies(
-        @PathVariable
-        @Parameter(description = "Identificatore del dizionario")
-        @NotBlank(message = ERR_VAL_SYSTEM_BLANK)
-        String system,
-        @RequestParam(API_QP_PAGE)
-        @Parameter(description = "Indice pagina richiesto (eg. 0, 1, 2...)")
-        int page,
-        @RequestParam(API_QP_LIMIT)
-        @Parameter(description = "Limite documenti per pagina (eg. 10, 20 ...)")
-        int limit
-    ) throws OperationException, DocumentNotFoundException, OutOfRangeException;
 
-    @PutMapping(
-        produces = { APPLICATION_JSON_VALUE },
-        consumes = { MULTIPART_FORM_DATA_VALUE }
-    )
-    @Operation(
-        summary = "Modifica terminologie attraverso un file CSV",
-        description = "Servizio che consente di aggiungere una nuova versione per terminologie già presenti sulla base dati caricando un file csv."
-    )
-    @ApiResponses(value = {
-        @ApiResponse(responseCode = "201", description = "Documenti caricati correttamente", content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = PutDocsResDTO.class))),
-        @ApiResponse(responseCode = "400", description = "I parametri forniti non sono validi", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = ErrorResponseDTO.class))),
-        @ApiResponse(responseCode = "404", description = "System non presente sul database", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = ErrorResponseDTO.class))),
-        @ApiResponse(responseCode = "409", description = "Version già presente sul database", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = ErrorResponseDTO.class))),
-        @ApiResponse(responseCode = "500", description = "Errore interno del server", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = ErrorResponseDTO.class)))
-    })
-    @ResponseStatus(HttpStatus.CREATED)
-    PutDocsResDTO updateTerminologies(
-        @RequestPart
-        @Parameter(description = "CSV contenente le terminologie da inserire (e.g 2.16.840.1.113883.1.11.1.csv)")
-        MultipartFile file,
-        @Parameter(description = "Versione del dizionario incrementata rispetto alla precedente")
-        String version,
-        @Parameter(description = "Data di rilascio del dizionario incrementata rispetto alla precedente")
-        @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-        @NoFutureDate(message = ERR_VAL_FUTURE_RELEASE_DATE)
-        Date releaseDate
-    ) throws OperationException, DocumentNotFoundException, DataProcessingException, DataIntegrityException, DocumentAlreadyPresentException, InvalidContentException;
 
-    @DeleteMapping(
-        value = API_SYSTEM_EXTS,
-        produces = { APPLICATION_JSON_VALUE }
-    )
-    @Operation(
-        summary = "Cancellazione terminologie attraverso il system",
-        description = "Servizio che consente di cancellare un certo system dalla base dati"
-    )
-    @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Documenti cancellati correttamente", content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = DelDocsResDTO.class))),
-        @ApiResponse(responseCode = "400", description = "I parametri forniti non sono validi", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = ErrorResponseDTO.class))),
-        @ApiResponse(responseCode = "404", description = "System non presente sul database", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = ErrorResponseDTO.class))),
-        @ApiResponse(responseCode = "500", description = "Errore interno del server", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = ErrorResponseDTO.class)))
-    })
-    DelDocsResDTO deleteTerminologies(
-        @PathVariable
-        @Parameter(description = "Identificatore del dizionario")
-        @NotBlank(message = ERR_VAL_SYSTEM_BLANK)
-        String system
-    ) throws OperationException, DocumentNotFoundException, DataIntegrityException;
+	@GetMapping(
+			value = API_TERMS_GET_ONE_BY_ID,
+			produces = { APPLICATION_JSON_VALUE }
+			)
+	@Operation(
+			summary = "Restituisce un terminology dato il suo identificativo",
+			description = "Servizio che consente di ritornare una terminologia dato il suo identificativo."
+			)
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "Documento presente sul database", content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = GetDocsResDTO.class))),
+			@ApiResponse(responseCode = "400", description = "I parametri forniti non sono validi", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = ErrorResponseDTO.class))),
+			@ApiResponse(responseCode = "404", description = "Documento non trovato sul database", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = ErrorResponseDTO.class))),
+			@ApiResponse(responseCode = "500", description = "Errore interno del server", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = ErrorResponseDTO.class)))
+	})
+	GetDocsResDTO getTerminologyById(
+			@PathVariable
+			@Parameter(description = "Identificatore documento")
+			@NotBlank(message = ERR_VAL_ID_BLANK)
+			@ValidObjectId(message = ERR_VAL_ID_NOT_VALID)
+			String id
+			) throws OperationException, DocumentNotFoundException;
+
+
+	@GetMapping(
+			value = API_SYSTEM_EXTS,
+			produces = { APPLICATION_JSON_VALUE }
+			)
+	@Operation(
+			summary = "Restituisce le terminologie appartenenti al system richiesto con paginazione",
+			description = "Servizio che restituisce tutte le terminologie appartenenti ad un certo system con paginazione"
+			)
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "Documenti restituite correttamente", content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = GetDocsPageResDTO.class))),
+			@ApiResponse(responseCode = "400", description = "I parametri forniti non sono validi", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = ErrorResponseDTO.class))),
+			@ApiResponse(responseCode = "404", description = "System non trovato sul database", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = ErrorResponseDTO.class))),
+			@ApiResponse(responseCode = "500", description = "Errore interno del server", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = ErrorResponseDTO.class)))
+	})
+	GetDocsPageResDTO getTerminologies(
+			@PathVariable
+			@Parameter(description = "Identificatore del dizionario")
+			@NotBlank(message = ERR_VAL_SYSTEM_BLANK)
+			String system,
+			@RequestParam(API_QP_PAGE)
+			@Parameter(description = "Indice pagina richiesto (eg. 0, 1, 2...)")
+			int page,
+			@RequestParam(API_QP_LIMIT)
+			@Parameter(description = "Limite documenti per pagina (eg. 10, 20 ...)")
+			int limit
+			) throws OperationException, DocumentNotFoundException, OutOfRangeException;
+
+	@PutMapping(
+			produces = { APPLICATION_JSON_VALUE },
+			consumes = { MULTIPART_FORM_DATA_VALUE }
+			)
+	@Operation(
+			summary = "Modifica terminologie attraverso un file CSV",
+			description = "Servizio che consente di aggiungere una nuova versione per terminologie già presenti sulla base dati caricando un file csv."
+			)
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "201", description = "Documenti caricati correttamente", content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = PutDocsResDTO.class))),
+			@ApiResponse(responseCode = "400", description = "I parametri forniti non sono validi", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = ErrorResponseDTO.class))),
+			@ApiResponse(responseCode = "404", description = "System non presente sul database", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = ErrorResponseDTO.class))),
+			@ApiResponse(responseCode = "409", description = "Version già presente sul database", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = ErrorResponseDTO.class))),
+			@ApiResponse(responseCode = "500", description = "Errore interno del server", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = ErrorResponseDTO.class)))
+	})
+	@ResponseStatus(HttpStatus.CREATED)
+	PutDocsResDTO updateTerminologies(
+			@RequestPart
+			@Parameter(description = "CSV contenente le terminologie da inserire (e.g 2.16.840.1.113883.1.11.1.csv)")
+			MultipartFile file,
+			@Parameter(description = "Versione del dizionario incrementata rispetto alla precedente")
+			String version,
+			@Parameter(description = "Data di rilascio del dizionario incrementata rispetto alla precedente")
+			@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+			@NoFutureDate(message = ERR_VAL_FUTURE_RELEASE_DATE)
+			Date releaseDate
+			) throws OperationException, DocumentNotFoundException, DataProcessingException, DataIntegrityException, DocumentAlreadyPresentException, InvalidContentException;
+
+	@DeleteMapping(
+			value = API_SYSTEM_EXTS,
+			produces = { APPLICATION_JSON_VALUE }
+			)
+	@Operation(
+			summary = "Cancellazione terminologie attraverso il system",
+			description = "Servizio che consente di cancellare un certo system dalla base dati"
+			)
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "Documenti cancellati correttamente", content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = DelDocsResDTO.class))),
+			@ApiResponse(responseCode = "400", description = "I parametri forniti non sono validi", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = ErrorResponseDTO.class))),
+			@ApiResponse(responseCode = "404", description = "System non presente sul database", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = ErrorResponseDTO.class))),
+			@ApiResponse(responseCode = "500", description = "Errore interno del server", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = ErrorResponseDTO.class)))
+	})
+	DelDocsResDTO deleteTerminologies(
+			@PathVariable
+			@Parameter(description = "Identificatore del dizionario")
+			@NotBlank(message = ERR_VAL_SYSTEM_BLANK)
+			String system
+			) throws OperationException, DocumentNotFoundException, DataIntegrityException;
 
 }
