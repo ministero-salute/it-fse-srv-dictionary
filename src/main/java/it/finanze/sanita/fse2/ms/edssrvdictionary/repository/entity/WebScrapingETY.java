@@ -30,6 +30,7 @@ public class WebScrapingETY {
 	public static final String FIELD_SYSTEM = "system";
 	public static final String FIELD_URL = "url";
 	public static final String FIELD_DELETED = "deleted";
+	public static final String FIELD_PROCESSED = "processed";
 
 	@Id
 	private String id;
@@ -43,18 +44,21 @@ public class WebScrapingETY {
 	@Field(name = FIELD_DELETED)
 	private boolean deleted;
 	
+	@Field(name = FIELD_PROCESSED)
+	private boolean processed;
+	
 	public static List<WebScrapingETY> fromCSV(byte[] raw) {
 		InputStream targetStream = new ByteArrayInputStream(raw);
 		Reader reader = new InputStreamReader(targetStream);
 		List<WebScrapingBuilderDTO> content = new CsvToBeanBuilder<WebScrapingBuilderDTO>(reader)
 				.withType(WebScrapingBuilderDTO.class)
-				.withSeparator(';')
+//				.withSeparator(';')
 				.build()
 				.parse();
 
 		return content
 				.stream()
-				.map(line -> new WebScrapingETY(null, line.getSystem(), line.getUrl(), false))
+				.map(line -> new WebScrapingETY(null, line.getSystem(), line.getUrl(), false,false))
 				.collect(Collectors.toList());
 	}
  

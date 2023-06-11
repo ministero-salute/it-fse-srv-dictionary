@@ -16,5 +16,7 @@ public class SystemUrlDTO {
 	
 	private String url;
 	
+	private boolean toDelete;
+	
  
 }

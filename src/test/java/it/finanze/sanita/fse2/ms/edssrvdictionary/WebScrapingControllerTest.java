@@ -28,7 +28,7 @@ import io.swagger.models.HttpMethod;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.crud.DelDocsResDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.crud.PostDocsResDTO;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.webscraping.PostSingleDTO;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.webscraping.WebScrapingPostSingleResDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.WebScrapingETY;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.utility.FileUtility;
 
@@ -54,7 +54,7 @@ public class WebScrapingControllerTest {
         MvcResult result = mvc.perform(post("/v1/web-scraping/{system}/{url}", system, url))
             .andExpect(status().isCreated()).andReturn();
 
-        PostSingleDTO response = new Gson().fromJson(result.getResponse().getContentAsString(), PostSingleDTO.class);
+        WebScrapingPostSingleResDTO response = new Gson().fromJson(result.getResponse().getContentAsString(), WebScrapingPostSingleResDTO.class);
         assertEquals(system, response.getDto().getSystem());
         assertEquals(url, response.getDto().getUrl());
     }
@@ -81,7 +81,7 @@ public class WebScrapingControllerTest {
         String system = "systemTest";
         String url = "urlTest";
 
-        WebScrapingETY ety = new WebScrapingETY(null, system, url, false);
+        WebScrapingETY ety = new WebScrapingETY(null, system, url, false,false);
         mongoTemplate.insert(ety);
 
         MvcResult result = mvc.perform(delete("/v1/web-scraping/delete/{system}", system))

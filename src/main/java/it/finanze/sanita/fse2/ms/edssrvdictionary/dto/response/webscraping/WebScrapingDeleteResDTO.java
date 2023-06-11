@@ -3,7 +3,6 @@
  */
 package it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.webscraping;
 
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.WebScrapingDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.base.ResponseDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.log.LogTraceInfoDTO;
 import lombok.Data;
@@ -16,13 +15,13 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class PostSingleDTO extends ResponseDTO {
+public class WebScrapingDeleteResDTO extends ResponseDTO {
 
-	private WebScrapingDTO dto;
+	private int deletedItems;
 
-	public PostSingleDTO(final LogTraceInfoDTO traceInfo, WebScrapingDTO dto) {
+	public WebScrapingDeleteResDTO(final LogTraceInfoDTO traceInfo, final int deletedItems) {
 		super(traceInfo);
-		this.dto = new WebScrapingDTO(dto.getId(), dto.getSystem(), dto.getUrl(), false);
+		this.deletedItems = deletedItems;
 	}
 	
 }

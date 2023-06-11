@@ -2,6 +2,7 @@ package it.finanze.sanita.fse2.ms.edssrvdictionary.service;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.MetadataResourceResponseDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.WebScrapingDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DataIntegrityException;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DataProcessingException;
@@ -19,4 +20,6 @@ public interface IWebScrapingSRV {
     int deleteWebScraping(String system) throws DocumentNotFoundException, OperationException, DataIntegrityException;
 
     int deleteMultiWebScraping(MultipartFile file) throws OperationException, DataProcessingException, InvalidContentException, DataIntegrityException, DocumentNotFoundException;
+    
+    MetadataResourceResponseDTO manageWebScrapingResources() throws OperationException;
 }

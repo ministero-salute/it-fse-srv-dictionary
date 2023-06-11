@@ -19,4 +19,8 @@ public interface IWebScrapingRepo {
 	boolean existsBySystem(final String system) throws OperationException;
 
 	List<WebScrapingETY> findBySystem(String system) throws OperationException;
+	
+	List<WebScrapingETY> findRecordToProcess() throws OperationException;
+	
+	int updateRecordProcessed(List<WebScrapingETY> list);
 }

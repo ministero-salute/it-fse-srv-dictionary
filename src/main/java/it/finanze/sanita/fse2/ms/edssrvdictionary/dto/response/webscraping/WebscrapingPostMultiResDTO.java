@@ -1,12 +1,13 @@
 /*
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
-package it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.crud;
+package it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.webscraping;
 
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.base.ResponseDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.log.LogTraceInfoDTO;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 
 /**
@@ -15,13 +16,15 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class PutDocsResDTO extends ResponseDTO {
+@NoArgsConstructor
+public class WebscrapingPostMultiResDTO extends ResponseDTO {
 
-	private int updatedItems;
+	
+	private Integer insertedItems;
 
-	public PutDocsResDTO(final LogTraceInfoDTO traceInfo, final int updatedItems) {
+	public WebscrapingPostMultiResDTO(final LogTraceInfoDTO traceInfo, final Integer insertedItems) {
 		super(traceInfo);
-		this.updatedItems = updatedItems;
+		this.insertedItems = insertedItems;
 	}
 	
 }

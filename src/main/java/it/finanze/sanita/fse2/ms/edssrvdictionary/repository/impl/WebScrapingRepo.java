@@ -5,14 +5,17 @@ import static it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Logs.E
 import static it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Logs.ERR_REP_DOCS_NOT_FOUND;
 import static it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Logs.ERR_REP_UNABLE_CHECK_SYSTEM;
 import static it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.WebScrapingETY.FIELD_DELETED;
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.WebScrapingETY.FIELD_PROCESSED;
 import static it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.WebScrapingETY.FIELD_SYSTEM;
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
@@ -81,6 +84,7 @@ public class WebScrapingRepo implements IWebScrapingRepo {
 		// Create update definition
 		Update update = new Update();
 		update.set(FIELD_DELETED, true);
+		update.set(FIELD_PROCESSED, false);
 		// Get docs to remove
 		entities = findBySystem(system);
 		try {
@@ -111,6 +115,7 @@ public class WebScrapingRepo implements IWebScrapingRepo {
 			// Create update definition
 			Update update = new Update();
 			update.set(FIELD_DELETED, true);
+			update.set(FIELD_PROCESSED, false);
 			// Get docs to remove
 			entities = findBySystem(ety.getSystem());
 			try {
@@ -148,5 +153,26 @@ public class WebScrapingRepo implements IWebScrapingRepo {
 		}
 		// Return data
 		return out;
+	}
+
+	@Override
+	public List<WebScrapingETY> findRecordToProcess() throws OperationException {
+		Query query = new Query();
+		query.addCriteria(Criteria.where(FIELD_PROCESSED).is(false));
+		return mongoTemplate.find(query, WebScrapingETY.class);
+	}
+	
+	@Override
+	public int updateRecordProcessed(List<WebScrapingETY> list) {
+        List<String> idsToUpdate = list.stream().map(WebScrapingETY::getId).collect(Collectors.toList());
+
+        Query query = new Query();
+        query.addCriteria(Criteria.where("_id").in(idsToUpdate));
+
+        Update update = new Update();
+        update.set(FIELD_PROCESSED, true);
+
+        UpdateResult res = mongoTemplate.updateMulti(query, update, WebScrapingETY.class);
+        return (int)res.getModifiedCount();
 	}
 }

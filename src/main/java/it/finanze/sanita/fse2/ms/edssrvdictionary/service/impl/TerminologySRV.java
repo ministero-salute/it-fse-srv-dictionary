@@ -23,7 +23,6 @@ import static it.finanze.sanita.fse2.ms.edssrvdictionary.utility.RoutesUtility.A
 import static java.lang.String.format;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.ArrayList;
 import java.util.Date;
@@ -37,13 +36,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-
 import it.finanze.sanita.fse2.ms.edssrvdictionary.client.IQueryClient;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.GetResponseDTO;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.MetadataResourceResponseDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.RequestDTO;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.SystemUrlDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.TerminologyDocumentDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes.ChangeSetDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes.data.snapshot.ChunksDTO;
@@ -64,7 +59,6 @@ import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.snapshot.Sna
 import it.finanze.sanita.fse2.ms.edssrvdictionary.service.ITerminologySRV;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.utility.ChangeSetUtility;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.utility.FileUtility;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.utility.StringUtility;
 
 /**
 
@@ -329,13 +323,6 @@ public class TerminologySRV implements ITerminologySRV {
 		List<TerminologyETY> entities = TerminologyETY.fromCSV(raw, system, version, releaseDate);
 		// Execute and return size
 		return repository.updateBySystem(system,version,releaseDate, entities).size();
-	}
-
-	@Override
-	public MetadataResourceResponseDTO  callQueryToManageMetadataResource() {
-		String jsonFile = new String(FileUtility.getFileFromInternalResources("dictionary.json"), StandardCharsets.UTF_8);
-		List<SystemUrlDTO> listCodeSystemUrls = StringUtility.fromJsonForList(jsonFile, new TypeReference<List<SystemUrlDTO>>() {});
-		return queryClient.callMetadataResourceEp(listCodeSystemUrls);
 	}
 
 

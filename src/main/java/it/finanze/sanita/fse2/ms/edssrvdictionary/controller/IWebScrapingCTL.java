@@ -30,10 +30,10 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.crud.DelDocsResDTO;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.crud.PostDocsResDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.error.base.ErrorResponseDTO;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.webscraping.PostSingleDTO;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.webscraping.WebScrapingDeleteResDTO;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.webscraping.WebScrapingPostSingleResDTO;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.webscraping.WebscrapingPostMultiResDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DataIntegrityException;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DataProcessingException;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DocumentAlreadyPresentException;
@@ -49,13 +49,13 @@ public interface IWebScrapingCTL {
     @PostMapping(value = API_WEB_SYSTEM_URL, produces = {MediaType.APPLICATION_JSON_VALUE})
     @Operation(summary = "Inserimento documento tramite system e url")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "201", description = "Documento caricato correttamente", content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = PostSingleDTO.class))),
+        @ApiResponse(responseCode = "201", description = "Documento caricato correttamente", content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = WebScrapingPostSingleResDTO.class))),
         @ApiResponse(responseCode = "400", description = "I parametri forniti non sono validi", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = ErrorResponseDTO.class))),
         @ApiResponse(responseCode = "409", description = "System già presente sul database", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = ErrorResponseDTO.class))),
         @ApiResponse(responseCode = "500", description = "Errore interno del server", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = ErrorResponseDTO.class)))
     })
     @ResponseStatus(HttpStatus.CREATED)
-    PostSingleDTO insertWebScraping(
+    WebScrapingPostSingleResDTO insertWebScraping(
         @PathVariable("system") @Parameter @NotBlank(message = ERR_VAL_SYSTEM_BLANK) String system,
         @PathVariable("url") @Parameter @NotBlank(message = ERR_VAL_URL_BLANK) String url)
         throws OperationException, DocumentAlreadyPresentException;
@@ -63,37 +63,37 @@ public interface IWebScrapingCTL {
     @PostMapping(value = API_WEB_INSERT_MULTI, produces = {MediaType.APPLICATION_JSON_VALUE}, consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     @Operation(summary = "Inserimento massivo documenti tramite file CSV", description = "Servizio che permette di inserire massivamente i documenti aventi system e url. Il file CSV deve avere intestazione")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "201", description = "Documenti caricati correttamente", content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = PostDocsResDTO.class))),
+        @ApiResponse(responseCode = "201", description = "Documenti caricati correttamente", content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = WebscrapingPostMultiResDTO.class))),
         @ApiResponse(responseCode = "400", description = "I parametri forniti non sono validi", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = ErrorResponseDTO.class))),
         @ApiResponse(responseCode = "409", description = "System già presente sul database", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = ErrorResponseDTO.class))),
         @ApiResponse(responseCode = "500", description = "Errore interno del server", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = ErrorResponseDTO.class)))
     })
     @ResponseStatus(HttpStatus.CREATED)
-    PostDocsResDTO insertMultiWebScraping(
+    WebscrapingPostMultiResDTO insertMultiWebScraping(
         @RequestParam @Parameter(description = "CSV contenente system e url") MultipartFile file)
         throws DataProcessingException, DocumentAlreadyPresentException, OperationException, InvalidContentException;
 
     @DeleteMapping(value = API_WEB_DELETE_SYSTEM, produces = {MediaType.APPLICATION_JSON_VALUE})
     @Operation(summary = "Cancellazione documento tramite system")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Documento cancellato", content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = DelDocsResDTO.class))),
+        @ApiResponse(responseCode = "200", description = "Documento cancellato", content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = WebScrapingDeleteResDTO.class))),
         @ApiResponse(responseCode = "400", description = "I parametri forniti non sono validi", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = ErrorResponseDTO.class))),
         @ApiResponse(responseCode = "404", description = "System non presente sul database", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = ErrorResponseDTO.class))),
         @ApiResponse(responseCode = "500", description = "Errore interno del server", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = ErrorResponseDTO.class)))
     })
-    DelDocsResDTO deleteWebScraping(
+    WebScrapingDeleteResDTO deleteWebScraping(
         @PathVariable("system") @Parameter @NotBlank(message = ERR_VAL_SYSTEM_BLANK) String system)
         throws DataIntegrityException, DocumentNotFoundException, OperationException;
 
     @DeleteMapping(value = API_WEB_DELETE_MULTI, produces = {MediaType.APPLICATION_JSON_VALUE}, consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     @Operation(summary = "Cancellazione massiva documenti tramite file CSV", description = "Servizio che consente di cancellare massivamente i documenti aventi system e url. Il file CSV deve avere intestazione")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Documenti cancellati correttamente", content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = DelDocsResDTO.class))),
+        @ApiResponse(responseCode = "200", description = "Documenti cancellati correttamente", content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = WebScrapingDeleteResDTO.class))),
         @ApiResponse(responseCode = "400", description = "I parametri forniti non sono validi", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = ErrorResponseDTO.class))),
         @ApiResponse(responseCode = "404", description = "System non presenti sul database", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = ErrorResponseDTO.class))),
         @ApiResponse(responseCode = "500", description = "Errore interno del server", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = ErrorResponseDTO.class)))
     })
-    DelDocsResDTO deleteMultiWebScraping(
+    WebScrapingDeleteResDTO deleteMultiWebScraping(
         @RequestParam @Parameter(description = "CSV contenente system e url") MultipartFile file)
         throws InvalidContentException, DataProcessingException, OperationException, DocumentNotFoundException, DataIntegrityException;
 }

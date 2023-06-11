@@ -5,7 +5,8 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.MetadataResourceResponseDTO;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.service.ITerminologySRV;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.OperationException;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.service.IWebScrapingSRV;
 import lombok.extern.slf4j.Slf4j;
 import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
 
@@ -15,17 +16,17 @@ import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
 public class WebScrapingScheduler {
 
 	@Autowired
-	private ITerminologySRV terminologySRV;
+	private IWebScrapingSRV webScrapingSRV;
 
 	@Scheduled(cron = "${scheduler.web-scraping}")
 	@SchedulerLock(name = "invokeWebScrapingScheduler" , lockAtMostFor = "60m")
-	public void action() {
+	public void action() throws OperationException {
 		log.info("START - WEB SCRAPING SCHEDULER");
 		run();
 		log.info("END - WEB SCRAPING SCHEDULER");
 	}
 
-	public MetadataResourceResponseDTO run() {
-		return terminologySRV.callQueryToManageMetadataResource();
+	public MetadataResourceResponseDTO run() throws OperationException {
+		return webScrapingSRV.manageWebScrapingResources();
 	}
 }

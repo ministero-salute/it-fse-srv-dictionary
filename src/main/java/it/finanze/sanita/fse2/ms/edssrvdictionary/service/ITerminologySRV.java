@@ -4,8 +4,8 @@
 package it.finanze.sanita.fse2.ms.edssrvdictionary.service;
 
 
-import java.util.AbstractMap.SimpleImmutableEntry;
 import java.io.IOException;
+import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.Date;
 import java.util.List;
 
@@ -13,7 +13,6 @@ import org.bson.types.ObjectId;
 import org.springframework.data.domain.Page;
 import org.springframework.web.multipart.MultipartFile;
 
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.MetadataResourceResponseDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.RequestDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.TerminologyDocumentDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.crud.PostDocsResDTO;
@@ -114,6 +113,4 @@ public interface ITerminologySRV extends IChangeSetSRV {
 	 */
 	int deleteTerminologiesBySystem(String oid, String version) throws DocumentNotFoundException, OperationException, DataIntegrityException, DocumentAlreadyPresentException;
 	
-	MetadataResourceResponseDTO  callQueryToManageMetadataResource();
-
 }

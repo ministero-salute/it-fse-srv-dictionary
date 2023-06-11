@@ -7,11 +7,15 @@ import static it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.error.Erro
 
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import it.finanze.sanita.fse2.ms.edssrvdictionary.client.IQueryClient;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.MetadataResourceResponseDTO;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.SystemUrlDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.WebScrapingDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DataIntegrityException;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DataProcessingException;
@@ -28,13 +32,17 @@ import it.finanze.sanita.fse2.ms.edssrvdictionary.utility.FileUtility;
 public class WebScrapingSRV implements IWebScrapingSRV {
 
     @Autowired
-    IWebScrapingRepo repository;
+    private IWebScrapingRepo repository;
+    
+    @Autowired
+    private IQueryClient queryClient;
 
     @Override
     public WebScrapingDTO insertWebScraping(String system, String url) throws OperationException, DocumentAlreadyPresentException {
         WebScrapingETY ety = new WebScrapingETY();
         ety.setSystem(system);
         ety.setUrl(url);
+        ety.setProcessed(false);
         if(repository.existsBySystem(system)) {
             throw new DocumentAlreadyPresentException(
 				String.format(ERR_SRV_SYSTEM_ALREADY_EXISTS, system)
@@ -98,4 +106,23 @@ public class WebScrapingSRV implements IWebScrapingSRV {
 		return deletions.size();
     }
     
+	
+	@Override
+	public MetadataResourceResponseDTO manageWebScrapingResources() throws OperationException {
+		MetadataResourceResponseDTO out = null;
+		List<WebScrapingETY> webScrapingToProcess = repository.findRecordToProcess();
+		
+		if(!webScrapingToProcess.isEmpty()) {
+			List<SystemUrlDTO> systems = convertToDTOList(webScrapingToProcess);
+			out = queryClient.callMetadataResourceEp(systems);
+			repository.updateRecordProcessed(webScrapingToProcess);
+		}
+		return out;
+	}
+	
+	private List<SystemUrlDTO> convertToDTOList(List<WebScrapingETY> webScrapingList) {
+        return webScrapingList.stream()
+                .map(webScraping -> new SystemUrlDTO(webScraping.getSystem(), webScraping.getUrl(), webScraping.isDeleted()))
+                .collect(Collectors.toList());
+    }
 }
