@@ -88,17 +88,6 @@ public interface IWebScrapingCTL {
         @PathVariable("system") @Parameter @NotBlank(message = ERR_VAL_SYSTEM_BLANK) String system)
         throws DataIntegrityException, DocumentNotFoundException, OperationException;
 
-    @DeleteMapping(value = API_WEB_DELETE_MULTI, produces = {MediaType.APPLICATION_JSON_VALUE}, consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    @Operation(summary = "Cancellazione massiva documenti tramite file CSV", description = "Servizio che consente di cancellare massivamente i documenti aventi system e url. Il file CSV deve avere intestazione")
-    @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Documenti cancellati correttamente", content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = WebScrapingDeleteResDTO.class))),
-        @ApiResponse(responseCode = "400", description = "I parametri forniti non sono validi", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = ErrorResponseDTO.class))),
-        @ApiResponse(responseCode = "404", description = "System non presenti sul database", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = ErrorResponseDTO.class))),
-        @ApiResponse(responseCode = "500", description = "Errore interno del server", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = ErrorResponseDTO.class)))
-    })
-    WebScrapingDeleteResDTO deleteMultiWebScraping(
-        @RequestParam @Parameter(description = "CSV contenente system e url") MultipartFile file)
-        throws InvalidContentException, DataProcessingException, OperationException, DocumentNotFoundException, DataIntegrityException;
 
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE})
     @Operation(summary = "Recupero url definiti")

@@ -12,17 +12,13 @@ public interface IWebScrapingRepo {
 	
 	List<WebScrapingETY> insertMultiWebScraping(List<WebScrapingETY> etys) throws OperationException;
 
-	List<WebScrapingETY> deleteBySystem(String system) throws OperationException, DataIntegrityException;
+	Integer deleteBySystem(String system) throws OperationException, DataIntegrityException;
 
-	List<WebScrapingETY> deleteMultiWebScraping(List<WebScrapingETY> etys) throws OperationException, DataIntegrityException;
+	Integer deleteMultiWebScraping(List<String> systems) throws OperationException, DataIntegrityException;
 
 	boolean existsBySystem(final String system) throws OperationException;
 
 	List<WebScrapingETY> findBySystem(String system) throws OperationException;
 	
-	List<WebScrapingETY> findRecordToProcess() throws OperationException;
-	
-	int updateRecordProcessed(List<WebScrapingETY> list);
-
-	List<WebScrapingETY> getWebScraping();
+	List<WebScrapingETY> findAll();
 }

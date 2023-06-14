@@ -2,7 +2,6 @@ package it.finanze.sanita.fse2.ms.edssrvdictionary.service.impl;
 
 import static it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Logs.ERR_SRV_FILE_NOT_VALID;
 import static it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Logs.ERR_SRV_SYSTEM_ALREADY_EXISTS;
-import static it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Logs.ERR_SRV_SYSTEM_NOT_EXISTS;
 import static it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.error.ErrorInstance.Fields.FILE;
 
 import java.util.Collection;
@@ -42,7 +41,6 @@ public class WebScrapingSRV implements IWebScrapingSRV {
         WebScrapingETY ety = new WebScrapingETY();
         ety.setSystem(system);
         ety.setUrl(url);
-        ety.setProcessed(false);
         ety.setForceDraft(forceDraft);
         if(repository.existsBySystem(system)) {
             throw new DocumentAlreadyPresentException(
@@ -75,60 +73,48 @@ public class WebScrapingSRV implements IWebScrapingSRV {
     }
 
     @Override
-    public int deleteWebScraping(String system) throws DocumentNotFoundException, OperationException, DataIntegrityException {
-        // Check system exists
-		if(!repository.existsBySystem(system)) {
-			// Let the caller know about it
-			throw new DocumentNotFoundException(String.format(ERR_SRV_SYSTEM_NOT_EXISTS, system));
-		}
-		// Delete any matching document system (then return size)
-		return repository.deleteBySystem(system).size();
+    public int deleteWebScraping(String system) throws OperationException, DataIntegrityException {
+		return repository.deleteBySystem(system);
     }
 
     @Override
     public int deleteMultiWebScraping(MultipartFile file) throws InvalidContentException, DataProcessingException, OperationException, DocumentNotFoundException, DataIntegrityException {
+    	int out = 0;
         // Check file integrity
 		if(file == null || file.isEmpty()) throw new InvalidContentException(ERR_SRV_FILE_NOT_VALID, FILE);
 		// Extract binary content
 		byte[] raw = FileUtility.throwIfEmpty(file);
 		// Parse entities
 		List<WebScrapingETY> entities = WebScrapingETY.fromCSV(raw);
-        // Check systems exist
-        for(WebScrapingETY ety : entities) {
-            if(!repository.existsBySystem(ety.getSystem())) {
-                throw new DocumentNotFoundException(
-                    String.format(ERR_SRV_SYSTEM_NOT_EXISTS, ety.getSystem())
-                );
-            }
-        }
-		// Delete
-		Collection<WebScrapingETY> deletions = repository.deleteMultiWebScraping(entities);
-		// Return size
-		return deletions.size();
+		
+		if(!entities.isEmpty()) {
+			List<String> systems = entities.stream().map(e-> e.getSystem()).collect(Collectors.toList());
+			out = repository.deleteMultiWebScraping(systems);
+		}
+		return out;
     }
     
 	
 	@Override
 	public MetadataResourceResponseDTO manageWebScrapingResources() throws OperationException {
 		MetadataResourceResponseDTO out = null;
-		List<WebScrapingETY> webScrapingToProcess = repository.findRecordToProcess();
+		List<WebScrapingETY> webScrapingToProcess = repository.findAll(); 
 		
 		if(!webScrapingToProcess.isEmpty()) {
 			List<SystemUrlDTO> systems = convertToDTOList(webScrapingToProcess);
 			out = queryClient.callMetadataResourceEp(systems);
-			repository.updateRecordProcessed(webScrapingToProcess);
 		}
 		return out;
 	}
 	
 	private List<SystemUrlDTO> convertToDTOList(List<WebScrapingETY> webScrapingList) {
         return webScrapingList.stream()
-                .map(webScraping -> new SystemUrlDTO(webScraping.getSystem(), webScraping.getUrl(), webScraping.isDeleted(), webScraping.isForceDraft()))
+                .map(webScraping -> new SystemUrlDTO(webScraping.getSystem(), webScraping.getUrl(), webScraping.isForceDraft()))
                 .collect(Collectors.toList());
     }
 
 	@Override
-	public List<WebScrapingETY> getWebScraping() {
-		return repository.getWebScraping();
+	public List<WebScrapingETY> findAll() {
+		return repository.findAll();
 	}
 }

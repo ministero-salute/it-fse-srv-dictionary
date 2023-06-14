@@ -29,8 +29,6 @@ public class WebScrapingETY {
 	
 	public static final String FIELD_SYSTEM = "system";
 	public static final String FIELD_URL = "url";
-	public static final String FIELD_DELETED = "deleted";
-	public static final String FIELD_PROCESSED = "processed";
 	public static final String FIELD_FORCE_DRAFT = "force-draft";
 	
 	@Id
@@ -42,12 +40,6 @@ public class WebScrapingETY {
 	@Field(name = FIELD_URL)
 	private String url;
 
-	@Field(name = FIELD_DELETED)
-	private boolean deleted;
-	
-	@Field(name = FIELD_PROCESSED)
-	private boolean processed;
-	
 	@Field(name = FIELD_FORCE_DRAFT)
 	private boolean forceDraft;
 	
@@ -62,7 +54,7 @@ public class WebScrapingETY {
 
 		return content
 				.stream()
-				.map(line -> new WebScrapingETY(null, line.getSystem(), line.getUrl(), false,false, line.getForceDraft()))
+				.map(line -> new WebScrapingETY(null, line.getSystem(), line.getUrl(), line.getForceDraft()))
 				.collect(Collectors.toList());
 	}
  

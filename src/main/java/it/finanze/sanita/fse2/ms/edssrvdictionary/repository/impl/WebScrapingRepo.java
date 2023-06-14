@@ -1,27 +1,21 @@
 package it.finanze.sanita.fse2.ms.edssrvdictionary.repository.impl;
 
 import static it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Logs.ERR_REP_DEL_DOCS_BY_SYS;
-import static it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Logs.ERR_REP_DEL_MISMATCH;
 import static it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Logs.ERR_REP_DOCS_NOT_FOUND;
 import static it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Logs.ERR_REP_UNABLE_CHECK_SYSTEM;
-import static it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.WebScrapingETY.FIELD_DELETED;
-import static it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.WebScrapingETY.FIELD_PROCESSED;
 import static it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.WebScrapingETY.FIELD_SYSTEM;
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
 
 import com.mongodb.MongoException;
-import com.mongodb.client.result.UpdateResult;
+import com.mongodb.client.result.DeleteResult;
 
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DataIntegrityException;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.OperationException;
@@ -33,7 +27,7 @@ public class WebScrapingRepo implements IWebScrapingRepo {
 
 	@Autowired
 	private MongoTemplate mongoTemplate;
-	
+
 	@Override
 	public WebScrapingETY insertWebScraping(WebScrapingETY entity) throws OperationException {
 		WebScrapingETY obj;
@@ -44,7 +38,7 @@ public class WebScrapingRepo implements IWebScrapingRepo {
 		}
 		return obj;
 	}
-	
+
 	@Override
 	public List<WebScrapingETY> insertMultiWebScraping(List<WebScrapingETY> etys) throws OperationException {
 		List<WebScrapingETY> entities;
@@ -62,77 +56,49 @@ public class WebScrapingRepo implements IWebScrapingRepo {
 		boolean output;
 		// Create query
 		Query query = new Query();
-		query.addCriteria(
-			where(FIELD_SYSTEM).is(system).and(FIELD_DELETED).is(false)
-		);
+		query.addCriteria(where(FIELD_SYSTEM).is(system));
 		try {
 			output = mongoTemplate.exists(query, WebScrapingETY.class);
- 		} catch(MongoException ex) {
+		} catch(MongoException ex) {
 			throw new OperationException(ERR_REP_UNABLE_CHECK_SYSTEM, ex);
 		}
 		return output;
 	}
 
 	@Override
-	public List<WebScrapingETY> deleteBySystem(String system) throws OperationException, DataIntegrityException {
-		// Working vars
-		List<WebScrapingETY> entities;
-		UpdateResult result;
+	public Integer deleteBySystem(String system) throws OperationException, DataIntegrityException {
+		Integer output = null;
+
 		// Create query
 		Query query = new Query();
-		query.addCriteria(where(FIELD_SYSTEM).is(system).and(FIELD_DELETED).is(false));
-		// Create update definition
-		Update update = new Update();
-		update.set(FIELD_DELETED, true);
-		update.set(FIELD_PROCESSED, false);
-		// Get docs to remove
-		entities = findBySystem(system);
+		query.addCriteria(where(FIELD_SYSTEM).is(system));
 		try {
 			// Execute
-			result = mongoTemplate.updateMulti(query, update, WebScrapingETY.class);
+			DeleteResult result = mongoTemplate.remove(query, WebScrapingETY.class);
+			output = (int)result.getDeletedCount();
 		} catch(MongoException e) {
 			// Catch data-layer runtime exceptions and turn into a checked exception
 			throw new OperationException(ERR_REP_DEL_DOCS_BY_SYS , e);
 		}
-		// Assert we modified the expected data size
-		if(entities.size() != result.getMatchedCount() || entities.size() != result.getModifiedCount()) {
-			throw new DataIntegrityException(String.format(ERR_REP_DEL_MISMATCH, result.getModifiedCount(), entities.size()));
-		}
-		// Return modified entities
-		return entities;
+		return output;
 	}
 
 	@Override
-	public List<WebScrapingETY> deleteMultiWebScraping(List<WebScrapingETY> etys) throws OperationException, DataIntegrityException {
-		// Working vars
-		List<WebScrapingETY> out = new ArrayList<>();
-		List<WebScrapingETY> entities;
-		UpdateResult result;
-		for(WebScrapingETY ety : etys) {
-			// Create query
-			Query query = new Query();
-			query.addCriteria(where(FIELD_SYSTEM).is(ety.getSystem()).and(FIELD_DELETED).is(false));
-			// Create update definition
-			Update update = new Update();
-			update.set(FIELD_DELETED, true);
-			update.set(FIELD_PROCESSED, false);
-			// Get docs to remove
-			entities = findBySystem(ety.getSystem());
-			try {
-				// Execute
-				result = mongoTemplate.updateMulti(query, update, WebScrapingETY.class);
-			} catch(MongoException e) {
-				// Catch data-layer runtime exceptions and turn into a checked exception
-				throw new OperationException(ERR_REP_DEL_DOCS_BY_SYS , e);
-			}
-			// Assert we modified the expected data size
-			if(entities.size() != result.getMatchedCount() || entities.size() != result.getModifiedCount()) {
-				throw new DataIntegrityException(String.format(ERR_REP_DEL_MISMATCH, result.getModifiedCount(), entities.size()));
-			}
-			out.addAll(entities);
+	public Integer deleteMultiWebScraping(List<String> systems) throws OperationException, DataIntegrityException {
+		Integer output = null;
+
+		// Create query
+		Query query = new Query();
+		query.addCriteria(where(FIELD_SYSTEM).in(systems));
+		try {
+			// Execute
+			DeleteResult result = mongoTemplate.remove(query, WebScrapingETY.class);
+			output = (int)result.getDeletedCount();
+		} catch(MongoException e) {
+			// Catch data-layer runtime exceptions and turn into a checked exception
+			throw new OperationException(ERR_REP_DEL_DOCS_BY_SYS , e);
 		}
-		// Return modified entities
-		return out;
+		return output;
 	}
 
 	@Override
@@ -141,9 +107,7 @@ public class WebScrapingRepo implements IWebScrapingRepo {
 		List<WebScrapingETY> out;
 		// Create query
 		Query query = new Query();
-		query.addCriteria(
-			where(FIELD_SYSTEM).is(system).and(FIELD_DELETED).is(false)
-		);
+		query.addCriteria(where(FIELD_SYSTEM).is(system));
 		try {
 			// Execute
 			out = mongoTemplate.find(query, WebScrapingETY.class);
@@ -155,29 +119,10 @@ public class WebScrapingRepo implements IWebScrapingRepo {
 		return out;
 	}
 
-	@Override
-	public List<WebScrapingETY> findRecordToProcess() throws OperationException {
-		Query query = new Query();
-		query.addCriteria(Criteria.where(FIELD_PROCESSED).is(false));
-		return mongoTemplate.find(query, WebScrapingETY.class);
-	}
-	
-	@Override
-	public int updateRecordProcessed(List<WebScrapingETY> list) {
-        List<String> idsToUpdate = list.stream().map(WebScrapingETY::getId).collect(Collectors.toList());
-
-        Query query = new Query();
-        query.addCriteria(Criteria.where("_id").in(idsToUpdate));
-
-        Update update = new Update();
-        update.set(FIELD_PROCESSED, true);
-
-        UpdateResult res = mongoTemplate.updateMulti(query, update, WebScrapingETY.class);
-        return (int)res.getModifiedCount();
-	}
 
 	@Override
-	public List<WebScrapingETY> getWebScraping() {
+	public List<WebScrapingETY> findAll() {
 		return mongoTemplate.findAll(WebScrapingETY.class);
 	}
+ 
 }

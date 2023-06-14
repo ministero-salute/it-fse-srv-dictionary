@@ -24,8 +24,8 @@ public interface IWebScrapingSRV {
     
     MetadataResourceResponseDTO manageWebScrapingResources() throws OperationException;
 
-    List<WebScrapingETY> getWebScraping();
-
 	WebScrapingDTO insertWebScraping(String system, String url, Boolean forceDraft)
 			throws OperationException, DocumentAlreadyPresentException;
+	
+	List<WebScrapingETY> findAll();
 }

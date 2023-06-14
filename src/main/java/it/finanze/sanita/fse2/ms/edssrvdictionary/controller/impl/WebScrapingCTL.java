@@ -41,12 +41,7 @@ public class WebScrapingCTL extends AbstractCTL implements IWebScrapingCTL {
     
     @Override
     public WebScrapingGetResDTO get() {
-        return new WebScrapingGetResDTO(getLogTraceInfo(), service.getWebScraping());
-    }
-
-    @Override
-    public WebScrapingDeleteResDTO deleteMultiWebScraping(MultipartFile file) throws InvalidContentException, DataProcessingException, OperationException, DocumentNotFoundException, DataIntegrityException {
-        return new WebScrapingDeleteResDTO(getLogTraceInfo(), service.deleteMultiWebScraping(file));
+        return new WebScrapingGetResDTO(getLogTraceInfo(), service.findAll());
     }
     
 }
