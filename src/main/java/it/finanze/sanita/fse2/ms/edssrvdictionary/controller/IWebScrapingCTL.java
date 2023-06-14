@@ -16,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,6 +33,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.error.base.ErrorResponseDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.webscraping.WebScrapingDeleteResDTO;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.webscraping.WebScrapingGetResDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.webscraping.WebScrapingPostSingleResDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.webscraping.WebscrapingPostMultiResDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DataIntegrityException;
@@ -57,7 +59,8 @@ public interface IWebScrapingCTL {
     @ResponseStatus(HttpStatus.CREATED)
     WebScrapingPostSingleResDTO insertWebScraping(
         @PathVariable("system") @Parameter @NotBlank(message = ERR_VAL_SYSTEM_BLANK) String system,
-        @PathVariable("url") @Parameter @NotBlank(message = ERR_VAL_URL_BLANK) String url)
+        @PathVariable("url") @Parameter @NotBlank(message = ERR_VAL_URL_BLANK) String url,
+        @PathVariable("force-draft") @Parameter @NotBlank(message = ERR_VAL_URL_BLANK) Boolean forceDraft)
         throws OperationException, DocumentAlreadyPresentException;
 
     @PostMapping(value = API_WEB_INSERT_MULTI, produces = {MediaType.APPLICATION_JSON_VALUE}, consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
@@ -96,4 +99,15 @@ public interface IWebScrapingCTL {
     WebScrapingDeleteResDTO deleteMultiWebScraping(
         @RequestParam @Parameter(description = "CSV contenente system e url") MultipartFile file)
         throws InvalidContentException, DataProcessingException, OperationException, DocumentNotFoundException, DataIntegrityException;
+
+    @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE})
+    @Operation(summary = "Recupero url definiti")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "URL recuperati", content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = WebScrapingPostSingleResDTO.class))),
+        @ApiResponse(responseCode = "400", description = "I parametri forniti non sono validi", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = ErrorResponseDTO.class))),
+        @ApiResponse(responseCode = "500", description = "Errore interno del server", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = ErrorResponseDTO.class)))
+    })
+    @ResponseStatus(HttpStatus.OK)
+	WebScrapingGetResDTO get();
+
 }

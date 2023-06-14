@@ -3,9 +3,11 @@
  */
 package it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.webscraping;
 
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.WebScrapingDTO;
+import java.util.List;
+
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.base.ResponseDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.log.LogTraceInfoDTO;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.WebScrapingETY;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -16,13 +18,13 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class WebScrapingPostSingleResDTO extends ResponseDTO {
+public class WebScrapingGetResDTO extends ResponseDTO {
 
-	private WebScrapingDTO dto;
+	private List<WebScrapingETY> entities;
 
-	public WebScrapingPostSingleResDTO(final LogTraceInfoDTO traceInfo, WebScrapingDTO dto) {
+	public WebScrapingGetResDTO(final LogTraceInfoDTO traceInfo, final List<WebScrapingETY> inEntities) {
 		super(traceInfo);
-		this.dto = new WebScrapingDTO(dto.getId(), dto.getSystem(), dto.getUrl(), false, dto.isForceDraft());
+		this.entities = inEntities;
 	}
-	
+
 }

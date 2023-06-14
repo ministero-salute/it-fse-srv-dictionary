@@ -23,4 +23,6 @@ public interface IWebScrapingRepo {
 	List<WebScrapingETY> findRecordToProcess() throws OperationException;
 	
 	int updateRecordProcessed(List<WebScrapingETY> list);
+
+	List<WebScrapingETY> getWebScraping();
 }

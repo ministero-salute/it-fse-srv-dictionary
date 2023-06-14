@@ -18,5 +18,6 @@ public class SystemUrlDTO {
 	
 	private boolean toDelete;
 	
- 
+	private Boolean forceDraft;
+
 }

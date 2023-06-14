@@ -81,7 +81,7 @@ public class WebScrapingControllerTest {
         String system = "systemTest";
         String url = "urlTest";
 
-        WebScrapingETY ety = new WebScrapingETY(null, system, url, false,false);
+        WebScrapingETY ety = new WebScrapingETY(null, system, url, false,false, true);
         mongoTemplate.insert(ety);
 
         MvcResult result = mvc.perform(delete("/v1/web-scraping/delete/{system}", system))

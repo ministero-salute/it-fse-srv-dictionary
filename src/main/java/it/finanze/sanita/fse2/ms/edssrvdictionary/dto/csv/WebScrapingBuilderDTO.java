@@ -13,4 +13,7 @@ public class WebScrapingBuilderDTO {
 	@CsvBindByName(column = "url")
 	private String url;
 
+	@CsvBindByName(column = "force-draft")
+	private Boolean forceDraft;
+
 }

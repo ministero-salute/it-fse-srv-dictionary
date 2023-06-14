@@ -175,4 +175,9 @@ public class WebScrapingRepo implements IWebScrapingRepo {
         UpdateResult res = mongoTemplate.updateMulti(query, update, WebScrapingETY.class);
         return (int)res.getModifiedCount();
 	}
+
+	@Override
+	public List<WebScrapingETY> getWebScraping() {
+		return mongoTemplate.findAll(WebScrapingETY.class);
+	}
 }

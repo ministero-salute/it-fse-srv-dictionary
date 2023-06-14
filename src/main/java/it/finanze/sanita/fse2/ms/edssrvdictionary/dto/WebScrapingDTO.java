@@ -13,4 +13,6 @@ public class WebScrapingDTO {
     private String system;
     private String url;
     private boolean deleted;
+    private boolean forceDraft;
+    
 }

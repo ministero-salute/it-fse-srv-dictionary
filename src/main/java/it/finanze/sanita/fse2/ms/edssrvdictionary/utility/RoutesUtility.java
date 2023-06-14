@@ -51,7 +51,7 @@ public final class RoutesUtility {
     public static final String API_CHANGESET_CHUNKS_TAG = "ChangeSet - Chunks";
 
     public static final String API_WEB_SCRAPING = API_VERSION + "/" + WEB_SCRAPING;
-    public static final String API_WEB_DELETE_SYSTEM = "/delete" + API_SYSTEM_EXTS;
+    public static final String API_WEB_DELETE_SYSTEM = API_SYSTEM_EXTS;
     public static final String API_WEB_DELETE_MULTI = "/delete-multi";
     public static final String API_WEB_SYSTEM_URL = API_SYSTEM_EXTS + API_URL_EXTS;
     public static final String API_WEB_INSERT_MULTI = "/insert-multi";

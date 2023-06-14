@@ -1,5 +1,7 @@
 package it.finanze.sanita.fse2.ms.edssrvdictionary.service;
 
+import java.util.List;
+
 import org.springframework.web.multipart.MultipartFile;
 
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.MetadataResourceResponseDTO;
@@ -10,11 +12,10 @@ import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DocumentAlreadyPres
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DocumentNotFoundException;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.InvalidContentException;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.OperationException;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.WebScrapingETY;
 
 public interface IWebScrapingSRV {
     
-    WebScrapingDTO insertWebScraping(String system, String url) throws OperationException, DocumentAlreadyPresentException;
-
     int insertMultiWebScraping(MultipartFile file) throws DocumentAlreadyPresentException, OperationException, DataProcessingException, InvalidContentException;
 
     int deleteWebScraping(String system) throws DocumentNotFoundException, OperationException, DataIntegrityException;
@@ -22,4 +23,9 @@ public interface IWebScrapingSRV {
     int deleteMultiWebScraping(MultipartFile file) throws OperationException, DataProcessingException, InvalidContentException, DataIntegrityException, DocumentNotFoundException;
     
     MetadataResourceResponseDTO manageWebScrapingResources() throws OperationException;
+
+    List<WebScrapingETY> getWebScraping();
+
+	WebScrapingDTO insertWebScraping(String system, String url, Boolean forceDraft)
+			throws OperationException, DocumentAlreadyPresentException;
 }

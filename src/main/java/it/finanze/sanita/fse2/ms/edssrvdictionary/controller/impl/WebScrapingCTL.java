@@ -7,6 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.controller.AbstractCTL;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.controller.IWebScrapingCTL;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.webscraping.WebScrapingDeleteResDTO;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.webscraping.WebScrapingGetResDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.webscraping.WebScrapingPostSingleResDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.webscraping.WebscrapingPostMultiResDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DataIntegrityException;
@@ -24,8 +25,8 @@ public class WebScrapingCTL extends AbstractCTL implements IWebScrapingCTL {
     private IWebScrapingSRV service;
 
     @Override
-    public WebScrapingPostSingleResDTO insertWebScraping(String system, String url) throws OperationException, DocumentAlreadyPresentException {
-        return new WebScrapingPostSingleResDTO(getLogTraceInfo(), service.insertWebScraping(system, url));
+    public WebScrapingPostSingleResDTO insertWebScraping(String system, String url, Boolean forceDraft) throws OperationException, DocumentAlreadyPresentException {
+        return new WebScrapingPostSingleResDTO(getLogTraceInfo(), service.insertWebScraping(system, url, forceDraft));
     }
 
     @Override
@@ -36,6 +37,11 @@ public class WebScrapingCTL extends AbstractCTL implements IWebScrapingCTL {
     @Override
     public WebScrapingDeleteResDTO deleteWebScraping(String system) throws DataIntegrityException, DocumentNotFoundException, OperationException {
         return new WebScrapingDeleteResDTO(getLogTraceInfo(), service.deleteWebScraping(system));
+    }
+    
+    @Override
+    public WebScrapingGetResDTO get() {
+        return new WebScrapingGetResDTO(getLogTraceInfo(), service.getWebScraping());
     }
 
     @Override

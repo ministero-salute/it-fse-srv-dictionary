@@ -38,18 +38,19 @@ public class WebScrapingSRV implements IWebScrapingSRV {
     private IQueryClient queryClient;
 
     @Override
-    public WebScrapingDTO insertWebScraping(String system, String url) throws OperationException, DocumentAlreadyPresentException {
+    public WebScrapingDTO insertWebScraping(String system, String url, Boolean forceDraft) throws OperationException, DocumentAlreadyPresentException {
         WebScrapingETY ety = new WebScrapingETY();
         ety.setSystem(system);
         ety.setUrl(url);
         ety.setProcessed(false);
+        ety.setForceDraft(forceDraft);
         if(repository.existsBySystem(system)) {
             throw new DocumentAlreadyPresentException(
 				String.format(ERR_SRV_SYSTEM_ALREADY_EXISTS, system)
 			);
         }
         WebScrapingETY response = repository.insertWebScraping(ety);
-        return new WebScrapingDTO(response.getId(), response.getSystem(), response.getUrl(), false);
+        return new WebScrapingDTO(response.getId(), response.getSystem(), response.getUrl(), false, response.isForceDraft());
     }
 
     @Override
@@ -122,7 +123,12 @@ public class WebScrapingSRV implements IWebScrapingSRV {
 	
 	private List<SystemUrlDTO> convertToDTOList(List<WebScrapingETY> webScrapingList) {
         return webScrapingList.stream()
-                .map(webScraping -> new SystemUrlDTO(webScraping.getSystem(), webScraping.getUrl(), webScraping.isDeleted()))
+                .map(webScraping -> new SystemUrlDTO(webScraping.getSystem(), webScraping.getUrl(), webScraping.isDeleted(), webScraping.isForceDraft()))
                 .collect(Collectors.toList());
     }
+
+	@Override
+	public List<WebScrapingETY> getWebScraping() {
+		return repository.getWebScraping();
+	}
 }

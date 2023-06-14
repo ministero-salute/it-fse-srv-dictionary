@@ -31,7 +31,8 @@ public class WebScrapingETY {
 	public static final String FIELD_URL = "url";
 	public static final String FIELD_DELETED = "deleted";
 	public static final String FIELD_PROCESSED = "processed";
-
+	public static final String FIELD_FORCE_DRAFT = "force-draft";
+	
 	@Id
 	private String id;
 	
@@ -47,6 +48,9 @@ public class WebScrapingETY {
 	@Field(name = FIELD_PROCESSED)
 	private boolean processed;
 	
+	@Field(name = FIELD_FORCE_DRAFT)
+	private boolean forceDraft;
+	
 	public static List<WebScrapingETY> fromCSV(byte[] raw) {
 		InputStream targetStream = new ByteArrayInputStream(raw);
 		Reader reader = new InputStreamReader(targetStream);
@@ -58,7 +62,7 @@ public class WebScrapingETY {
 
 		return content
 				.stream()
-				.map(line -> new WebScrapingETY(null, line.getSystem(), line.getUrl(), false,false))
+				.map(line -> new WebScrapingETY(null, line.getSystem(), line.getUrl(), false,false, line.getForceDraft()))
 				.collect(Collectors.toList());
 	}
  
