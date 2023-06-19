@@ -3,17 +3,20 @@
  */
 package it.finanze.sanita.fse2.ms.edssrvdictionary.utility;
 
-import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DataProcessingException;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.multipart.MultipartFile;
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Logs.ERR_UTLS_IO_EMPTY;
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Logs.ERR_UTLS_IO_ERROR;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Objects;
 
-import static it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Logs.ERR_UTLS_IO_EMPTY;
-import static it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Logs.ERR_UTLS_IO_ERROR;
+import org.springframework.web.multipart.MultipartFile;
+
+import it.finanze.sanita.fse2.ms.edssrvdictionary.enums.FormatEnum;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DataProcessingException;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.FileExtensionValidationException;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * The Class FileUtils.
@@ -99,6 +102,18 @@ public final class FileUtility {
 		// Check emptiness
 		if(raw.length == 0) throw new DataProcessingException(ERR_UTLS_IO_EMPTY);
 		return raw;
+	}
+	
+	public static void validateFileExtension(FormatEnum format, MultipartFile file) {
+	    String originalFilename = file.getOriginalFilename();
+	    if (originalFilename != null) {
+	        String fileExtension = originalFilename.substring(originalFilename.lastIndexOf(".") + 1);
+	        if (!format.getFileExtension().contains(fileExtension)) {
+	        	throw new FileExtensionValidationException("Estensione non valida rispetto a quanto dichiarato nel Format");
+	        }
+	    } else {
+	    	throw new FileExtensionValidationException("File name non valido");
+	    }
 	}
 
 }

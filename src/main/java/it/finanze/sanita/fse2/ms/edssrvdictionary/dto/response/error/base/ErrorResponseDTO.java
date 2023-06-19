@@ -9,6 +9,7 @@ import javax.validation.constraints.Size;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.base.ResponseDTO;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.error.ErrorDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.log.LogTraceInfoDTO;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -24,20 +25,6 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 public class ErrorResponseDTO extends ResponseDTO {
-
-//	/**
-//	 * Trace id log.
-//	 */
-//	@Schema(description = "Indentificativo univoco della richiesta dell'utente")
-//	@Size(min = 0, max = 100)
-//	private String traceID;
-//	
-//	/**
-//	 * Span id log.
-//	 */
-//	@Schema(description = "Indentificativo univoco di un task della richiesta dell'utente (differisce dal traceID solo in caso di chiamate sincrone in cascata)")
-//	@Size(min = 0, max = 100)
-//	private String spanID;
 
 	@Schema(description = "Identificativo del problema verificatosi")
 	@Size(min = 0, max = 100)
@@ -61,15 +48,20 @@ public class ErrorResponseDTO extends ResponseDTO {
 	private String instance;
 
 	public ErrorResponseDTO(final LogTraceInfoDTO traceInfo, final String inType, final String inTitle, final String inDetail, final Integer inStatus, final String inInstance) {
-		super.setTraceID(traceInfo.getTraceID());
-		super.setSpanID(traceInfo.getSpanID());
-//		traceID = traceInfo.getTraceID();
-//		spanID = traceInfo.getSpanID();
+		super(traceInfo);
 		type = inType;
 		title = inTitle;
 		detail = inDetail;
 		status = inStatus;
 		instance = inInstance;
+	}
+	
+	public ErrorResponseDTO(final LogTraceInfoDTO traceInfo, final ErrorDTO inError) {
+		super(traceInfo);
+		type = inError.getType();
+		title = inError.getTitle();
+		detail = inError.getDetail();
+		instance = inError.getInstance();
 	}
 
 }

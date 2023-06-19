@@ -45,9 +45,11 @@ import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DataIntegrityExcept
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DataProcessingException;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DocumentAlreadyPresentException;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DocumentNotFoundException;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.FileExtensionValidationException;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.InvalidContentException;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.OperationException;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.OutOfRangeException;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.base.ValidationException;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -299,6 +301,15 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
 		return new ResponseEntity<>(out, headers, out.getStatus());
 	}
 
+	@ExceptionHandler(value = {FileExtensionValidationException.class})
+	protected ResponseEntity<ErrorResponseDTO> handleBadRequestException(final ValidationException ex, final WebRequest request) {
+
+		LogTraceInfoDTO traceInfo = getLogTraceInfo();
+		ErrorResponseDTO response = new ErrorResponseDTO(traceInfo, ex.getError());
+
+		return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+	}
+	
 	/**
 	 * Handles generic or unknown exceptions, unexpected thrown during the execution of any operation.
 	 *
