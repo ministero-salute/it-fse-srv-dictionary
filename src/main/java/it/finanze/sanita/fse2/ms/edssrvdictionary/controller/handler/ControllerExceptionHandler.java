@@ -49,6 +49,7 @@ import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.FileExtensionValida
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.InvalidContentException;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.OperationException;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.OutOfRangeException;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.RequestValidationException;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.base.ValidationException;
 import lombok.extern.slf4j.Slf4j;
 
@@ -301,7 +302,7 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
 		return new ResponseEntity<>(out, headers, out.getStatus());
 	}
 
-	@ExceptionHandler(value = {FileExtensionValidationException.class})
+	@ExceptionHandler(value = {FileExtensionValidationException.class,RequestValidationException.class})
 	protected ResponseEntity<ErrorResponseDTO> handleBadRequestException(final ValidationException ex, final WebRequest request) {
 
 		LogTraceInfoDTO traceInfo = getLogTraceInfo();

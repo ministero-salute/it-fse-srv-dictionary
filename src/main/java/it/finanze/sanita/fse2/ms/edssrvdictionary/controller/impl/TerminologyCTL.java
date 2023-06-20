@@ -27,7 +27,7 @@ import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DocumentNotFoundExc
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.InvalidContentException;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.OperationException;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.service.ITerminologySRV;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.utility.FileUtility;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.utility.ValidationUtility;
 
 
 /**
@@ -44,7 +44,8 @@ public class TerminologyCTL extends AbstractCTL implements ITerminologyCTL {
     @Override
 	public PostDocsResDTO uploadTerminology(FormatEnum format, @Valid RequestDTO creationInfo, MultipartFile file,HttpServletRequest request) throws OperationException, DocumentAlreadyPresentException,DataProcessingException, InvalidContentException, IOException {
 		LogTraceInfoDTO traceInfoDTO = getLogTraceInfo();
-		FileUtility.validateFileExtension(format, file);
+		ValidationUtility.validateFileExtension(format, file);
+		ValidationUtility.validRequiredReqBody(format, creationInfo);
 		PostDocsResDTO out = service.uploadTerminologyCsv(format,file, creationInfo);
 		out.setSpanID(traceInfoDTO.getSpanID());
 		out.setTraceID(traceInfoDTO.getTraceID());

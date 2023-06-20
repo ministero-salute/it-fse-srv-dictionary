@@ -5,7 +5,6 @@ import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.error.ErrorDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.base.ValidationException;
 
 
-
 public class FileExtensionValidationException extends ValidationException {
     
     /**

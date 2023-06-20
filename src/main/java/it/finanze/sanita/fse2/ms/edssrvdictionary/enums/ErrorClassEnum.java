@@ -16,7 +16,8 @@ public enum ErrorClassEnum {
 	 */
 	GENERIC("/errors", "Generic", "Errore generico", "/generic"),
 	VALIDATION_MANDATORY("/errors/fields", "Missing", "Campo obbligatorio non presente", "/mandatory"),
-	VALIDATION_WRONG_EXTENSION("/errors/fields", "Wrong extension", "Estensione file errata", "/mandatory"),
+	VALIDATION_WRONG_EXTENSION("/errors/fields", "Valore errato", "Estensione file errata", "/mandatory"),
+	VALIDATION_REQUEST("/errors/fields", "Valore errato", "Valorizzare correttamente la request", "/mandatory"),
     TIMEOUT("/errors", "Timeout", "Errore di timeout", "/timeout");
 
 

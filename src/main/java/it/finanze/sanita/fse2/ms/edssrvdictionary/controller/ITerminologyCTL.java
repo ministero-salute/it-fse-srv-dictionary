@@ -59,7 +59,8 @@ public interface ITerminologyCTL {
 			@ApiResponse(responseCode = "409", description = "System già presente sul database", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = ErrorResponseDTO.class))),
 			@ApiResponse(responseCode = "500", description = "Errore interno del server", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = ErrorResponseDTO.class)))
 	}) 
-	PostDocsResDTO uploadTerminology(@PathVariable FormatEnum format, @Valid@RequestPart RequestDTO creationInfo,
+	PostDocsResDTO uploadTerminology(@PathVariable FormatEnum format, 
+			@Valid@RequestPart(required = false) RequestDTO creationInfo,
 			@RequestPart(name = "file") MultipartFile file,HttpServletRequest request) throws OperationException, DocumentAlreadyPresentException, DataProcessingException, InvalidContentException,IOException ;
 
 	@DeleteMapping(value = "/{oid}/{version}",produces = { APPLICATION_JSON_VALUE })
@@ -73,58 +74,5 @@ public interface ITerminologyCTL {
 	DelDocsResDTO deleteTerminologies(
 			@PathVariable@Parameter(description = "Identificatore del dizionario")@NotBlank(message = ERR_VAL_SYSTEM_BLANK)String oid,
 			@PathVariable@Parameter(description = "Identificatore della version del dizionario")@NotBlank(message = ERR_VAL_SYSTEM_BLANK)String version) throws OperationException, DocumentNotFoundException, DataIntegrityException, DocumentAlreadyPresentException;
-	
-
-//
-//	@GetMapping(
-//			value = API_TERMS_GET_ONE_BY_ID,
-//			produces = { APPLICATION_JSON_VALUE }
-//			)
-//	@Operation(
-//			summary = "Restituisce un terminology dato il suo identificativo",
-//			description = "Servizio che consente di ritornare una terminologia dato il suo identificativo."
-//			)
-//	@ApiResponses(value = {
-//			@ApiResponse(responseCode = "200", description = "Documento presente sul database", content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = GetDocsResDTO.class))),
-//			@ApiResponse(responseCode = "400", description = "I parametri forniti non sono validi", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = ErrorResponseDTO.class))),
-//			@ApiResponse(responseCode = "404", description = "Documento non trovato sul database", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = ErrorResponseDTO.class))),
-//			@ApiResponse(responseCode = "500", description = "Errore interno del server", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = ErrorResponseDTO.class)))
-//	})
-//	GetDocsResDTO getTerminologyById(
-//			@PathVariable
-//			@Parameter(description = "Identificatore documento")
-//			@NotBlank(message = ERR_VAL_ID_BLANK)
-//			@ValidObjectId(message = ERR_VAL_ID_NOT_VALID)
-//			String id
-//			) throws OperationException, DocumentNotFoundException;
-//
-//
-//	@GetMapping(
-//			value = API_SYSTEM_EXTS,
-//			produces = { APPLICATION_JSON_VALUE }
-//			)
-//	@Operation(
-//			summary = "Restituisce le terminologie appartenenti al system richiesto con paginazione",
-//			description = "Servizio che restituisce tutte le terminologie appartenenti ad un certo system con paginazione"
-//			)
-//	@ApiResponses(value = {
-//			@ApiResponse(responseCode = "200", description = "Documenti restituite correttamente", content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = GetDocsPageResDTO.class))),
-//			@ApiResponse(responseCode = "400", description = "I parametri forniti non sono validi", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = ErrorResponseDTO.class))),
-//			@ApiResponse(responseCode = "404", description = "System non trovato sul database", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = ErrorResponseDTO.class))),
-//			@ApiResponse(responseCode = "500", description = "Errore interno del server", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = ErrorResponseDTO.class)))
-//	})
-//	GetDocsPageResDTO getTerminologies(
-//			@PathVariable
-//			@Parameter(description = "Identificatore del dizionario")
-//			@NotBlank(message = ERR_VAL_SYSTEM_BLANK)
-//			String system,
-//			@RequestParam(API_QP_PAGE)
-//			@Parameter(description = "Indice pagina richiesto (eg. 0, 1, 2...)")
-//			int page,
-//			@RequestParam(API_QP_LIMIT)
-//			@Parameter(description = "Limite documenti per pagina (eg. 10, 20 ...)")
-//			int limit
-//			) throws OperationException, DocumentNotFoundException, OutOfRangeException;
-//
-
+	 
 }

@@ -10,7 +10,6 @@ import static it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Logs.E
 import static it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Logs.ERR_SRV_PAGE_IDX_LESS_ZERO;
 import static it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Logs.ERR_SRV_PAGE_LIMIT_LESS_ZERO;
 import static it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Logs.ERR_SRV_PAGE_NOT_EXISTS;
-import static it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Logs.ERR_SRV_SYSTEM_ALREADY_EXISTS;
 import static it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Logs.ERR_SRV_SYSTEM_NOT_EXISTS;
 import static it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Logs.ERR_VAL_IDX_CHUNK_NOT_VALID;
 import static it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.error.ErrorInstance.Fields.FILE;
@@ -275,12 +274,6 @@ public class TerminologySRV implements ITerminologySRV {
 	public PostDocsResDTO uploadTerminologyCsv(FormatEnum formatEnum, MultipartFile file, RequestDTO requestDTO) throws DocumentAlreadyPresentException, OperationException, InvalidContentException, IOException {
 		// Check file integrity
 		if(file == null || file.isEmpty()) throw new InvalidContentException(ERR_SRV_FILE_NOT_VALID, FILE);
-		 
-		// Verify this system does not exist
-		if(queryClient.getTerminology(requestDTO.getOid(), requestDTO.getVersion()).isPresent()) {
-			throw new DocumentAlreadyPresentException(String.format(ERR_SRV_SYSTEM_ALREADY_EXISTS, requestDTO.getOid()));
-		}
-
 		return queryClient.callUploadTerminology(formatEnum, requestDTO, file);
 	}
 	
