@@ -3,41 +3,36 @@
  */
 package it.finanze.sanita.fse2.ms.edssrvdictionary.repository;
 
+import it.finanze.sanita.fse2.ms.edssrvdictionary.utility.ProfileUtility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.utility.ProfileUtility;
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Collections.*;
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Profile.TEST_PREFIX;
 
 @Configuration
 public class CollectionNaming {
 
     @Autowired
-    private ProfileUtility profileUtility;
+    private ProfileUtility profiles;
 
-    @Bean("terminologyBean")
-    public String getTerminologyCollection() {
-        if (profileUtility.isTestProfile()) {
-            return Constants.Profile.TEST_PREFIX + Constants.Collections.TERMINOLOGY;
-        }
-        return Constants.Collections.TERMINOLOGY;
+    @Bean("chunkIndexBean")
+    public String getChunkIndexCollection() {
+        return profiles.isTestProfile() ? TEST_PREFIX + CHUNKS_INDEX : CHUNKS_INDEX;
     }
 
-    @Bean("snapshotBean")
-    public String getSnapshotCollection() {
-        if (profileUtility.isTestProfile()) {
-            return Constants.Profile.TEST_PREFIX + Constants.Collections.SNAPSHOT;
-        }
-        return Constants.Collections.SNAPSHOT;
+    @Bean("chunkBean")
+    public String getChunkCollection() {
+        return profiles.isTestProfile() ? TEST_PREFIX + CHUNKS : CHUNKS;
     }
     
     @Bean("webScrapingBean")
     public String getWebScrapingBeanCollection() {
-        if (profileUtility.isTestProfile()) {
-            return Constants.Profile.TEST_PREFIX + Constants.Collections.WEB_SCRAPING;
+        if (profiles.isTestProfile()) {
+            return TEST_PREFIX + WEB_SCRAPING;
         }
-        return Constants.Collections.WEB_SCRAPING;
+        return WEB_SCRAPING;
     }
     
     

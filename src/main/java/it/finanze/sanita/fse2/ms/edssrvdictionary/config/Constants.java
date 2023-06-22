@@ -31,9 +31,9 @@ public final class Constants {
 
 	public static final class Collections {
 
-		public static final String TERMINOLOGY = "terminology_eds";
+		public static final String CHUNKS_INDEX = "chunks_index_eds";
 
-		public static final String SNAPSHOT = "snapshot_eds";
+		public static final String CHUNKS = "chunks_eds";
 		
 		public static final String WEB_SCRAPING = "web_scraping";
 
