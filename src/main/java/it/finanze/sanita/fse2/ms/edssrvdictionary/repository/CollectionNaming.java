@@ -17,8 +17,8 @@ public class CollectionNaming {
     @Autowired
     private ProfileUtility profiles;
 
-    @Bean("chunkIndexBean")
-    public String getChunkIndexCollection() {
+    @Bean("chunksIndexBean")
+    public String getChunksIndexCollection() {
         return profiles.isTestProfile() ? TEST_PREFIX + CHUNKS_INDEX : CHUNKS_INDEX;
     }
 
