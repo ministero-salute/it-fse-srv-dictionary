@@ -1,12 +1,19 @@
 package it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes.query;
 
-import lombok.Value;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.Data;
 
 import java.util.Date;
 import java.util.List;
 
-@Value
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
+
+@Data
+@JsonInclude(NON_NULL)
 public class HistoryResourceDTO {
+
+    private static final String PTT_ISO_8601 = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
 
     String traceID;
     String spanID;
@@ -16,17 +23,21 @@ public class HistoryResourceDTO {
     ResourceMetaDTO meta;
     List<ResourceItemDTO> items;
 
-    @Value
+    @Data
+    @JsonInclude(NON_NULL)
     public static class ResourceMetaDTO {
         String resourceId;
         String versionId;
         String resourceType;
+        @JsonFormat(pattern = PTT_ISO_8601)
         Date releaseDate;
     }
 
-    @Value
+    @Data
+    @JsonInclude(NON_NULL)
     public static class ResourceItemDTO {
         String code;
         String display;
     }
+
 }

@@ -3,46 +3,50 @@
  */
 package it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes;
 
-import lombok.AllArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.Size;
-import java.io.Serializable;
+import java.util.Date;
+import java.util.List;
 
-import static it.finanze.sanita.fse2.ms.edssrvdictionary.utility.ValidationUtility.DEFAULT_STRING_MAX_SIZE;
-import static it.finanze.sanita.fse2.ms.edssrvdictionary.utility.ValidationUtility.DEFAULT_STRING_MIN_SIZE;
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes.query.HistoryDTO.HistoryDeleteDTO;
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes.query.HistoryDTO.HistoryInsertDTO;
+
+/**
+ * DTO for Change Set status endpoint response.
+ *
+ */
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
-public class ChangeSetDTO implements Serializable {
+@JsonInclude(NON_NULL)
+public class ChangeSetDTO {
 
     /**
-	 * Serial Version UID 
-	 */
-	private static final long serialVersionUID = 8943366877983853446L; 
-	
+     * Trace id log.
+     */
+    private String traceID;
 
-	@Size(min = DEFAULT_STRING_MIN_SIZE, max = DEFAULT_STRING_MAX_SIZE)
-	private String id; 
+    /**
+     * Span id log.
+     */
+    private String spanID;
 
-	Payload description;
+    /**
+     * Last update date to consider while retrieving the change set items
+     */
+    private Date lastUpdate;
+    /**
+     * The response date-time (usually used as the next lastUpdate)
+     */
+    private Date timestamp;
 
+    private List<HistoryInsertDTO> insertions;
 
-    @Data
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class Payload implements Serializable {
-    	
-        /**
-		 * Serial Version UID 
-		 */
-		private static final long serialVersionUID = -525579157952607584L; 
-		
-		@Size(max = DEFAULT_STRING_MAX_SIZE)
-        String system;
-        @Size(max = DEFAULT_STRING_MAX_SIZE)
-        String code;
-    }
+    private List<HistoryDeleteDTO> deletions;
+
+    /**
+     * The current active collection items
+     */
+    private long collectionSize;
 
 }

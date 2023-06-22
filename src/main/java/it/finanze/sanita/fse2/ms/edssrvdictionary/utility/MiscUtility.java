@@ -4,9 +4,6 @@
 package it.finanze.sanita.fse2.ms.edssrvdictionary.utility;
 
 import javax.validation.Path;
-import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
-import java.util.Date;
 
 public final class MiscUtility {
 
@@ -15,11 +12,6 @@ public final class MiscUtility {
      */
     private MiscUtility() {
         // This method is intentionally left blank.
-    }
-
-    public static OffsetDateTime convertToOffsetDateTime(Date dateToConvert) {
-    	if (dateToConvert == null) return null;
-        return dateToConvert.toInstant().atOffset(ZoneOffset.UTC);
     }
 
     public static String extractKeyFromPath(Path path) {

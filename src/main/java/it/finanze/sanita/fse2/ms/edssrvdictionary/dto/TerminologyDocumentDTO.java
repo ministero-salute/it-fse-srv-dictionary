@@ -4,8 +4,6 @@
 package it.finanze.sanita.fse2.ms.edssrvdictionary.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.TerminologyETY;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.utility.MiscUtility;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -39,17 +37,5 @@ public class TerminologyDocumentDTO implements Serializable {
 	private OffsetDateTime releaseDate;
 	private OffsetDateTime insertionDate;
 	private OffsetDateTime lastUpdateDate;
-
-	public static TerminologyDocumentDTO fromEntity(TerminologyETY e) {
-		return new TerminologyDocumentDTO(
-				e.getId(),
-				e.getSystem(),
-				e.getVersion(),
-				e.getCode(),
-				e.getDescription(),
-				MiscUtility.convertToOffsetDateTime(e.getReleaseDate()),
-				MiscUtility.convertToOffsetDateTime(e.getInsertionDate()),
-				MiscUtility.convertToOffsetDateTime(e.getLastUpdateDate()));
-	}
 
 }
