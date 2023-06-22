@@ -65,37 +65,5 @@ public class TerminologyCTL extends AbstractCTL implements ITerminologyCTL {
 	public DelDocsResDTO deleteTerminologies(String oid,String version)throws OperationException, DocumentNotFoundException, DataIntegrityException, DocumentAlreadyPresentException {
 		return new DelDocsResDTO(getLogTraceInfo(), service.deleteTerminologiesBySystem(oid,version));	
 	}
-	
-//	/**
-//	 * Returns terminologies matching system with pagination
-//	 * @param system System identifier
-//	 * @param page Page index
-//	 * @param limit Page max available items
-//	 * @return The requested page
-//	 * @throws OperationException If a data-layer error occurs
-//	 * @throws DocumentNotFoundException If no document matching system is found
-//	 * @throws OutOfRangeException If the provided page index is not valid
-//	 */
-//	@Override
-//	public GetDocsPageResDTO getTerminologies(String system, int page, int limit) throws OperationException, DocumentNotFoundException, OutOfRangeException {
-//		// Retrieve Pair<Page, Entities>
-//		SimpleImmutableEntry<Page<TerminologyETY>, List<TerminologyDocumentDTO>> slice = service.getTerminologies(page, limit, system);
-//		// When returning, it builds the URL according to provided values
-//		return new GetDocsPageResDTO(getLogTraceInfo(), slice.getValue(), system, slice.getKey());
-//	}
-//
-//	/**
-//	 * Retrieves the document by identifier
-//	 * @param id The document id
-//	 * @return The document matching the identifier
-//	 * @throws OperationException If a data-layer error occurs
-//	 * @throws DocumentNotFoundException If no document matching the id is found
-//	 */
-//	@Override
-//	public GetDocsResDTO getTerminologyById(String id) throws OperationException, DocumentNotFoundException {
-//		return new GetDocsResDTO(getLogTraceInfo(), service.getTerminologyById(id));
-//	}
-// 
- 
-
+	 
 }
