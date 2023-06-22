@@ -30,12 +30,14 @@ public class HistoryDTO {
     public static class HistoryInsertDTO {
         String id;
         String version;
+        String type;
     }
 
     @Data
     @JsonInclude(NON_NULL)
     public static class HistoryDeleteDTO {
         String id;
+        String type;
         String omit;
     }
 }
