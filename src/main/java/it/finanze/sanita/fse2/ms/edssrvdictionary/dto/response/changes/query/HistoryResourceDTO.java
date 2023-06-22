@@ -18,19 +18,20 @@ public class HistoryResourceDTO {
     String traceID;
     String spanID;
 
-    String id;
-    String version;
+    String resourceId;
+    String versionId;
+
     ResourceMetaDTO meta;
     List<ResourceItemDTO> items;
 
     @Data
     @JsonInclude(NON_NULL)
     public static class ResourceMetaDTO {
-        String resourceId;
-        String versionId;
-        String resourceType;
+        String oid;
+        String version;
+        String type;
         @JsonFormat(pattern = PTT_ISO_8601)
-        Date releaseDate;
+        Date released;
     }
 
     @Data
