@@ -3,6 +3,7 @@
  */
 package it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 
@@ -21,6 +22,8 @@ import static it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes.qu
 @JsonInclude(NON_NULL)
 public class ChangeSetDTO {
 
+    private static final String PTT_ISO_8601 = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
+
     /**
      * Trace id log.
      */
@@ -34,10 +37,12 @@ public class ChangeSetDTO {
     /**
      * Last update date to consider while retrieving the change set items
      */
+    @JsonFormat(pattern = PTT_ISO_8601)
     private Date lastUpdate;
     /**
      * The response date-time (usually used as the next lastUpdate)
      */
+    @JsonFormat(pattern = PTT_ISO_8601)
     private Date timestamp;
 
     private List<HistoryInsertDTO> insertions;
