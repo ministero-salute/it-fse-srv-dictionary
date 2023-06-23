@@ -8,33 +8,41 @@ package it.finanze.sanita.fse2.ms.edssrvdictionary.config;
  */
 public final class Constants {
 
-	/**
-	 * Path scan.
-	 */
-	public static final class ComponentScan {
+
+	public static final class App {
+		public static final String SHA_ALGORITHM = "SHA-256";
+
+		private App() {
+			//This method is intentionally left blank.
+		}
+	}
+
+	public static final class Headers {
 
 		/**
-		 * Base path.
+		 * JWT header field of GovWay.
 		 */
-		public static final String BASE = "it.finanze.sanita.fse2.ms.edssrvdictionary";
+		public static final String JWT_BUSINESS_HEADER = "FSE-JWT-Authoring";
 
 		/**
-		 * Configuration mongo path.
+		 * JWT header field of GovWay.
 		 */
-		public static final String CONFIG_MONGO = "it.finanze.sanita.fse2.ms.edssrvdictionary.config.mongo";
+		public static final String JWT_GOVWAY_HEADER = "GovWay-ModI-Info";
 
-		private ComponentScan() {
-			// This method is intentionally left blank.
+
+		private Headers() {
+			//This method is intentionally left blank.
 		}
 
 	}
+
 
 	public static final class Collections {
 
 		public static final String TERMINOLOGY = "terminology_eds";
 
 		public static final String SNAPSHOT = "snapshot_eds";
-		
+
 		public static final String WEB_SCRAPING = "web_scraping";
 
 		private Collections() {
@@ -43,6 +51,10 @@ public final class Constants {
 	}
 
 	public static final class Profile {
+
+		public static final String DOCKER = "docker";
+
+		public static final String DEV = "dev";
 
 		public static final String TEST = "test";
 

@@ -3,7 +3,14 @@
  */
 package it.finanze.sanita.fse2.ms.edssrvdictionary.config;
 
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.utility.ValidationUtility.DEFAULT_ARRAY_MAX_SIZE;
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.utility.ValidationUtility.DEFAULT_ARRAY_MIN_SIZE;
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.utility.ValidationUtility.DEFAULT_BINARY_MAX_SIZE;
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.utility.ValidationUtility.DEFAULT_BINARY_MIN_SIZE;
+import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
+
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -14,20 +21,15 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 
-import static it.finanze.sanita.fse2.ms.edssrvdictionary.utility.ValidationUtility.DEFAULT_ARRAY_MAX_SIZE;
-import static it.finanze.sanita.fse2.ms.edssrvdictionary.utility.ValidationUtility.DEFAULT_ARRAY_MIN_SIZE;
-import static it.finanze.sanita.fse2.ms.edssrvdictionary.utility.ValidationUtility.DEFAULT_BINARY_MAX_SIZE;
-import static it.finanze.sanita.fse2.ms.edssrvdictionary.utility.ValidationUtility.DEFAULT_BINARY_MIN_SIZE;
-import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
-
 import io.swagger.v3.oas.models.info.Contact;
 import io.swagger.v3.oas.models.media.ArraySchema;
-import io.swagger.v3.oas.models.media.Schema;
-import io.swagger.v3.oas.models.media.StringSchema;
-import io.swagger.v3.oas.models.parameters.RequestBody;
-import io.swagger.v3.oas.models.servers.Server;
-import io.swagger.v3.oas.models.media.MediaType;
 import io.swagger.v3.oas.models.media.Content;
+import io.swagger.v3.oas.models.media.MediaType;
+import io.swagger.v3.oas.models.media.Schema;
+import io.swagger.v3.oas.models.parameters.RequestBody;
+import io.swagger.v3.oas.models.security.SecurityRequirement;
+import io.swagger.v3.oas.models.security.SecurityScheme;
+import io.swagger.v3.oas.models.servers.Server;
 
 
 @Configuration
@@ -42,38 +44,38 @@ public class OpenApiCFG {
 	}
 
 	@Bean
-    public OpenApiCustomiser disableAdditionalResponseProperties() {
-        return openApi -> openApi.getComponents().
-            getSchemas().
-            values().
-            forEach( s -> s.setAdditionalProperties(false));
-    }
+	public OpenApiCustomiser disableAdditionalResponseProperties() {
+		return openApi -> openApi.getComponents().
+				getSchemas().
+				values().
+				forEach( s -> s.setAdditionalProperties(false));
+	}
 
 	@Bean
-    public OpenApiCustomiser binaryProperties() {
-        return openApi -> openApi
-			.getComponents()
-			.getSchemas()
-            .values()
-            .forEach(item -> {
-                if(item.getName().equalsIgnoreCase("binary")) {
-					item.getProperties().values().forEach(property -> {
-						if(((Schema) property).getName().equalsIgnoreCase("type")){
-							((Schema<Object>) property).setMaxLength(DEFAULT_BINARY_MAX_SIZE);
-							((Schema<Object>) property).setMinLength(DEFAULT_BINARY_MIN_SIZE);
-						} else if(((Schema) property).getName().equalsIgnoreCase("data")){
-							((Schema<Object>) property).setMaxItems(DEFAULT_ARRAY_MAX_SIZE);
-							((Schema<Object>) property).setMinItems(DEFAULT_ARRAY_MIN_SIZE);
-							((ArraySchema) property).getItems().setMaxLength(DEFAULT_ARRAY_MAX_SIZE);
-							((ArraySchema) property).getItems().setMinLength(DEFAULT_ARRAY_MIN_SIZE);
-							System.out.println("Binary data setted");
-						}
-					});
-				}
-			});
-}
+	public OpenApiCustomiser binaryProperties() {
+		return openApi -> openApi
+				.getComponents()
+				.getSchemas()
+				.values()
+				.forEach(item -> {
+					if(item.getName().equalsIgnoreCase("binary")) {
+						item.getProperties().values().forEach(property -> {
+							if(((Schema) property).getName().equalsIgnoreCase("type")){
+								((Schema<Object>) property).setMaxLength(DEFAULT_BINARY_MAX_SIZE);
+								((Schema<Object>) property).setMinLength(DEFAULT_BINARY_MIN_SIZE);
+							} else if(((Schema) property).getName().equalsIgnoreCase("data")){
+								((Schema<Object>) property).setMaxItems(DEFAULT_ARRAY_MAX_SIZE);
+								((Schema<Object>) property).setMinItems(DEFAULT_ARRAY_MIN_SIZE);
+								((ArraySchema) property).getItems().setMaxLength(DEFAULT_ARRAY_MAX_SIZE);
+								((ArraySchema) property).getItems().setMinLength(DEFAULT_ARRAY_MIN_SIZE);
+								System.out.println("Binary data setted");
+							}
+						});
+					}
+				});
+	}
 
-	
+
 	@Bean
 	public OpenApiCustomiser openApiCustomiser() {
 
@@ -98,15 +100,12 @@ public class OpenApiCFG {
 			// Adding servers
 			final List<Server> servers = new ArrayList<>();
 			final Server devServer = new Server();
-			devServer.setDescription("Gateway Dispatcher Development URL");
+			devServer.setDescription("Dictionary Development URL");
 			devServer.setUrl("http://localhost:" + customOpenapi.getPort());
 			devServer.addExtension("x-sandbox", true);
 
 			servers.add(devServer);
 			openApi.setServers(servers);
-
-			//openApi.getComponents().getSchemas().values().forEach(this::setAdditionalProperties);
-
 
 			openApi.getPaths().values().stream().filter(item -> item.getPost() != null).forEach(item -> {
 
@@ -115,44 +114,54 @@ public class OpenApiCFG {
 					MediaType mediaType = rb.getContent().get(org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE);
 					if(mediaType != null) {
 						final Schema<MediaType> schema = mediaType.getSchema();
-				
 						schema.additionalProperties(false);
-						if(schema.getProperties().get("content_schematron") != null){
-							schema.getProperties().get("content_schematron").setMaxLength(customOpenapi.getFileMaxLength());
-						}
 					}
 				}
 			});
 
 			openApi.getPaths().values().stream().filter(item -> item.getPut() != null).forEach(item -> {
-
 				final Schema<MediaType> schema = item.getPut().getRequestBody().getContent().get(org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE).getSchema();
-
 				schema.additionalProperties(false);
-				if(schema.getProperties().get("content_schematron") != null){
-					schema.getProperties().get("content_schematron").setMaxLength(customOpenapi.getFileMaxLength());
-				}
-
 			});
+			
+			//START 
+			SecurityScheme jwtScheme = new SecurityScheme()
+			        .name(Constants.Headers.JWT_BUSINESS_HEADER)
+			        .type(SecurityScheme.Type.APIKEY)
+			        .in(SecurityScheme.In.HEADER);
+			openApi.getComponents().addSecuritySchemes(Constants.Headers.JWT_BUSINESS_HEADER, jwtScheme);
+			
+			SecurityScheme authScheme = new SecurityScheme()
+			        .type(SecurityScheme.Type.HTTP)
+			        .bearerFormat("JWT")
+			        .scheme("bearer")
+			        .description("JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token} [RFC8725](https://tools.ietf.org/html/RFC8725).\"");
+			        
+			openApi.getComponents().addSecuritySchemes("bearerAuth", authScheme);
 
-
-
-
+			
+			List<SecurityRequirement> securityReqGOV = Arrays.asList(
+					new SecurityRequirement().addList("bearerAuth"),
+					new SecurityRequirement().addList(Constants.Headers.JWT_BUSINESS_HEADER));
+			
+			// Add security requirements to the two endpoints that require jwt
+//			openApi.getPaths().get("/v1/certificate/revoke/multi").getPost()
+//			.security(securityReqGOV);
 		};
 	}
 
 	private void disableAdditionalPropertiesToMultipart(Content content) {
-        if (content.containsKey(MULTIPART_FORM_DATA_VALUE)) {
-            content.get(MULTIPART_FORM_DATA_VALUE).getSchema().setAdditionalProperties(false);
-        }
-    }
+		if (content.containsKey(MULTIPART_FORM_DATA_VALUE)) {
+			content.get(MULTIPART_FORM_DATA_VALUE).getSchema().setAdditionalProperties(false);
+		}
+	}
 
 	private void setAdditionalProperties(Schema<?> schema) {
 		if (schema == null) return;
 		schema.setAdditionalProperties(false);
 		handleSchema(schema);
 	}
-	
+
 	private void handleSchema(Schema<?> schema) {
 		getProperties(schema).forEach(this::handleArraySchema);
 		handleArraySchema(schema);
@@ -170,15 +179,14 @@ public class OpenApiCFG {
 	}
 
 	private <T> T getSchema(Schema<?> schema, Class<T> clazz) {
-	    try { return clazz.cast(schema); }
-	    catch(ClassCastException e) { return null; }
+		try { return clazz.cast(schema); }
+		catch(ClassCastException e) { return null; }
 	}
 
-	   @Bean
-	    public MappingJackson2HttpMessageConverter octetStreamJsonConverter() {
-	        MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
-	        converter.setSupportedMediaTypes(
-	                Collections.singletonList(org.springframework.http.MediaType.APPLICATION_OCTET_STREAM));
-	        return converter;
-	    }
+	@Bean
+	public MappingJackson2HttpMessageConverter octetStreamJsonConverter() {
+		MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
+		converter.setSupportedMediaTypes(Collections.singletonList(org.springframework.http.MediaType.APPLICATION_OCTET_STREAM));
+		return converter;
+	}
 }

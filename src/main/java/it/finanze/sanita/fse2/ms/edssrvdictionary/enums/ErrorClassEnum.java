@@ -18,6 +18,7 @@ public enum ErrorClassEnum {
 	VALIDATION_MANDATORY("/errors/fields", "Missing", "Campo obbligatorio non presente", "/mandatory"),
 	VALIDATION_WRONG_EXTENSION("/errors/fields", "Valore errato", "Estensione file errata", "/mandatory"),
 	VALIDATION_REQUEST("/errors/fields", "Valore errato", "Valorizzare correttamente la request", "/mandatory"),
+	VALIDATION_WRONG_TOKEN("/errors/fields", "Token jwt errato", "Token jwt errato", "/mandatory"),
     TIMEOUT("/errors", "Timeout", "Errore di timeout", "/timeout");
 
 

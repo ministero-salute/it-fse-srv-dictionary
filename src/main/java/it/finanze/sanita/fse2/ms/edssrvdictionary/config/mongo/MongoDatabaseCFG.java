@@ -24,7 +24,6 @@ import it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants;
  * Factory to create database instances
  */
 @Configuration
-@EnableMongoRepositories(basePackages = Constants.ComponentScan.CONFIG_MONGO)
 public class MongoDatabaseCFG {
 
 

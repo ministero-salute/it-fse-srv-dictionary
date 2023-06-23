@@ -2,7 +2,6 @@ package it.finanze.sanita.fse2.ms.edssrvdictionary.controller;
 
 import static it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Logs.ERR_VAL_SYSTEM_BLANK;
 import static it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Logs.ERR_VAL_URL_BLANK;
-import static it.finanze.sanita.fse2.ms.edssrvdictionary.utility.RoutesUtility.API_WEB_DELETE_MULTI;
 import static it.finanze.sanita.fse2.ms.edssrvdictionary.utility.RoutesUtility.API_WEB_DELETE_SYSTEM;
 import static it.finanze.sanita.fse2.ms.edssrvdictionary.utility.RoutesUtility.API_WEB_INSERT_MULTI;
 import static it.finanze.sanita.fse2.ms.edssrvdictionary.utility.RoutesUtility.API_WEB_SCRAPING;

@@ -14,6 +14,14 @@ public class ProfileUtility {
     @Autowired
     private Environment environment;
 
+    public boolean isDevOrDockerProfile() {
+        if (environment != null && environment.getActiveProfiles().length > 0) {
+            return environment.getActiveProfiles()[0].toLowerCase().contains(Constants.Profile.DEV) ||
+            		environment.getActiveProfiles()[0].toLowerCase().contains(Constants.Profile.DOCKER);
+        }
+        return false;
+    }
+    
     public boolean isTestProfile() {
         if (environment != null && environment.getActiveProfiles().length > 0) {
             return environment.getActiveProfiles()[0].toLowerCase().contains(Constants.Profile.TEST);

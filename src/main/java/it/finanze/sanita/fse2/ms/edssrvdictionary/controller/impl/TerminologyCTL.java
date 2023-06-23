@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import it.finanze.sanita.fse2.ms.edssrvdictionary.controller.AbstractCTL;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.controller.ITerminologyCTL;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.JWTTokenDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.RequestDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.crud.DelDocsResDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.crud.PostDocsResDTO;
@@ -27,6 +28,7 @@ import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DocumentNotFoundExc
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.InvalidContentException;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.OperationException;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.service.ITerminologySRV;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.utility.ProfileUtility;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.utility.ValidationUtility;
 
 
@@ -37,12 +39,17 @@ import it.finanze.sanita.fse2.ms.edssrvdictionary.utility.ValidationUtility;
 @Validated
 public class TerminologyCTL extends AbstractCTL implements ITerminologyCTL {
 
-	
-    @Autowired
-    private ITerminologySRV service;
+	@Autowired
+	private ITerminologySRV service;
 
-    @Override
+	@Autowired
+	private ProfileUtility profileUtility;
+
+	@Override
 	public PostDocsResDTO uploadTerminology(FormatEnum format, @Valid RequestDTO creationInfo, MultipartFile file,HttpServletRequest request) throws OperationException, DocumentAlreadyPresentException,DataProcessingException, InvalidContentException, IOException {
+		JWTTokenDTO jwt = JWTTokenDTO.extractPayload(request , profileUtility.isDevOrDockerProfile());
+		JWTTokenDTO.uploadTerminologyValidatePayload(jwt, file);
+
 		LogTraceInfoDTO traceInfoDTO = getLogTraceInfo();
 		ValidationUtility.validateFileExtension(format, file);
 		ValidationUtility.validRequiredReqBody(format, creationInfo);
@@ -51,7 +58,7 @@ public class TerminologyCTL extends AbstractCTL implements ITerminologyCTL {
 		out.setTraceID(traceInfoDTO.getTraceID());
 		return out;
 	}
-	
+
 	/**
 	 * Delete terminologies matching system
 	 * @param system System identifier
@@ -61,9 +68,11 @@ public class TerminologyCTL extends AbstractCTL implements ITerminologyCTL {
 	 * @throws DataIntegrityException If database output is not the expected one
 	 * @throws DocumentAlreadyPresentException 
 	 */
-    @Override
-	public DelDocsResDTO deleteTerminologies(String oid,String version)throws OperationException, DocumentNotFoundException, DataIntegrityException, DocumentAlreadyPresentException {
+	@Override
+	public DelDocsResDTO deleteTerminologies(String oid,String version,HttpServletRequest request)throws OperationException, DocumentNotFoundException, DataIntegrityException, DocumentAlreadyPresentException {
+		JWTTokenDTO jwt = JWTTokenDTO.extractPayload(request , profileUtility.isDevOrDockerProfile());
+		JWTTokenDTO.deleteTerminologyValidatePayload(jwt);
 		return new DelDocsResDTO(getLogTraceInfo(), service.deleteTerminologiesBySystem(oid,version));	
 	}
-	 
+
 }

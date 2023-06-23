@@ -30,6 +30,8 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.security.SecurityRequirements;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.RequestDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.crud.DelDocsResDTO;
@@ -52,6 +54,9 @@ public interface ITerminologyCTL {
 
 	@PostMapping(path = "/{format}", produces = { MediaType.APPLICATION_JSON_VALUE }, consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
 	@Operation(summary = "Upload avvenuta con successo", description = "Upload avvenuta con successo.")
+	@SecurityRequirements({
+		@SecurityRequirement(name = "bearerAuth"),
+		@SecurityRequirement(name = "FSE-JWT-A")})
 	@ApiResponse(content = @Content(mediaType = MediaType.APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = ErrorResponseDTO.class)))
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "201", description = "Documenti caricati correttamente", content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = PostDocsResDTO.class))),
@@ -73,6 +78,7 @@ public interface ITerminologyCTL {
 	})
 	DelDocsResDTO deleteTerminologies(
 			@PathVariable@Parameter(description = "Identificatore del dizionario")@NotBlank(message = ERR_VAL_SYSTEM_BLANK)String oid,
-			@PathVariable@Parameter(description = "Identificatore della version del dizionario")@NotBlank(message = ERR_VAL_SYSTEM_BLANK)String version) throws OperationException, DocumentNotFoundException, DataIntegrityException, DocumentAlreadyPresentException;
+			@PathVariable@Parameter(description = "Identificatore della version del dizionario")@NotBlank(message = ERR_VAL_SYSTEM_BLANK)String version,
+			HttpServletRequest request) throws OperationException, DocumentNotFoundException, DataIntegrityException, DocumentAlreadyPresentException;
 	 
 }
