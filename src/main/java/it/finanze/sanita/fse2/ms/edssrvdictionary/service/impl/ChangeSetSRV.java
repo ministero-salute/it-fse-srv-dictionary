@@ -9,7 +9,7 @@ import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes.query.His
 import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.IChunksRepo;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.resources.ChunkETY;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.resources.ChunksIndexETY;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.service.IHistorySRV;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.service.IChangeSetSRV;
 import lombok.extern.slf4j.Slf4j;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +24,7 @@ import static it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes.qu
 
 @Service
 @Slf4j
-public class HistorySRV implements IHistorySRV {
+public class ChangeSetSRV implements IChangeSetSRV {
 
     private static final int CHUNK_SIZE = 1;
 

@@ -29,7 +29,7 @@ public interface IChangeSetCTL {
 
 	@GetChangeSetChunks
 	@GetMapping(API_CHANGESET_CHUNKS)
-	@Tag(name = API_CHANGESET_CHUNKS_TAG)
+	@Tag(name = API_CHANGESET_TAG)
 	ChangeSetDTO changeSet(
 		@RequestParam(value=API_QP_LAST_UPDATE, required = false)
 		@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)

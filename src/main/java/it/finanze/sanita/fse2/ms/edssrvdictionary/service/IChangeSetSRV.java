@@ -4,7 +4,7 @@ import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes.query.His
 
 import java.util.Date;
 
-public interface IHistorySRV {
+public interface IChangeSetSRV {
 
     HistoryDTO history(Date lastUpdate);
 

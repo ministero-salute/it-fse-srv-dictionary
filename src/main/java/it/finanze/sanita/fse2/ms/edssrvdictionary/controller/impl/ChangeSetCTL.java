@@ -8,7 +8,7 @@ import it.finanze.sanita.fse2.ms.edssrvdictionary.controller.IChangeSetCTL;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes.ChangeSetDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes.query.HistoryDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.log.LogTraceInfoDTO;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.service.IHistorySRV;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.service.IChangeSetSRV;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -21,7 +21,7 @@ import java.util.Date;
 public class ChangeSetCTL extends AbstractCTL implements IChangeSetCTL {
 
     @Autowired
-    private IHistorySRV service;
+    private IChangeSetSRV service;
 
     /**
      * @param lastUpdate the last updated date
