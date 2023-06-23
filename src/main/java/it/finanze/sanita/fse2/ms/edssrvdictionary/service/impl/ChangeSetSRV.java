@@ -115,7 +115,7 @@ public class ChangeSetSRV implements IChangeSetSRV {
     }
 
     private List<ChunkETY> generateChunks(ObjectId root, HistoryResourceDTO res) {
-        log.debug("[{}] Starting chunks generation", res);
+        log.debug("[{}] Starting chunks generation", res.info());
         // Hold chunks references
         List<ChunkETY> chunks = new ArrayList<>();
         // Get values
@@ -126,7 +126,7 @@ public class ChangeSetSRV implements IChangeSetSRV {
             List<List<ResourceItemDTO>> partition = Lists.partition(values, CHUNK_SIZE);
             // Iterate
             for (int idx = 0; idx < partition.size(); idx++) {
-                log.debug("[{}] Generating chunk {}/{}", res, idx + 1, partition.size());
+                log.debug("[{}] Generating chunk {}/{}", res.info(), idx + 1, partition.size());
                 // Get chunk items
                 List<ResourceItemDTO> items = partition.get(idx);
                 // Create chunk
@@ -140,9 +140,9 @@ public class ChangeSetSRV implements IChangeSetSRV {
                 chunks.add(instance);
             }
         } else {
-            log.debug("Resource {} is empty, no chunks will be generated", res);
+            log.debug("Resource {} is empty, no chunks will be generated", res.info());
         }
-        log.debug("[{}] Finishing chunk generation", res);
+        log.debug("[{}] Finishing chunk generation", res.info());
         return chunks;
     }
 

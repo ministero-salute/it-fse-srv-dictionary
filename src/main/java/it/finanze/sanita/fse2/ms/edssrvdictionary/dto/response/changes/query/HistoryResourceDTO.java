@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.List;
 
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes.query.HistoryDTO.HistoryInsertDTO;
 
 @Data
 @JsonInclude(NON_NULL)
@@ -39,6 +40,14 @@ public class HistoryResourceDTO {
     public static class ResourceItemDTO {
         String code;
         String display;
+    }
+
+    public HistoryInsertDTO info() {
+        HistoryInsertDTO obj = new HistoryInsertDTO();
+        obj.setId(resourceId);
+        obj.setVersion(versionId);
+        obj.setType(meta.type);
+        return obj;
     }
 
 }

@@ -10,7 +10,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import static it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes.query.HistoryResourceDTO.ResourceMetaDTO;
 
-@Document(collection = "#{@chunksIndexBean}")
+@Document(collection = "#{@chunkBean}")
 @Data
 public class ChunkETY {
 

@@ -30,7 +30,7 @@ public final class QueryClientRoutes {
 
     public String resource(String resourceId, String versionId) {
         return base()
-            .pathSegment(API_VERSION, RESOURCE_PATH, resourceId, versionId)
+            .pathSegment(API_VERSION, HISTORY_PATH, RESOURCE_PATH, resourceId, versionId)
             .build()
             .toUriString();
     }

@@ -3,6 +3,8 @@ package it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes.query;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Date;
 import java.util.List;
@@ -26,11 +28,17 @@ public class HistoryDTO {
     List<HistoryInsertDTO> insertions;
     List<HistoryDeleteDTO> deletions;
 
-    @Data
+    @Getter
+    @Setter
     public static class HistoryInsertDTO {
         String id;
         String version;
         String type;
+
+        @Override
+        public String toString() {
+            return String.format("%s|%s/%s", type.substring(0, 3), id, version);
+        }
     }
 
     @Data
