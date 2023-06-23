@@ -5,22 +5,18 @@ package it.finanze.sanita.fse2.ms.edssrvdictionary.service;
 
 
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.RequestDTO;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes.query.HistoryDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.crud.PostDocsResDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.enums.FormatEnum;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.Date;
 
 /**
  *
  *	Vocabulary interface service.
  */
-public interface ITerminologySRV extends IChangeSetSRV {
-
-	HistoryDTO getHistory(Date lastUpdate);
+public interface ITerminologySRV {
 
 	/**
 	 * Insert terminologies inside the database using a .csv file

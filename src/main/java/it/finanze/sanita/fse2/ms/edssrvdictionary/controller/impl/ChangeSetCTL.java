@@ -8,8 +8,7 @@ import it.finanze.sanita.fse2.ms.edssrvdictionary.controller.IChangeSetCTL;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes.ChangeSetDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes.query.HistoryDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.log.LogTraceInfoDTO;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.OperationException;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.service.ITerminologySRV;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.service.IHistorySRV;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -19,21 +18,20 @@ import java.util.Date;
  * 
  */
 @RestController
-public class ChangeSetCTL extends AbstractCTL implements IChangeSetCTL{
+public class ChangeSetCTL extends AbstractCTL implements IChangeSetCTL {
 
     @Autowired
-    private ITerminologySRV terminologySRV;
+    private IHistorySRV service;
 
     /**
      * @param lastUpdate the last updated date
      * 
      * @return the changeset chunks of the current time according to the last update
-     * @throws OperationException If a data-layer error occurs
      */
     @Override
-    public ChangeSetDTO changeSet(Date lastUpdate) throws OperationException {
+    public ChangeSetDTO changeSet(Date lastUpdate) {
 
-        HistoryDTO history = terminologySRV.getHistory(lastUpdate);
+        HistoryDTO history = service.history(lastUpdate);
         ChangeSetDTO response = new ChangeSetDTO();
         LogTraceInfoDTO info = getLogTraceInfo();
         response.setSpanID(info.getSpanID());
@@ -42,7 +40,7 @@ public class ChangeSetCTL extends AbstractCTL implements IChangeSetCTL{
         response.setTimestamp(history.getTimestamp());
         response.setInsertions(history.getInsertions());
         response.setDeletions(history.getDeletions());
-        response.setCollectionSize(terminologySRV.getCollectionSize());
+        response.setCollectionSize(service.size());
 
         return response;
     }
