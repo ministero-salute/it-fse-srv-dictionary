@@ -21,6 +21,10 @@ public abstract class AbstractChunkResources {
     private static final SecureRandom generator = new SecureRandom();
 
     protected TestResource createResource(String type, @Nullable Date deleted) {
+        return createResource(type, deleted, new Date());
+    }
+
+    protected TestResource createResource(String type, @Nullable Date deleted, Date insertionDate) {
         List<ChunkETY> chunks = new ArrayList<>();
         // Generate fake index
         ChunksIndexETY index = generateIndex(type, deleted);
@@ -31,7 +35,7 @@ public abstract class AbstractChunkResources {
         // Iterate
         for(int i = 0; i < size; ++i) {
             // Generate fake chunk
-            ChunkETY e = generateChunk(index, i);
+            ChunkETY e = generateChunk(index, i, insertionDate);
             // Add id to index
             index.getChunks().add(e.getId());
             // Save chunk
@@ -56,7 +60,7 @@ public abstract class AbstractChunkResources {
         );
     }
 
-    private ChunkETY generateChunk(ChunksIndexETY index, int idx) {
+    private ChunkETY generateChunk(ChunksIndexETY index, int idx, Date insertedAt) {
         ChunkETY chunk = new ChunkETY(
             index.getMeta(),
             new ResChunkETY(
@@ -67,6 +71,7 @@ public abstract class AbstractChunkResources {
             )
         );
         chunk.setId(new ObjectId());
+        chunk.setInsertedAt(insertedAt);
         return chunk;
     }
 
@@ -99,6 +104,12 @@ public abstract class AbstractChunkResources {
     public static class TestResource {
         ChunksIndexETY index;
         List<ChunkETY> chunks;
+    }
+
+    @Value
+    public static class TestSetting {
+        TestResource resource;
+        boolean omitIndex;
     }
 
 }

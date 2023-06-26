@@ -43,6 +43,8 @@ public class ChunksRepositoryTest extends AbstractChunkResources {
         mongo.dropCollection(ChunkETY.class);
     }
 
+    // *** DATA REMOVER ***
+
     @Test
     void shouldRemoveNoIndex() {
         // Args
@@ -51,7 +53,10 @@ public class ChunksRepositoryTest extends AbstractChunkResources {
             createResource("valueset", null)
         };
         // Generate active chunks
-        insert(res);
+        insert(
+            new TestSetting(res[0], false),
+            new TestSetting(res[1], false)
+        );
         // Execute
         assertDoesNotThrow(() -> {
             // Retrieve removed chunks
@@ -72,7 +77,10 @@ public class ChunksRepositoryTest extends AbstractChunkResources {
             createResource("valueset", getDateBeforeHours(REMOVE_AFTER_X_HOURS + 3))
         };
         // Generate active chunks
-        int size = insert(res);
+        int size = insert(
+            new TestSetting(res[0], false),
+            new TestSetting(res[1], false)
+        );
         // Execute
         assertDoesNotThrow(() -> {
             // Retrieve removed chunks
@@ -93,7 +101,10 @@ public class ChunksRepositoryTest extends AbstractChunkResources {
             createResource("valueset", getDateBeforeHours(REMOVE_AFTER_X_HOURS - 3))
         };
         // Generate active chunks
-        int size = insert(res);
+        int size = insert(
+            new TestSetting(res[0], false),
+            new TestSetting(res[1], false)
+        );
         // Execute
         assertDoesNotThrow(() -> {
             // Retrieve removed chunks
@@ -103,6 +114,80 @@ public class ChunksRepositoryTest extends AbstractChunkResources {
             // Verify existence
             assertResourceExists(res[0], false);
             assertResourceExists(res[1], true);
+        });
+    }
+
+    // *** ORPHAN CHUNKS REMOVER ***
+
+    @Test
+    void shouldRemoveNoChunk() {
+        // Args
+        TestResource[] res = new TestResource[] {
+            createResource("codesystem", null),
+            createResource("valueset", null)
+        };
+        // Generate active chunks
+        insert(
+            new TestSetting(res[0], false),
+            new TestSetting(res[1], false)
+        );
+        // Execute
+        assertDoesNotThrow(() -> {
+            // Retrieve removed chunks
+            List<ObjectId> indexes = repository.removeOrphanChunks();
+            // Check
+            assertTrue(indexes.isEmpty());
+            // Verify exists
+            assertResourceExists(res[0], true);
+            assertResourceExists(res[1], true);
+        });
+    }
+
+    @Test
+    void shouldRemoveOneChunk() {
+        // Args
+        TestResource[] res = new TestResource[] {
+            createResource("codesystem", null),
+            createResource("valueset", null, getDateBeforeHours(REMOVE_AFTER_X_HOURS + 3))
+        };
+        // Generate chunks
+        int size = insert(
+            new TestSetting(res[0], false),
+            new TestSetting(res[1], true)
+        );
+        // Execute
+        assertDoesNotThrow(() -> {
+            // Retrieve removed chunks
+            List<ObjectId> indexes = repository.removeOrphanChunks();
+            // Check
+            assertEquals(size - 1, indexes.size());
+            // Verify exists
+            assertResourceExists(res[0], true);
+            assertResourceExists(res[1], false);
+        });
+    }
+
+    @Test
+    void shouldRemoveAllChunks() {
+        // Args
+        TestResource[] res = new TestResource[] {
+            createResource("codesystem", null, getDateBeforeHours(REMOVE_AFTER_X_HOURS + 1)),
+            createResource("valueset", null, getDateBeforeHours(REMOVE_AFTER_X_HOURS + 3))
+        };
+        // Generate chunks
+        int size = insert(
+            new TestSetting(res[0], true),
+            new TestSetting(res[1], true)
+        );
+        // Execute
+        assertDoesNotThrow(() -> {
+            // Retrieve removed chunks
+            List<ObjectId> indexes = repository.removeOrphanChunks();
+            // Check
+            assertEquals(size, indexes.size());
+            // Verify not exists in collection
+            assertResourceExists(res[0], false);
+            assertResourceExists(res[1], false);
         });
     }
 
@@ -127,12 +212,19 @@ public class ChunksRepositoryTest extends AbstractChunkResources {
     boolean exists(Class<?> clazz, ObjectId id) {
         return mongo.exists(new Query(where("_id").is(id)), clazz);
     }
-    int insert(TestResource ...res) {
-        for (TestResource r : res) {
-            mongo.insert(r.getIndex());
-            mongo.insertAll(r.getChunks());
+
+    int insert(boolean omitIndex, TestResource res) {
+        if (!omitIndex) mongo.insert(res.getIndex());
+        mongo.insertAll(res.getChunks());
+        return 1;
+    }
+
+    int insert(TestSetting ...res) {
+        int size = 0;
+        for (TestSetting r : res) {
+            size += insert(r.isOmitIndex(), r.getResource());
         }
-        return res.length;
+        return size;
     }
 
     @AfterAll
