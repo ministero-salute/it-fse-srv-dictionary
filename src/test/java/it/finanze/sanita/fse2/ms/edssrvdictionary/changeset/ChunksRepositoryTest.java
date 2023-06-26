@@ -144,6 +144,30 @@ public class ChunksRepositoryTest extends AbstractChunkResources {
     }
 
     @Test
+    void shouldRemoveNoChunkDespiteMissingIndex() {
+        // Args
+        TestResource[] res = new TestResource[] {
+            createResource("codesystem", null),
+            createResource("valueset", null)
+        };
+        // Generate active chunks
+        insert(
+            new TestSetting(res[0], true),
+            new TestSetting(res[1], true)
+        );
+        // Execute
+        assertDoesNotThrow(() -> {
+            // Retrieve removed chunks
+            List<ObjectId> indexes = repository.removeOrphanChunks();
+            // Check
+            assertTrue(indexes.isEmpty());
+            // Verify exists
+            assertResourceExists(res[0], true, true);
+            assertResourceExists(res[1], true, true);
+        });
+    }
+
+    @Test
     void shouldRemoveOneChunk() {
         // Args
         TestResource[] res = new TestResource[] {
@@ -192,13 +216,19 @@ public class ChunksRepositoryTest extends AbstractChunkResources {
     }
 
     void assertResourceExists(TestResource e, boolean expected) {
+        assertResourceExists(e, expected, false);
+    }
+
+    void assertResourceExists(TestResource e, boolean expected, boolean omitIndexCheck) {
         String verb = expected ? "doesn't" : "does";
-        // Check index exists
-        assertEquals(
-            expected,
-            exists(ChunksIndexETY.class, e.getIndex().getId()),
-            String.format("Expected index %s exists", verb)
-        );
+        if(!omitIndexCheck) {
+            // Check index exists
+            assertEquals(
+                expected,
+                exists(ChunksIndexETY.class, e.getIndex().getId()),
+                String.format("Expected index %s exists", verb)
+            );
+        }
         // Check chunks exists
         for (ChunkETY chunk : e.getChunks()) {
             assertEquals(
