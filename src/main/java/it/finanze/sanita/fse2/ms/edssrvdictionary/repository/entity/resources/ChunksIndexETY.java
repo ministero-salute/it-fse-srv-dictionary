@@ -18,8 +18,10 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class ChunksIndexETY {
 
+    public static final String FIELD_IDX_ID = "_id";
     public static final String FIELD_IDX_RESOURCE = "resource";
     public static final String FIELD_IDX_VERSION = "version";
+    public static final String FIELD_IDX_CHUNKS = "chunks";
     public static final String FIELD_IDX_DELETED_AT = "deleted_at";
     public static final String FIELD_IDX_SIZE = "size";
 
@@ -30,6 +32,7 @@ public class ChunksIndexETY {
     @Field(FIELD_IDX_VERSION)
     private String version;
     private ResMetaETY meta;
+    @Field(FIELD_IDX_CHUNKS)
     private List<ObjectId> chunks;
     @Field(FIELD_IDX_SIZE)
     private long size;

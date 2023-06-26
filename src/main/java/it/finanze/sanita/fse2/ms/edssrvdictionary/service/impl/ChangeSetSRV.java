@@ -50,6 +50,11 @@ public class ChangeSetSRV implements IChangeSetSRV {
         return repository.getActiveItems();
     }
 
+    @Override
+    public List<ChunksIndexETY> clearIndexes() {
+        return repository.removeIndexes();
+    }
+
     private synchronized void syncAt(HistoryDTO history) {
         log.debug("Starting synchronization with history");
         resourcesToRemove(history.getDeletions());
@@ -63,7 +68,7 @@ public class ChangeSetSRV implements IChangeSetSRV {
             // Get item
             HistoryDeleteDTO item = deletions.get(i);
             // Remove
-            repository.markToRemove(item.getId(), item.getOmit());
+            repository.markIndexAsRemovable(item.getId(), item.getOmit());
             // Check for omission
             if(item.getOmit() != null) {
                 log.debug(
