@@ -34,7 +34,7 @@ import static org.springframework.data.mongodb.core.query.Criteria.where;
 @Slf4j
 public class ChunksRepo implements IChunksRepo {
 
-    private static final int REMOVE_AFTER_X_HOURS = 1;
+    public static final int REMOVE_AFTER_X_HOURS = 12;
 
     @Autowired
     private MongoTemplate mongo;
@@ -99,7 +99,7 @@ public class ChunksRepo implements IChunksRepo {
         // Remove chunks after X hours have passed
         Query q = new Query(
             where(FIELD_IDX_DELETED_AT).not().isNullValue().
-            and(FIELD_IDX_DELETED_AT).lt(getDateOffsetForRemove())
+            andOperator(where(FIELD_IDX_DELETED_AT).lt(getDateOffsetForRemove()))
         );
         // Iterate each document
         List<ChunksIndexETY> documents = mongo.find(q, ChunksIndexETY.class);
