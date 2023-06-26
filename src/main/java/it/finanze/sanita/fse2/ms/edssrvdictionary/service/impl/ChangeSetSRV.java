@@ -55,6 +55,11 @@ public class ChangeSetSRV implements IChangeSetSRV {
         return repository.removeIndexes();
     }
 
+    @Override
+    public List<ObjectId> clearOrphanChunks() {
+        return repository.removeOrphanChunks();
+    }
+
     private synchronized void syncAt(HistoryDTO history) {
         log.debug("Starting synchronization with history");
         resourcesToRemove(history.getDeletions());

@@ -13,6 +13,8 @@ import static it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes.qu
 @AllArgsConstructor
 public class ResChunkETY {
 
+    public static final String FIELD_CK_ROOT = "chunk.root";
+
     private ObjectId root;
     private long idx;
     private List<ResourceItemDTO> values;

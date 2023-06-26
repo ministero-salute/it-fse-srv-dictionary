@@ -19,14 +19,13 @@ import org.springframework.stereotype.Repository;
 
 import javax.annotation.Nullable;
 import java.time.Instant;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 import static com.mongodb.client.model.Accumulators.sum;
 import static com.mongodb.client.model.Aggregates.*;
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.resources.ChunkETY.FIELD_CK_INSERTED_AT;
 import static it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.resources.ChunksIndexETY.*;
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.resources.base.ResChunkETY.FIELD_CK_ROOT;
 import static java.time.temporal.ChronoUnit.HOURS;
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 
@@ -127,6 +126,37 @@ public class ChunksRepo implements IChunksRepo {
         }
 
         return documents;
+    }
+
+    @Override
+    public List<ObjectId> removeOrphanChunks() {
+        // Hold reference of removed root id
+        List<ObjectId> ids = new ArrayList<>();
+        // Retrieve every root id where chunk has been there for at least x hours
+        List<ObjectId> root = mongo.findDistinct(
+            new Query(where(FIELD_CK_INSERTED_AT).lt(getDateOffsetForRemove())),
+            FIELD_CK_ROOT,
+            ChunkETY.class,
+            ObjectId.class
+        );
+        // Iterate every root object
+        for (ObjectId id : root) {
+            // Check if exists
+            boolean exists = mongo.exists(
+                new Query(where(FIELD_IDX_ID).is(id)),
+                ChunksIndexETY.class
+            );
+            // If it doesn't we can clean every chunk referencing it
+            if(!exists) {
+                mongo.remove(
+                    new Query(where(FIELD_CK_ROOT).is(id)),
+                    ChunkETY.class
+                );
+                // Add to refs
+                ids.add(id);
+            }
+        }
+        return ids;
     }
 
     private Date getDateOffsetForRemove() {
