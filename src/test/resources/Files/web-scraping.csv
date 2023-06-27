@@ -1,10 +1,10 @@
-"system";"url"
-"2.16.840.1.113883.1.11.12839";"url": "https://terminology.hl7.org/2.1.0/ValueSet-v3-UnitsOfMeasureCaseSensitive.json"
-"2.16.840.1.113883.5.1";"https://terminology.hl7.org/3.1.0/CodeSystem-v3-AdministrativeGender.json"
-"2.16.840.1.113883.2.9.5.1.88";"url": "https://terminology.hl7.org/2.1.0/CodeSystem-v3-ParticipationFunction.json"
-"1.2.840.10008.2.16.4";"url": "https://www.hl7.org/fhir/R4/codesystem-dicom-dcim.json"
-"2.16.840.1.113883.4.642.3.912";"https://www.hl7.org/fhir/valueset-ucum-units.json"
-"2.16.840.1.113883.5.1063";"https://terminology.hl7.org/4.0.0/CodeSystem-v3-ObservationValue.json"
-"2.16.840.1.113883.5.25";"https://terminology.hl7.org/4.0.0/CodeSystem-v3-Confidentiality.json"
-"2.16.840.1.113883.5.7";"https://terminology.hl7.org/3.1.0/CodeSystem-v3-ActPriority.json"
-"2.16.840.1.113883.2.9.6.2.7";"http://hl7.org/fhir/uv/ips/STU1/ValueSet-healthcare-professional-roles-uv-ips.json"
+"system";"url";"force-draft"
+"2.16.840.1.113883.1.11.12839";"https://terminology.hl7.org/2.1.0/ValueSet-v3-UnitsOfMeasureCaseSensitive.json";false
+"2.16.840.1.113883.5.1";"https://terminology.hl7.org/3.1.0/CodeSystem-v3-AdministrativeGender.json";false
+"2.16.840.1.113883.2.9.5.1.88";"https://terminology.hl7.org/2.1.0/CodeSystem-v3-ParticipationFunction.json";false
+"1.2.840.10008.2.16.4";"https://www.hl7.org/fhir/R4/codesystem-dicom-dcim.json";false
+"2.16.840.1.113883.4.642.3.912";"https://www.hl7.org/fhir/valueset-ucum-units.json";false
+"2.16.840.1.113883.5.1063";"https://terminology.hl7.org/4.0.0/CodeSystem-v3-ObservationValue.json";false
+"2.16.840.1.113883.5.25";"https://terminology.hl7.org/4.0.0/CodeSystem-v3-Confidentiality.json";false
+"2.16.840.1.113883.5.7";"https://terminology.hl7.org/3.1.0/CodeSystem-v3-ActPriority.json";false
+"2.16.840.1.113883.2.9.6.2.7";"http://hl7.org/fhir/uv/ips/STU1/ValueSet-healthcare-professional-roles-uv-ips.json";false

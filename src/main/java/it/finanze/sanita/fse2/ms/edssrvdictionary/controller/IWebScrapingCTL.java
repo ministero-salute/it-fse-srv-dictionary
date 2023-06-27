@@ -59,7 +59,7 @@ public interface IWebScrapingCTL {
     WebScrapingPostSingleResDTO insertWebScraping(
         @PathVariable("system") @Parameter @NotBlank(message = ERR_VAL_SYSTEM_BLANK) String system,
         @PathVariable("url") @Parameter @NotBlank(message = ERR_VAL_URL_BLANK) String url,
-        @PathVariable("force-draft") @Parameter @NotBlank(message = ERR_VAL_URL_BLANK) Boolean forceDraft)
+        @RequestParam("force-draft") @Parameter Boolean forceDraft)
         throws OperationException, DocumentAlreadyPresentException;
 
     @PostMapping(value = API_WEB_INSERT_MULTI, produces = {MediaType.APPLICATION_JSON_VALUE}, consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})

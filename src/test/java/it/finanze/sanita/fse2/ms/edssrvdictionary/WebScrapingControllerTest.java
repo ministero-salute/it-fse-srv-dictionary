@@ -24,18 +24,17 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 
 import com.google.gson.Gson;
 
-import io.swagger.models.HttpMethod;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.crud.DelDocsResDTO;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.crud.PostDocsResDTO;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.webscraping.WebScrapingDeleteResDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.webscraping.WebScrapingPostSingleResDTO;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.webscraping.WebscrapingPostMultiResDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.WebScrapingETY;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.utility.FileUtility;
 
 @AutoConfigureMockMvc
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles(Constants.Profile.TEST)
-public class WebScrapingControllerTest {
+class WebScrapingControllerTest {
     
     @Autowired
     MockMvc mvc;
@@ -51,7 +50,8 @@ public class WebScrapingControllerTest {
     @ParameterizedTest
     @CsvSource({"systemTest1,urlTest1", "systemTest2,urlTest2", "systemTest3,urlTest3"})
     void insertSingleDocument(String system, String url) throws Exception {
-        MvcResult result = mvc.perform(post("/v1/web-scraping/{system}/{url}", system, url))
+        MvcResult result = mvc.perform(post("/v1/web-scraping/{system}/{url}", system, url)
+        	.param("force-draft", "false"))
             .andExpect(status().isCreated()).andReturn();
 
         WebScrapingPostSingleResDTO response = new Gson().fromJson(result.getResponse().getContentAsString(), WebScrapingPostSingleResDTO.class);
@@ -69,7 +69,7 @@ public class WebScrapingControllerTest {
         MvcResult result = mvc.perform(requestBuilder)
                 .andExpect(status().isCreated()).andReturn();
 
-        PostDocsResDTO response = new Gson().fromJson(result.getResponse().getContentAsString(), PostDocsResDTO.class);
+        WebscrapingPostMultiResDTO response = new Gson().fromJson(result.getResponse().getContentAsString(), WebscrapingPostMultiResDTO.class);
         assertEquals(9, response.getInsertedItems(), "The file contains 9 rows, the items inserted should be 9");
 
         List<WebScrapingETY> documents = getDocuments();
@@ -84,36 +84,11 @@ public class WebScrapingControllerTest {
         WebScrapingETY ety = new WebScrapingETY(null, system, url, true);
         mongoTemplate.insert(ety);
 
-        MvcResult result = mvc.perform(delete("/v1/web-scraping/delete/{system}", system))
+        MvcResult result = mvc.perform(delete("/v1/web-scraping/{system}", system))
         .andExpect(status().isOk()).andReturn();
 
-        DelDocsResDTO response = new Gson().fromJson(result.getResponse().getContentAsString(), DelDocsResDTO.class);
+        WebScrapingDeleteResDTO response = new Gson().fromJson(result.getResponse().getContentAsString(), WebScrapingDeleteResDTO.class);
         assertEquals(1, response.getDeletedItems());
-    }
-
-    @Test
-    void deleteByCSV() throws Exception {
-        byte[] file = FileUtility.getFileFromInternalResources("Files/web-scraping.csv");
-		// Parse entities
-		List<WebScrapingETY> entities = WebScrapingETY.fromCSV(file);
-        // Insert all documents in db
-        mongoTemplate.insertAll(entities);
-
-        MockHttpServletRequestBuilder requestBuilder = multipart("/v1/web-scraping/delete-multi")
-                .file(new MockMultipartFile("file", "web-scraping.csv", "text/csv", file))
-                .with(req -> {
-                    req.setMethod(HttpMethod.DELETE.name());
-                    return req;
-                });
-        
-        MvcResult result = mvc.perform(requestBuilder)
-                .andExpect(status().isOk()).andReturn();
-
-        DelDocsResDTO response = new Gson().fromJson(result.getResponse().getContentAsString(), DelDocsResDTO.class);
-        assertEquals(9, response.getDeletedItems(), "The file contains 9 rows, the items deleted should be 9");
-
-        List<WebScrapingETY> documents = getDocuments();
-        assertEquals(9, documents.size(), "The file contains 9 rows, the items deleted should be 9");
     }
 
     private List<WebScrapingETY> getDocuments() {
