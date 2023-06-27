@@ -38,7 +38,7 @@ public class JWTTokenDTO {
 		genericValidatePayload(jwtToken);
 	}
 	
-	public static void uploadTerminologyValidatePayload(final JWTTokenDTO jwtToken, MultipartFile multipartFile) {
+	public static void uploadTerminologyValidatePayload(final JWTTokenDTO jwtToken, RequestDTO creationInfo, MultipartFile multipartFile) {
 
 		genericValidatePayload(jwtToken);
 
@@ -46,6 +46,14 @@ public class JWTTokenDTO {
 			String hash =  StringUtility.encodeSHA256(multipartFile.getBytes());
 			if(!hash.equals(jwtToken.getFile_hash())) {
 				throw new TokenException("L'hash del valido risulta essere non valido ");
+			}
+			
+			if(!jwtToken.getOid().equals(creationInfo.getOid())) {
+				throw new TokenException("Oid del token diverso dalla request");
+			}
+			
+			if(!jwtToken.getVersion().equals(creationInfo.getVersion())) {
+				throw new TokenException("Version del token diverso dalla request");
 			}
 		} catch(Exception ex) {
 			throw new BusinessException("Generic error upload");

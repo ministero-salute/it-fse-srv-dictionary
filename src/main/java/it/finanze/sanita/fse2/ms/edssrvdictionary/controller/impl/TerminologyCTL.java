@@ -56,7 +56,7 @@ public class TerminologyCTL extends AbstractCTL implements ITerminologyCTL {
 	@Override
 	public PostDocsResDTO uploadTerminology(FormatEnum format, @Valid RequestDTO creationInfo, MultipartFile file,HttpServletRequest request) throws OperationException, DocumentAlreadyPresentException,DataProcessingException, InvalidContentException, IOException {
 		JWTTokenDTO jwt = JWTTokenDTO.extractPayload(request , profileUtility.isDevOrDockerProfile());
-		JWTTokenDTO.uploadTerminologyValidatePayload(jwt, file);
+		JWTTokenDTO.uploadTerminologyValidatePayload(jwt,creationInfo, file);
 
 		LogTraceInfoDTO traceInfoDTO = getLogTraceInfo();
 		ValidationUtility.validateFileExtension(format, file);
