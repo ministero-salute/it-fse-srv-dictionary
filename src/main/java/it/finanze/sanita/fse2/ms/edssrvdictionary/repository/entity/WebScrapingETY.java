@@ -54,7 +54,7 @@ public class WebScrapingETY {
 
 		return content
 				.stream()
-				.map(line -> new WebScrapingETY(null, line.getSystem(), line.getUrl(), line.getForceDraft()))
+				.map(line -> new WebScrapingETY(null, line.getSystem(), line.getUrl(), line.isForceDraft()))
 				.collect(Collectors.toList());
 	}
  
