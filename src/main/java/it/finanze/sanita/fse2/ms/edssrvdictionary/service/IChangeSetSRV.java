@@ -11,6 +11,8 @@ public interface IChangeSetSRV {
 
     HistoryDTO history(Date lastUpdate);
 
+    void initHistoryStorage();
+
     long size();
 
     List<ChunksIndexETY> clearIndexes();

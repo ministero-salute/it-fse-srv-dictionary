@@ -3,24 +3,12 @@
  */
 package it.finanze.sanita.fse2.ms.edssrvdictionary.controller.handler;
 
-import static it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.error.ErrorBuilderDTO.createArgumentMismatchError;
-import static it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.error.ErrorBuilderDTO.createConstraintError;
-import static it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.error.ErrorBuilderDTO.createDataIntegrityError;
-import static it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.error.ErrorBuilderDTO.createDataProcessingError;
-import static it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.error.ErrorBuilderDTO.createDocumentAlreadyPresentError;
-import static it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.error.ErrorBuilderDTO.createDocumentNotFoundError;
-import static it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.error.ErrorBuilderDTO.createGenericError;
-import static it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.error.ErrorBuilderDTO.createInvalidContentError;
-import static it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.error.ErrorBuilderDTO.createMissingParameterError;
-import static it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.error.ErrorBuilderDTO.createMissingPartError;
-import static it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.error.ErrorBuilderDTO.createOperationError;
-import static it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.error.ErrorBuilderDTO.createOutOfRangeError;
-import static it.finanze.sanita.fse2.ms.edssrvdictionary.enums.ErrorClassEnum.TIMEOUT;
-
-import java.util.Date;
-
-import javax.validation.ConstraintViolationException;
-
+import brave.Tracer;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.error.base.ErrorResponseDTO;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.log.LogTraceInfoDTO;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.*;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.base.ValidationException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -37,21 +25,11 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 import org.springframework.web.multipart.support.MissingServletRequestPartException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import brave.Tracer;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.error.base.ErrorResponseDTO;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.log.LogTraceInfoDTO;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.ClientException;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DataIntegrityException;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DataProcessingException;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DocumentAlreadyPresentException;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DocumentNotFoundException;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.FileExtensionValidationException;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.InvalidContentException;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.OperationException;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.OutOfRangeException;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.RequestValidationException;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.base.ValidationException;
-import lombok.extern.slf4j.Slf4j;
+import javax.validation.ConstraintViolationException;
+import java.util.Date;
+
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.error.ErrorBuilderDTO.*;
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.enums.ErrorClassEnum.TIMEOUT;
 
 /**
  *	Exceptions handler
@@ -81,6 +59,19 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_PROBLEM_JSON);
 		// Bye bye
+		return new ResponseEntity<>(out, headers, out.getStatus());
+	}
+
+	@ExceptionHandler(EngineInitException.class)
+	protected ResponseEntity<ErrorResponseDTO> handleEngineInitException(EngineInitException ex) {
+		// Log me
+		log.error("HANDLER handleEngineInitException()", ex);
+		// Create error DTO
+		ErrorResponseDTO out = createEngineInitError(getLogTraceInfo(), ex);
+		// Set HTTP headers
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_PROBLEM_JSON);
+
 		return new ResponseEntity<>(out, headers, out.getStatus());
 	}
 

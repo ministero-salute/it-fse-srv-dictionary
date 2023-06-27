@@ -18,6 +18,7 @@ public final class ErrorInstance {
         @NoArgsConstructor(access = AccessLevel.PRIVATE)
         public static final class Server {
                 public static final String INTERNAL = "/internal";
+                public static final String UNAVAILABLE = "/unavailable";
         }
 
         @NoArgsConstructor(access = AccessLevel.PRIVATE)

@@ -6,6 +6,7 @@ import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes.chunks.Pa
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes.query.HistoryDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes.query.HistoryResourceDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes.query.HistoryResourceDTO.ResourceItemDTO;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.EngineInitException;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.IChunksRepo;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.resources.ChunkETY;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.resources.ChunksIndexETY;
@@ -13,12 +14,14 @@ import it.finanze.sanita.fse2.ms.edssrvdictionary.service.IChangeSetSRV;
 import lombok.extern.slf4j.Slf4j;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Logs.ERR_SRV_INIT_ENGINE;
 import static it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes.query.HistoryDTO.HistoryDeleteDTO;
 import static it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes.query.HistoryDTO.HistoryInsertDTO;
 
@@ -34,8 +37,12 @@ public class ChangeSetSRV implements IChangeSetSRV {
     @Autowired
     private IChunksRepo repository;
 
+    private volatile boolean syncing;
+
     @Override
     public HistoryDTO history(Date lastUpdate) {
+        // Check for syncing
+        if(syncing) throw new EngineInitException(ERR_SRV_INIT_ENGINE);
         log.debug("Retrieving history at {}", lastUpdate);
         // Retrieve history
         HistoryDTO history = client.getHistory(lastUpdate);
@@ -43,6 +50,17 @@ public class ChangeSetSRV implements IChangeSetSRV {
         syncAt(history);
         // Return object
         return history;
+    }
+
+    @Async("single-thread-exec")
+    @Override
+    public void initHistoryStorage() {
+        log.debug("History engine running on {}", Thread.currentThread().getName());
+        syncing = true;
+        log.info("Initialising history storage");
+        syncAt(client.getHistory(null));
+        log.info("Finishing setup for history storage");
+        syncing = false;
     }
 
     @Override
