@@ -30,7 +30,7 @@ public final class Constants {
 		/**
 		 * JWT header field of GovWay.
 		 */
-		public static final String JWT_BUSINESS_HEADER = "FSE-JWT-Authoring";
+		public static final String JWT_BUSINESS_HEADER = "FSE-JWT-Terminology";
 
 		/**
 		 * JWT header field of GovWay.

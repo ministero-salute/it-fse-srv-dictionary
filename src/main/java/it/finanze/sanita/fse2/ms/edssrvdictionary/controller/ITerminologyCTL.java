@@ -14,7 +14,6 @@ package it.finanze.sanita.fse2.ms.edssrvdictionary.controller;
 
 import static it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Logs.ERR_VAL_SYSTEM_BLANK;
 import static it.finanze.sanita.fse2.ms.edssrvdictionary.utility.RoutesUtility.API_DOCUMENTS_TAG;
-import static it.finanze.sanita.fse2.ms.edssrvdictionary.utility.RoutesUtility.API_TERMS_MAPPER;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.http.MediaType.APPLICATION_PROBLEM_JSON_VALUE;
 
@@ -52,11 +51,12 @@ import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DocumentAlreadyPres
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DocumentNotFoundException;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.InvalidContentException;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.OperationException;
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Headers.JWT_BUSINESS_HEADER;
 
 /**
  * Terminology controller
  */
-@RequestMapping(path = API_TERMS_MAPPER)
+@RequestMapping(path = "v1/terminology")
 @Tag(name = API_DOCUMENTS_TAG)
 public interface ITerminologyCTL {
 
@@ -64,7 +64,7 @@ public interface ITerminologyCTL {
 	@Operation(summary = "Upload avvenuta con successo", description = "Upload avvenuta con successo.")
 	@SecurityRequirements({
 		@SecurityRequirement(name = "bearerAuth"),
-		@SecurityRequirement(name = "FSE-JWT-A")})
+		@SecurityRequirement(name = JWT_BUSINESS_HEADER)})
 	@ApiResponse(content = @Content(mediaType = MediaType.APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = ErrorResponseDTO.class)))
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "201", description = "Documenti caricati correttamente", content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = PostDocsResDTO.class))),
@@ -74,10 +74,13 @@ public interface ITerminologyCTL {
 	}) 
 	PostDocsResDTO uploadTerminology(@PathVariable FormatEnum format, 
 			@Valid@RequestPart(required = false) RequestDTO creationInfo,
-			@RequestPart(name = "file") MultipartFile file,HttpServletRequest request) throws OperationException, DocumentAlreadyPresentException, DataProcessingException, InvalidContentException,IOException ;
+			@RequestPart(name = "file")@Schema(format = "binary") MultipartFile file,HttpServletRequest request) throws OperationException, DocumentAlreadyPresentException, DataProcessingException, InvalidContentException,IOException ;
 
 	@DeleteMapping(value = "/{oid}/{version}",produces = { APPLICATION_JSON_VALUE })
 	@Operation(summary = "Cancellazione terminologie attraverso il system",description = "Servizio che consente di cancellare un certo system dalla base dati")
+	@SecurityRequirements({
+		@SecurityRequirement(name = "bearerAuth"),
+		@SecurityRequirement(name = JWT_BUSINESS_HEADER)})
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "Documenti cancellati correttamente", content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = DelDocsResDTO.class))),
 			@ApiResponse(responseCode = "400", description = "I parametri forniti non sono validi", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = ErrorResponseDTO.class))),
@@ -85,8 +88,10 @@ public interface ITerminologyCTL {
 			@ApiResponse(responseCode = "500", description = "Errore interno del server", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = ErrorResponseDTO.class)))
 	})
 	DelDocsResDTO deleteTerminologies(
-			@PathVariable@Parameter(description = "Identificatore del dizionario")@NotBlank(message = ERR_VAL_SYSTEM_BLANK)String oid,
-			@PathVariable@Parameter(description = "Identificatore della version del dizionario")@NotBlank(message = ERR_VAL_SYSTEM_BLANK)String version,
+			@PathVariable@Parameter(description = "Identificatore del dizionario")@NotBlank(message = ERR_VAL_SYSTEM_BLANK)
+			@Schema(description = "oid",  minLength = 0, maxLength = 1000)String oid,
+			@PathVariable@Parameter(description = "Identificatore della version del dizionario")@NotBlank(message = ERR_VAL_SYSTEM_BLANK)
+			@Schema(description = "version",  minLength = 0, maxLength = 1000)String version,
 			HttpServletRequest request) throws OperationException, DocumentNotFoundException, DataIntegrityException, DocumentAlreadyPresentException;
 	 
 }

@@ -11,6 +11,9 @@
  */
 package it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.crud;
 
+import javax.validation.constraints.Size;
+
+import io.swagger.v3.oas.annotations.media.Schema;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.base.ResponseDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.log.LogTraceInfoDTO;
 import lombok.Data;
@@ -27,8 +30,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class PostDocsResDTO extends ResponseDTO {
 
+	@Schema(description = "location",  minLength = 0, maxLength = 1000)
 	private String location;
 	
+	@Schema(description = "insertedItems")
+	@Size(min = 0, max = Integer.MAX_VALUE)
 	private Integer insertedItems;
 
 	public PostDocsResDTO(final LogTraceInfoDTO traceInfo,final String location, final Integer insertedItems) {
