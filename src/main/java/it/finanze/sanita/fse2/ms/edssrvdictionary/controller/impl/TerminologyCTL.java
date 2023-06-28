@@ -55,8 +55,10 @@ public class TerminologyCTL extends AbstractCTL implements ITerminologyCTL {
 
 	@Override
 	public PostDocsResDTO uploadTerminology(FormatEnum format, @Valid RequestDTO creationInfo, MultipartFile file,HttpServletRequest request) throws OperationException, DocumentAlreadyPresentException,DataProcessingException, InvalidContentException, IOException {
-		JWTTokenDTO jwt = JWTTokenDTO.extractPayload(request , profileUtility.isDevOrDockerProfile());
-		JWTTokenDTO.uploadTerminologyValidatePayload(jwt,creationInfo, file);
+		if(!profileUtility.isDevProfile() && !profileUtility.isTestProfile()) {
+			JWTTokenDTO jwt = JWTTokenDTO.extractPayload(request , profileUtility.isDockerProfile());
+			JWTTokenDTO.uploadTerminologyValidatePayload(jwt,creationInfo, file);
+		}
 
 		LogTraceInfoDTO traceInfoDTO = getLogTraceInfo();
 		ValidationUtility.validateFileExtension(format, file);
@@ -78,8 +80,10 @@ public class TerminologyCTL extends AbstractCTL implements ITerminologyCTL {
 	 */
 	@Override
 	public DelDocsResDTO deleteTerminologies(String oid,String version,HttpServletRequest request)throws OperationException, DocumentNotFoundException, DataIntegrityException, DocumentAlreadyPresentException {
-		JWTTokenDTO jwt = JWTTokenDTO.extractPayload(request , profileUtility.isDevOrDockerProfile());
-		JWTTokenDTO.deleteTerminologyValidatePayload(jwt);
+		if(!profileUtility.isDevProfile() && !profileUtility.isTestProfile()) {
+			JWTTokenDTO jwt = JWTTokenDTO.extractPayload(request , profileUtility.isDockerProfile());
+			JWTTokenDTO.deleteTerminologyValidatePayload(jwt);
+		}
 		return new DelDocsResDTO(getLogTraceInfo(), service.deleteTerminologiesBySystem(oid,version));	
 	}
 

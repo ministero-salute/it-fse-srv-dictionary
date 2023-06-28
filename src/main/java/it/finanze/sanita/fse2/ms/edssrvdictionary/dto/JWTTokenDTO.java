@@ -81,12 +81,12 @@ public class JWTTokenDTO {
 	}
 
 
-	public static JWTTokenDTO extractPayload(final Object httpRequest,boolean fromTestEnvironment) {
+	public static JWTTokenDTO extractPayload(final Object httpRequest,boolean fromDockerEnvironment) {
 
 		HttpServletRequest req = (HttpServletRequest)httpRequest;
 
 		String jwtGovwayHeaderB64 = "";
-		if(fromTestEnvironment) {
+		if(fromDockerEnvironment) {
 			jwtGovwayHeaderB64 = req.getHeader(Constants.Headers.JWT_BUSINESS_HEADER);
 		} else {
 			jwtGovwayHeaderB64 = req.getHeader(Constants.Headers.JWT_GOVWAY_HEADER);
@@ -99,7 +99,7 @@ public class JWTTokenDTO {
 		String[] chunks = jwtGovwayHeaderB64.split("\\.");
 
 		String payload = "";
-		if (Boolean.FALSE.equals(fromTestEnvironment) || chunks.length==1) {
+		if (Boolean.FALSE.equals(fromDockerEnvironment) || chunks.length==1) {
 			payload = new String(Base64.getDecoder().decode(chunks[0]));
 		} else {
 			payload = new String(Base64.getDecoder().decode(chunks[1]));
