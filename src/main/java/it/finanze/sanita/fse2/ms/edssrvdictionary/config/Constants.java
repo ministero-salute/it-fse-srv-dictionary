@@ -67,7 +67,9 @@ public final class Constants {
 		public static final String ERR_VAL_FUTURE_DATE = "La data del ultimo aggiornamento non può essere nel futuro";
 		public static final String ERR_SRV_SYSTEM_ALREADY_EXISTS = "System %s già presente nel database";
 		public static final String ERR_SRV_DOCUMENT_NOT_EXIST = "Il documento richiesto non esiste";
+		public static final String ERR_SRV_DOCUMENT_CHUNK_NOT_EXIST = "Il chunk richiesto non esiste, l'indice potrebbe essere malformato";
 		public static final String ERR_SRV_INIT_ENGINE = "Inizializzazione engine dei chunks in corso";
+		public static final String ERR_VAL_IDX_CHUNK_NOT_VALID = "L'indice chunk non è valido (minore di zero o maggiore dei chunk disponibili)";
 		public static final String ERR_SRV_FILE_NOT_VALID = "Il documento è nullo oppure vuoto";
 		public static final String ERR_REP_UNABLE_CHECK_SYSTEM = "Impossibile verificare l'esistenza del system";
 		public static final String ERR_UTLS_IO_ERROR = "Impossibile estrarre i dati dal file";

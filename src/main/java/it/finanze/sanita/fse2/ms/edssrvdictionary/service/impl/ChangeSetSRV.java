@@ -2,15 +2,19 @@ package it.finanze.sanita.fse2.ms.edssrvdictionary.service.impl;
 
 import com.google.common.collect.Lists;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.client.IQueryClient;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes.ResourceDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes.chunks.PartialChunkDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes.query.HistoryDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes.query.HistoryResourceDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes.query.HistoryResourceDTO.ResourceItemDTO;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DocumentNotFoundException;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.EngineInitException;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.OutOfRangeException;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.IChunksRepo;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.resources.ChunkETY;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.resources.ChunksIndexETY;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.service.IChangeSetSRV;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.service.utils.SearchResult;
 import lombok.extern.slf4j.Slf4j;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,10 +24,12 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
-import static it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Logs.ERR_SRV_INIT_ENGINE;
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Logs.*;
 import static it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes.query.HistoryDTO.HistoryDeleteDTO;
 import static it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes.query.HistoryDTO.HistoryInsertDTO;
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.utility.RoutesUtility.API_QP_CHUNK;
 
 @Service
 @Slf4j
@@ -50,6 +56,32 @@ public class ChangeSetSRV implements IChangeSetSRV {
         syncAt(history);
         // Return object
         return history;
+    }
+
+    @Override
+    public ResourceDTO resource(String resource, String version, String ref, int chunk) throws DocumentNotFoundException, OutOfRangeException {
+        SearchResult res;
+        // Check for syncing
+        if(syncing) throw new EngineInitException(ERR_SRV_INIT_ENGINE);
+        // Get index
+        if(ref != null) {
+            res = retrieveByRef(ref, chunk);
+        } else {
+            res = retrieveBy(resource, version, chunk);
+        }
+        return ResourceDTO.from(res.getIdx(), res.getItems(), chunk);
+    }
+
+    private SearchResult retrieveBy(String resource, String version, int chunk) throws DocumentNotFoundException, OutOfRangeException {
+        // Get reference
+        Optional<ChunksIndexETY> index = repository.findByResourceVersion(resource, version);
+        // Check if exists
+        if(!index.isPresent()) {
+            throw new DocumentNotFoundException(ERR_SRV_DOCUMENT_NOT_EXIST);
+        }
+        ChunksIndexETY etx = index.get();
+        // Return by ref
+        return retrieveByRef(etx.getId().toString(), chunk);
     }
 
     @Async("single-thread-exec")
@@ -172,6 +204,36 @@ public class ChangeSetSRV implements IChangeSetSRV {
         }
         log.debug("[{}] Finishing chunk generation", res.info());
         return chunks;
+    }
+
+    private SearchResult retrieveByRef(String ref, int chunk) throws DocumentNotFoundException, OutOfRangeException {
+        ObjectId current;
+        ChunksIndexETY idx;
+        ChunkETY items;
+        // Retrieve index
+        Optional<ChunksIndexETY> index = repository.getChunkIndex(ref);
+        // Check if exists
+        if(!index.isPresent()) {
+            throw new DocumentNotFoundException(ERR_SRV_DOCUMENT_NOT_EXIST);
+        }
+        // Verify boundaries
+        idx = index.get();
+        try {
+            // Get object id
+            current = idx.getChunks().get(chunk);
+        } catch (ArrayIndexOutOfBoundsException e) {
+            throw new OutOfRangeException(ERR_VAL_IDX_CHUNK_NOT_VALID, API_QP_CHUNK);
+        }
+        // Retrieve index
+        Optional<ChunkETY> v = repository.getChunk(current.toHexString());
+        // Check if exists
+        if(!v.isPresent()) {
+            throw new DocumentNotFoundException(ERR_SRV_DOCUMENT_CHUNK_NOT_EXIST);
+        }
+        // Get
+        items = v.get();
+
+        return new SearchResult(idx, items);
     }
 
 }

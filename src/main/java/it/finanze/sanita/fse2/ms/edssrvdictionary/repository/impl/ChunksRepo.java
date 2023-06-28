@@ -12,6 +12,7 @@ import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
@@ -27,6 +28,7 @@ import static it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.resou
 import static it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.resources.ChunksIndexETY.*;
 import static it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.resources.base.ResChunkETY.FIELD_CK_ROOT;
 import static java.time.temporal.ChronoUnit.HOURS;
+import static org.springframework.data.domain.Sort.Direction.DESC;
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 
 @Repository
@@ -46,6 +48,16 @@ public class ChunksRepo implements IChunksRepo {
     @Override
     public void createChunkIndex(ChunksIndexETY obj) {
         mongo.insert(obj);
+    }
+
+    @Override
+    public Optional<ChunksIndexETY> getChunkIndex(String id) {
+        return Optional.ofNullable(mongo.findById(new ObjectId(id), ChunksIndexETY.class));
+    }
+
+    @Override
+    public Optional<ChunkETY> getChunk(String id) {
+        return Optional.ofNullable(mongo.findById(new ObjectId(id), ChunkETY.class));
     }
 
     @Override
@@ -157,6 +169,37 @@ public class ChunksRepo implements IChunksRepo {
             }
         }
         return ids;
+    }
+
+    @Override
+    public Optional<ChunksIndexETY> findByResourceVersion(String resource, String version) {
+        List<ChunksIndexETY> indexes;
+        ChunksIndexETY index = null;
+        // Find actives indexes
+        Query actives = new Query(
+                where(FIELD_IDX_RESOURCE).is(resource)
+                .and(FIELD_IDX_VERSION).is(version)
+                .and(FIELD_IDX_DELETED_AT).isNull()
+        );
+        indexes = mongo.find(actives, ChunksIndexETY.class);
+        // Check if exists
+        if(indexes.isEmpty()) {
+            // Find deleted but still readable indexes
+            Query deleted = new Query(
+                where(FIELD_IDX_RESOURCE).is(resource)
+                .and(FIELD_IDX_VERSION).is(version)
+                .and(FIELD_IDX_DELETED_AT).gt(getDateOffsetForRemove())
+            ).with(Sort.by(DESC, FIELD_IDX_DELETED_AT));
+            // Retrieve
+            indexes = mongo.find(deleted, ChunksIndexETY.class);
+            // Verify
+            if(!indexes.isEmpty()) index = indexes.get(0);
+        } else {
+            // Retrieve first
+            index = indexes.get(0);
+        }
+
+        return Optional.ofNullable(index);
     }
 
     private Date getDateOffsetForRemove() {
