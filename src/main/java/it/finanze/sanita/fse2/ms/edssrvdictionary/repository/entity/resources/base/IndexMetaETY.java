@@ -7,13 +7,21 @@ import static it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes.qu
 
 @Getter
 @AllArgsConstructor
-public class ResMetaETY {
+public class IndexMetaETY {
+
     String oid;
     String version;
     String type;
 
-    public static ResMetaETY from(ResourceMetaDTO meta) {
-        return new ResMetaETY(meta.getOid(), meta.getVersion(), meta.getType());
+    boolean whitelist;
+
+    public static IndexMetaETY from(ResourceMetaDTO meta) {
+        return new IndexMetaETY(
+            meta.getOid(),
+            meta.getVersion(),
+            meta.getType(),
+            meta.isWhitelist()
+        );
     }
 
 }

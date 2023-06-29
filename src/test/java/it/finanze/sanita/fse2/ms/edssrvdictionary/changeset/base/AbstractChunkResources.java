@@ -2,8 +2,9 @@ package it.finanze.sanita.fse2.ms.edssrvdictionary.changeset.base;
 
 import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.resources.ChunkETY;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.resources.ChunksIndexETY;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.resources.base.ChunkMetaETY;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.resources.base.IndexMetaETY;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.resources.base.ResChunkETY;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.resources.base.ResMetaETY;
 import lombok.Value;
 import org.bson.types.ObjectId;
 
@@ -49,10 +50,11 @@ public abstract class AbstractChunkResources {
             new ObjectId(),
             String.valueOf(generateNumber(9999)),
             String.valueOf(generateNumber(1000)),
-            new ResMetaETY(
+            new IndexMetaETY(
                 generateOid(),
                 generateVersion(),
-                type
+                type,
+                false
             ),
             new ArrayList<>(),
             0,
@@ -62,7 +64,7 @@ public abstract class AbstractChunkResources {
 
     private ChunkETY generateChunk(ChunksIndexETY index, int idx, Date insertedAt) {
         ChunkETY chunk = new ChunkETY(
-            index.getMeta(),
+            ChunkMetaETY.from(index.getMeta()),
             new ResChunkETY(
                 index.getId(),
                 idx,

@@ -5,7 +5,7 @@ import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes.query.Pag
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.log.LogTraceInfoDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.resources.ChunkETY;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.resources.ChunksIndexETY;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.resources.base.ResMetaETY;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.resources.base.IndexMetaETY;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -25,7 +25,7 @@ public class ResourceDTO {
     private String resourceId;
     private String versionId;
 
-    private ResMetaETY meta;
+    private IndexMetaETY meta;
     private List<ResourceItemDTO> items;
 
     private PaginationLinks links;

@@ -33,6 +33,7 @@ public class HistoryResourceDTO {
         String type;
         @JsonFormat(pattern = PTT_ISO_8601)
         Date released;
+        boolean whitelist;
     }
 
     @Data

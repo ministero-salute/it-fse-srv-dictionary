@@ -1,7 +1,7 @@
 package it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.resources;
 
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes.query.HistoryResourceDTO;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.resources.base.ResMetaETY;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.resources.base.IndexMetaETY;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.bson.types.ObjectId;
@@ -31,7 +31,7 @@ public class ChunksIndexETY {
     private String resource;
     @Field(FIELD_IDX_VERSION)
     private String version;
-    private ResMetaETY meta;
+    private IndexMetaETY meta;
     @Field(FIELD_IDX_CHUNKS)
     private List<ObjectId> chunks;
     @Field(FIELD_IDX_SIZE)
@@ -54,7 +54,7 @@ public class ChunksIndexETY {
             root,
             res.getResourceId(),
             res.getVersionId(),
-            ResMetaETY.from(res.getMeta()),
+            IndexMetaETY.from(res.getMeta()),
             asChunksId(chunks),
             asChunksSize(chunks),
             null

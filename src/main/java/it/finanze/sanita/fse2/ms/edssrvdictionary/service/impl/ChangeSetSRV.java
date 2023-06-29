@@ -73,6 +73,7 @@ public class ChangeSetSRV implements IChangeSetSRV {
     }
 
     private SearchResult retrieveBy(String resource, String version, int chunk) throws DocumentNotFoundException, OutOfRangeException {
+        SearchResult res;
         // Get reference
         Optional<ChunksIndexETY> index = repository.findByResourceVersion(resource, version);
         // Check if exists
@@ -80,8 +81,14 @@ public class ChangeSetSRV implements IChangeSetSRV {
             throw new DocumentNotFoundException(ERR_SRV_DOCUMENT_NOT_EXIST);
         }
         ChunksIndexETY etx = index.get();
+        // Check if whitelisted
+        if(etx.getMeta().isWhitelist()) {
+            res = new SearchResult(etx, ChunkETY.empty());
+        } else {
+            res = retrieveByRef(etx.getId().toString(), chunk);
+        }
         // Return by ref
-        return retrieveByRef(etx.getId().toString(), chunk);
+        return res;
     }
 
     @Async("single-thread-exec")
