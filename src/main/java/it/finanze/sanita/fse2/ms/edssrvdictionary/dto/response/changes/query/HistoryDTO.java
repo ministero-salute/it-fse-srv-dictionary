@@ -48,4 +48,9 @@ public class HistoryDTO {
         String type;
         String omit;
     }
+
+    public boolean isEmpty() {
+        return lastUpdate == null && insertions.isEmpty() && deletions.isEmpty();
+    }
+
 }

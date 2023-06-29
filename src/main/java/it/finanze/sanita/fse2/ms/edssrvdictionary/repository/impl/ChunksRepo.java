@@ -202,6 +202,12 @@ public class ChunksRepo implements IChunksRepo {
         return Optional.ofNullable(index);
     }
 
+    @Override
+    public void reset() {
+        mongo.dropCollection(ChunksIndexETY.class);
+        mongo.dropCollection(ChunkETY.class);
+    }
+
     private Date getDateOffsetForRemove() {
         return Date.from(Instant.now().minus(REMOVE_AFTER_X_HOURS, HOURS));
     }

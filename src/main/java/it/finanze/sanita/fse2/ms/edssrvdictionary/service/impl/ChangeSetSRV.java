@@ -107,7 +107,13 @@ public class ChangeSetSRV implements IChangeSetSRV {
         log.debug("History engine running on {}", Thread.currentThread().getName());
         syncing = true;
         log.info("Initialising history storage");
-        syncAt(client.getHistory(null));
+        HistoryDTO history = client.getHistory(null);
+        if(history.isEmpty()) {
+            log.info("Terminology seems empty, dropping indexes and chunks...");
+            repository.reset();
+        } else {
+            syncAt(history);
+        }
         log.info("Finishing setup for history storage");
         syncing = false;
     }
