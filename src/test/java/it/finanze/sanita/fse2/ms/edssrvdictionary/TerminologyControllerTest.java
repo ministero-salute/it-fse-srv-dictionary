@@ -11,40 +11,20 @@
  */
 package it.finanze.sanita.fse2.ms.edssrvdictionary;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.http.MediaType;
-import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
 
 import it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.RequestDTO;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.crud.PostDocsResDTO;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.enums.FormatEnum;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.enums.TypeEnum;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DocumentAlreadyPresentException;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.TerminologyETY;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.snapshot.ChunksETY;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.snapshot.SnapshotETY;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.utility.FileUtility;
 
 @AutoConfigureMockMvc
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -64,7 +44,29 @@ class TerminologyControllerTest {
         mongoTemplate.dropCollection(SnapshotETY.class);
     }
     
-    // TODO - tests on /v1/terminology/{format}
+//    @Test
+//    void uploadTerminologiesTest() throws Exception {
+//    	
+//        // Retrieve file from internal resources
+//        byte[] file = FileUtility.getFileFromInternalResources("Files/vocabulary/Terminology_10Items.csv");
+//
+//        // Build the request
+//        MockHttpServletRequestBuilder requestBuilder = multipart("/{format}", FormatEnum.CUSTOM_CSV)
+//                .file(new MockMultipartFile("file", "Terminology_10Items.csv", "text/csv", file))
+//                .accept(MediaType.APPLICATION_JSON_VALUE)
+//                .contentType(MediaType.MULTIPART_FORM_DATA);
+//        
+//        // Perform the request
+//        MvcResult result = mvc.perform(requestBuilder)
+//                .andExpect(status().isCreated()).andReturn();
+//        
+//        PostDocsResDTO response = new Gson().fromJson(result.getResponse().getContentAsString(), PostDocsResDTO.class);
+//        
+//        // Assertions
+//        assertEquals(10, response.getInsertedItems(), "The file contains 10 rows, the items inserted should be 10");
+//        List<TerminologyETY> terminologies = getTerminologies();
+//        assertEquals(10, terminologies.size(), "The file contains 10 rows, the items inserted should be 10");
+//    }
     
     // TODO - tests on /v1/terminology/{oid}/{version}
 

@@ -11,7 +11,9 @@
  */
 package it.finanze.sanita.fse2.ms.edssrvdictionary;
 
-import org.junit.jupiter.api.Assertions;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -26,23 +28,35 @@ import it.finanze.sanita.fse2.ms.edssrvdictionary.utility.CfUtility;
 class CfUtilityTest {
     @Test
     void successTest() {
-        String invalidRandomCF16 = "33NDMA80A01A883I";
-        Assertions.assertFalse(CfUtility.isValidCf(invalidRandomCF16));
+        final String invalidRandomCF16 = "33NDMA80A01A883I";
+        assertFalse(CfUtility.isValidCf(invalidRandomCF16));
 
-        String validRandomCF16 = "DKNDMA80A01A883I";
-        Assertions.assertTrue(CfUtility.isValidCf(validRandomCF16));
+        final String validRandomCF16 = "DKNDMA80A01A883I";
+        assertTrue(CfUtility.isValidCf(validRandomCF16));
 
-        String invalidRandomCF11 = "DKNDMA80A01";
-        Assertions.assertFalse(CfUtility.isValidCf(invalidRandomCF11));
+        final String invalidRandomCF11 = "DKNDMA80A01";
+        assertFalse(CfUtility.isValidCf(invalidRandomCF11));
 
-        String validRandomCF11 = "29259870359";
-        Assertions.assertTrue(CfUtility.isValidCf(validRandomCF11));
+        final String validRandomCF11 = "29259870359";
+        assertTrue(CfUtility.isValidCf(validRandomCF11));
 
-        String eniInvalidRandomCF16 = "ENIDMA80A01A883I";
-        Assertions.assertFalse(CfUtility.isValidCf(eniInvalidRandomCF16));
+        final String eniInvalidRandomCF16 = "ENIDMA80A01A883I";
+        assertFalse(CfUtility.isValidCf(eniInvalidRandomCF16));
 
-        String stpInvalidRandomCF16 = "STPDMA80A01A883I";
-        Assertions.assertFalse(CfUtility.isValidCf(stpInvalidRandomCF16));
+        final String stpInvalidRandomCF16 = "STPDMA80A01A883I";
+        assertFalse(CfUtility.isValidCf(stpInvalidRandomCF16));
+        
+        final String fiscalCodeEni = "ENI1234567891234";
+        assertTrue(CfUtility.isValidCf(fiscalCodeEni));
+        
+        final String fiscalCodeStp = "STP1234567891234";
+        assertTrue(CfUtility.isValidCf(fiscalCodeStp));
+        
+        final String fiscalCodeEmpty = "";
+        assertFalse(CfUtility.isValidCf(fiscalCodeEmpty));
+        
+        final String fiscalCodeNull = null;
+        assertFalse(CfUtility.isValidCf(fiscalCodeNull));
     }
     
 }

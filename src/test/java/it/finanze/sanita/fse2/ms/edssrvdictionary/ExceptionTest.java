@@ -25,6 +25,7 @@ import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DocumentAlreadyPres
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.FileExtensionValidationException;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.InvalidContentException;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.RequestValidationException;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.TokenException;
 
 
 class ExceptionTest {
@@ -102,4 +103,11 @@ class ExceptionTest {
 		assertEquals("Error", exc.getError().getDetail());
 	}
 	
+	@Test
+	void tokenExceptionTest() {
+		TokenException exc = new TokenException("Error"); 
+		
+		assertEquals(TokenException.class, exc.getClass()); 
+		assertEquals("Error", exc.getError().getDetail());
+	}
 } 

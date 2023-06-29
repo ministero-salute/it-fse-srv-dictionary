@@ -52,10 +52,9 @@ public final class StringUtility {
 			ObjectMapper objectMapper = new ObjectMapper();
 			return objectMapper.readValue(jsonString, typeReference);
 		} catch (IOException e) {
-			e.printStackTrace();
-			// Handle the exception according to your requirements
+			log.info("Error while parse list to json",e);
+	        throw new BusinessException("Error while parse list to json");
 		}
-		return null; // Or throw an exception if desired
 	}
 	
 	/**
