@@ -8,6 +8,7 @@ import it.finanze.sanita.fse2.ms.edssrvdictionary.controller.IChangeSetCTL;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes.ChangeSetDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes.ResourceDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes.query.HistoryDTO;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes.query.HistorySnapshotDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.log.LogTraceInfoDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DocumentNotFoundException;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.OutOfRangeException;
@@ -51,6 +52,11 @@ public class ChangeSetCTL extends AbstractCTL implements IChangeSetCTL {
     @Override
     public ResourceDTO resource(String resource, String version, String ref, int chunk) throws DocumentNotFoundException, OutOfRangeException {
         return service.resource(resource, version, ref, chunk).trackWith(getLogTraceInfo());
+    }
+
+    @Override
+    public HistorySnapshotDTO snapshot() {
+        return service.snapshot().trackWith(getLogTraceInfo());
     }
 
 }

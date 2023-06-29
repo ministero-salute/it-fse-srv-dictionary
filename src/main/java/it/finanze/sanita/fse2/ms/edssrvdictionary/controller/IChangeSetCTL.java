@@ -7,8 +7,10 @@ package it.finanze.sanita.fse2.ms.edssrvdictionary.controller;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.controller.operation.changeset.GetChangeSetChunks;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.controller.operation.changeset.GetChangeSetResource;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.controller.operation.changeset.GetChangeSetSnapshot;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes.ChangeSetDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes.ResourceDTO;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes.query.HistorySnapshotDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DocumentNotFoundException;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.OperationException;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.OutOfRangeException;
@@ -60,5 +62,10 @@ public interface IChangeSetCTL {
 		@PositiveOrZero
 		int chunk
 	) throws DocumentNotFoundException, OutOfRangeException;
+
+	@GetChangeSetSnapshot
+	@GetMapping(API_CHANGESET_SNAPSHOT)
+	@Tag(name = API_CHANGESET_TAG)
+	HistorySnapshotDTO snapshot();
 
 }

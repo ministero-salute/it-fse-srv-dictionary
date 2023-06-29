@@ -17,6 +17,7 @@ public final class RoutesUtility {
     public static final String API_RESOURCE = "resource";
     public static final String API_RESOURCE_ID = "id";
     public static final String API_RESOURCE_VERSION = "version";
+    public static final String API_SNAPSHOT = "snapshot";
 
     public static final String WEB_SCRAPING = "web-scraping";
 
@@ -35,6 +36,7 @@ public final class RoutesUtility {
     public static final String API_CHANGESET_MAPPER = API_VERSION + "/" + API_CHANGESET;
     public static final String API_CHANGESET_CHUNKS = "/" + API_TERMINOLOGY ;
     public static final String API_CHANGESET_RESOURCE = "/" + API_TERMINOLOGY + "/" + API_RESOURCE + API_RESOURCE_ID_EXTS + API_RESOURCE_VERS_EXTS;
+    public static final String API_CHANGESET_SNAPSHOT = "/" + API_TERMINOLOGY + "/" + API_SNAPSHOT;
 
     public static final String API_CHANGESET_TAG = "ChangeSet";
 

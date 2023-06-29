@@ -7,6 +7,7 @@ import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes.chunks.Pa
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes.query.HistoryDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes.query.HistoryResourceDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes.query.HistoryResourceDTO.ResourceItemDTO;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes.query.HistorySnapshotDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DocumentNotFoundException;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.EngineInitException;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.OutOfRangeException;
@@ -44,6 +45,11 @@ public class ChangeSetSRV implements IChangeSetSRV {
     private IChunksRepo repository;
 
     private volatile boolean syncing;
+
+    @Override
+    public HistorySnapshotDTO snapshot() {
+        return client.getSnapshot();
+    }
 
     @Override
     public HistoryDTO history(Date lastUpdate) {

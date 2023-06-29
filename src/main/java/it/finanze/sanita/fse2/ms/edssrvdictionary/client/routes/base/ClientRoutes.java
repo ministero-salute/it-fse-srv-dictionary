@@ -14,6 +14,7 @@ public final class ClientRoutes {
         public static final String API_VERSION = "v1";
         public static final String HISTORY_PATH = "history";
         public static final String RESOURCE_PATH = "resource";
+        public static final String INTEGRITY_PATH = "integrity";
     }
 
 }

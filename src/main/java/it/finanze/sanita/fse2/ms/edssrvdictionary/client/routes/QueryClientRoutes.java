@@ -38,6 +38,10 @@ public final class QueryClientRoutes {
             .toUriString();
     }
 
+    public String snapshot() {
+        return base().pathSegment(API_VERSION, HISTORY_PATH, INTEGRITY_PATH).build().toUriString();
+    }
+
     private static String asTimestamp(@Nullable Date lastUpdate) {
         return lastUpdate == null ? "" : ZonedDateTime.ofInstant(lastUpdate.toInstant(), UTC).toString();
     }

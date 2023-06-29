@@ -9,6 +9,7 @@ import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.RequestDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.SystemUrlDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes.query.HistoryDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes.query.HistoryResourceDTO;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes.query.HistorySnapshotDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.crud.PostDocsResDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.enums.FormatEnum;
 import lombok.extern.slf4j.Slf4j;
@@ -99,6 +100,11 @@ public class QueryClient implements IQueryClient {
 	@Override
 	public HistoryResourceDTO getResource(String resourceId, String versionId) {
 		return rest.getForObject(routes.resource(resourceId, versionId), HistoryResourceDTO.class);
+	}
+
+	@Override
+	public HistorySnapshotDTO getSnapshot() {
+		return rest.getForObject(routes.snapshot(), HistorySnapshotDTO.class);
 	}
 
 }

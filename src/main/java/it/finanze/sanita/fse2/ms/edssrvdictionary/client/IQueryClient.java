@@ -6,6 +6,7 @@ import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.RequestDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.SystemUrlDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes.query.HistoryDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes.query.HistoryResourceDTO;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes.query.HistorySnapshotDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.crud.PostDocsResDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.enums.FormatEnum;
 import org.springframework.web.multipart.MultipartFile;
@@ -27,5 +28,7 @@ public interface IQueryClient {
 	HistoryDTO getHistory(Date lastUpdate);
 
 	HistoryResourceDTO getResource(String resourceId, String versionId);
+
+	HistorySnapshotDTO getSnapshot();
 
 }
