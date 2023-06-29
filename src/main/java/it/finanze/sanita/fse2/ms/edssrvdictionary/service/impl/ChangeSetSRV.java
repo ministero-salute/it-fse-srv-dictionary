@@ -83,6 +83,10 @@ public class ChangeSetSRV implements IChangeSetSRV {
         ChunksIndexETY etx = index.get();
         // Check if whitelisted
         if(etx.getMeta().isWhitelist()) {
+            // Check out of bound
+            if(chunk != 0) {
+                throw new OutOfRangeException(ERR_VAL_IDX_CHUNK_NOT_VALID, API_QP_CHUNK);
+            }
             res = new SearchResult(etx, ChunkETY.empty());
         } else {
             res = retrieveByRef(etx.getId().toString(), chunk);
