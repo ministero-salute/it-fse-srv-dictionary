@@ -64,7 +64,7 @@ public interface IChangeSetCTL {
 	) throws DocumentNotFoundException, OutOfRangeException;
 
 	@GetChangeSetSnapshot
-	@GetMapping(API_CHANGESET_SNAPSHOT)
+	@GetMapping(API_CHANGESET_INTEGRITY)
 	@Tag(name = API_CHANGESET_TAG)
 	HistorySnapshotDTO snapshot();
 
