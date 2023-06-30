@@ -44,7 +44,6 @@ public class ChangeSetCTL extends AbstractCTL implements IChangeSetCTL {
         response.setTimestamp(history.getTimestamp());
         response.setInsertions(history.getInsertions());
         response.setDeletions(history.getDeletions());
-        response.setCollectionSize(service.size());
 
         return response;
     }

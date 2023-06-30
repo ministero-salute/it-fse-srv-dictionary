@@ -49,9 +49,4 @@ public class ChangeSetDTO {
 
     private List<HistoryDeleteDTO> deletions;
 
-    /**
-     * The current active collection items
-     */
-    private long collectionSize;
-
 }
