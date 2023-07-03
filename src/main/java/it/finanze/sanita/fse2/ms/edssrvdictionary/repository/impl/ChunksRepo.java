@@ -210,7 +210,7 @@ public class ChunksRepo implements IChunksRepo {
 
     @Override
     public boolean isEmpty() {
-        return mongo.estimatedCount(ChunksIndexETY.class) == 0;
+        return mongo.count(new Query(), ChunksIndexETY.class) == 0;
     }
 
     private Date getDateOffsetForRemove() {
