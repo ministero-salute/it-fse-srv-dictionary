@@ -111,8 +111,12 @@ public class ChangeSetSRV implements IChangeSetSRV {
         if(history.isEmpty()) {
             log.info("Terminology seems empty, dropping indexes and chunks...");
             repository.reset();
-        } else {
+        } else if(repository.isEmpty()) {
+            log.info("History storage seems empty, dropping indexes and chunks ...");
+            repository.reset();
             syncAt(history);
+        } else {
+            log.info("History storage is not empty, skipping initialization..,");
         }
         log.info("Finishing setup for history storage");
         syncing = false;

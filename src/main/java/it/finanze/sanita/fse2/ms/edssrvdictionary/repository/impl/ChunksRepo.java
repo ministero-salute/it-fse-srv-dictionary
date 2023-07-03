@@ -208,6 +208,11 @@ public class ChunksRepo implements IChunksRepo {
         mongo.dropCollection(ChunkETY.class);
     }
 
+    @Override
+    public boolean isEmpty() {
+        return mongo.estimatedCount(ChunksIndexETY.class) == 0;
+    }
+
     private Date getDateOffsetForRemove() {
         return Date.from(Instant.now().minus(REMOVE_AFTER_X_HOURS, HOURS));
     }

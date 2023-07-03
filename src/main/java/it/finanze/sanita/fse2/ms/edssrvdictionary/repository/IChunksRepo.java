@@ -20,4 +20,5 @@ public interface IChunksRepo {
     List<ObjectId> removeOrphanChunks();
     Optional<ChunksIndexETY> findByResourceVersion(String resource, String version);
     void reset();
+    boolean isEmpty();
 }
