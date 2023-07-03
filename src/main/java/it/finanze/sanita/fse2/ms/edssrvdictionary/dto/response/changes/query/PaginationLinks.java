@@ -20,7 +20,7 @@ public class PaginationLinks {
         int current,
         int size
     ) {
-        PaginationLinks out = null;
+        PaginationLinks out = new PaginationLinks(null);
         if(current < size - 1) {
             String next = new URIBuilder(fromCurrentContextPath().build().toUri())
                 .setPathSegments(
