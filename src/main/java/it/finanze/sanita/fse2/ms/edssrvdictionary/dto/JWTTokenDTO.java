@@ -7,8 +7,6 @@ import java.util.Base64;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.springframework.web.multipart.MultipartFile;
-
 import it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.BusinessException;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.TokenException;
@@ -38,13 +36,13 @@ public class JWTTokenDTO {
 		genericValidatePayload(jwtToken);
 	}
 	
-	public static void uploadTerminologyValidatePayload(final JWTTokenDTO jwtToken, RequestDTO creationInfo, MultipartFile multipartFile) {
+	public static void uploadTerminologyValidatePayload(final JWTTokenDTO jwtToken, RequestDTO creationInfo) {
 
 		genericValidatePayload(jwtToken);
 
 		try {
-			String hash =  StringUtility.encodeSHA256(multipartFile.getBytes());
-			if(!hash.equals(jwtToken.getFile_hash())) {
+//			String hash =  StringUtility.encodeSHA256(multipartFile.getBytes());
+			if(StringUtility.isNullOrEmpty(jwtToken.getFile_hash())) {
 				throw new TokenException("L'hash del valido risulta essere non valido ");
 			}
 			
@@ -80,7 +78,7 @@ public class JWTTokenDTO {
 		}
 	}
 
-
+	
 	public static JWTTokenDTO extractPayload(final Object httpRequest,boolean fromDockerEnvironment) {
 
 		HttpServletRequest req = (HttpServletRequest)httpRequest;
