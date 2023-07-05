@@ -107,12 +107,8 @@ public class OpenApiCFG {
 
 			// Adding extensions
 			openApi.getInfo().addExtension("x-api-id", customOpenapi.getApiId());
+			
 			openApi.getInfo().addExtension("x-summary", customOpenapi.getApiSummary());
-
-			// Adding servers
-			final List<Server> servers = new ArrayList<>();
-			final Server devServer = new Server();
-			devServer.setDescription("Dictionary Development URL");
 			for (final Server server : openApi.getServers()) {
 				final Pattern pattern = Pattern.compile("^https://.*");
 				if (!pattern.matcher(server.getUrl()).matches()) {
@@ -120,9 +116,6 @@ public class OpenApiCFG {
 				}
 			}
 
-
-			servers.add(devServer);
-			openApi.setServers(servers);
 
 			openApi.getPaths().values().stream().filter(item -> item.getPost() != null).forEach(item -> {
 
