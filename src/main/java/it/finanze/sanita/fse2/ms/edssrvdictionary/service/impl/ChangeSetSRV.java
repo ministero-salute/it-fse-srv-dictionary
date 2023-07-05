@@ -8,6 +8,7 @@ import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes.query.His
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes.query.HistoryResourceDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes.query.HistoryResourceDTO.ResourceItemDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes.query.HistorySnapshotDTO;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes.query.HistorySnapshotDTO.Resources;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DocumentNotFoundException;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.EngineInitException;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.OutOfRangeException;
@@ -48,7 +49,15 @@ public class ChangeSetSRV implements IChangeSetSRV {
 
     @Override
     public HistorySnapshotDTO snapshot() {
-        return client.getSnapshot();
+        return attachSizeToSnapshot(client.getSnapshot());
+    }
+
+    private HistorySnapshotDTO attachSizeToSnapshot(HistorySnapshotDTO snapshot) {
+        for (Resources res : snapshot.getResources()) {
+            Optional<ChunksIndexETY> idx = repository.findByResourceVersion(res.getId(), res.getVersion());
+            idx.ifPresent(chunksIndexETY -> res.setSize(chunksIndexETY.getSize()));
+        }
+        return snapshot;
     }
 
     @Override

@@ -25,10 +25,12 @@ public class HistorySnapshotDTO {
     private List<Resources> resources;
 
     @Data
+    @JsonInclude(NON_NULL)
     public static class Resources {
         String id;
         String version;
         String type;
+        Long size;
     }
 
     public HistorySnapshotDTO trackWith(LogTraceInfoDTO info) {
