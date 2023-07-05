@@ -23,6 +23,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.regex.Pattern;
 
 import org.springdoc.core.customizers.OpenApiCustomiser;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -112,8 +113,13 @@ public class OpenApiCFG {
 			final List<Server> servers = new ArrayList<>();
 			final Server devServer = new Server();
 			devServer.setDescription("Dictionary Development URL");
-			devServer.setUrl("http://localhost:" + customOpenapi.getPort());
-			devServer.addExtension("x-sandbox", true);
+			for (final Server server : openApi.getServers()) {
+				final Pattern pattern = Pattern.compile("^https://.*");
+				if (!pattern.matcher(server.getUrl()).matches()) {
+					server.addExtension("x-sandbox", true);
+				}
+			}
+
 
 			servers.add(devServer);
 			openApi.setServers(servers);
