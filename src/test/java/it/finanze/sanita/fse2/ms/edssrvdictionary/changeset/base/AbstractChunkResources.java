@@ -7,6 +7,9 @@ import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.resources.ba
 import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.resources.base.ResChunkETY;
 import lombok.Value;
 import org.bson.types.ObjectId;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Query;
 
 import javax.annotation.Nullable;
 import java.security.SecureRandom;
@@ -16,8 +19,13 @@ import java.util.Date;
 import java.util.List;
 
 import static java.time.temporal.ChronoUnit.HOURS;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.springframework.data.mongodb.core.query.Criteria.where;
 
 public abstract class AbstractChunkResources {
+
+    @Autowired
+    protected MongoTemplate mongo;
 
     private static final SecureRandom generator = new SecureRandom();
 
@@ -113,6 +121,48 @@ public abstract class AbstractChunkResources {
     public static class TestSetting {
         TestResource resource;
         boolean omitIndex;
+    }
+
+    protected void assertResourceExists(TestResource e, boolean expected) {
+        assertResourceExists(e, expected, false);
+    }
+
+    protected void assertResourceExists(TestResource e, boolean expected, boolean omitIndexCheck) {
+        String verb = expected ? "doesn't" : "does";
+        if(!omitIndexCheck) {
+            // Check index exists
+            assertEquals(
+                expected,
+                exists(ChunksIndexETY.class, e.getIndex().getId()),
+                String.format("Expected index %s exists", verb)
+            );
+        }
+        // Check chunks exists
+        for (ChunkETY chunk : e.getChunks()) {
+            assertEquals(
+                expected,
+                exists(ChunkETY.class, chunk.getId()),
+                String.format("Expected chunk %s exists", verb)
+            );
+        }
+    }
+
+    protected boolean exists(Class<?> clazz, ObjectId id) {
+        return mongo.exists(new Query(where("_id").is(id)), clazz);
+    }
+
+    protected int insert(boolean omitIndex, TestResource res) {
+        if (!omitIndex) mongo.insert(res.getIndex());
+        mongo.insertAll(res.getChunks());
+        return 1;
+    }
+
+    protected int insert(TestSetting ...res) {
+        int size = 0;
+        for (TestSetting r : res) {
+            size += insert(r.isOmitIndex(), r.getResource());
+        }
+        return size;
     }
 
 }

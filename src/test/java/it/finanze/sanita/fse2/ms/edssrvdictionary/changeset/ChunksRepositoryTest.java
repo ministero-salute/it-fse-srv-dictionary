@@ -12,8 +12,6 @@ import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.util.List;
@@ -23,16 +21,12 @@ import static it.finanze.sanita.fse2.ms.edssrvdictionary.repository.impl.ChunksR
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
-import static org.springframework.data.mongodb.core.query.Criteria.where;
 
 @AutoConfigureMockMvc
 @SpringBootTest(webEnvironment = RANDOM_PORT)
 @ActiveProfiles(TEST)
 @TestInstance(PER_CLASS)
 public class ChunksRepositoryTest extends AbstractChunkResources {
-
-    @Autowired
-    private MongoTemplate mongo;
 
     @Autowired
     private IChunksRepo repository;
@@ -213,48 +207,6 @@ public class ChunksRepositoryTest extends AbstractChunkResources {
             assertResourceExists(res[0], false);
             assertResourceExists(res[1], false);
         });
-    }
-
-    void assertResourceExists(TestResource e, boolean expected) {
-        assertResourceExists(e, expected, false);
-    }
-
-    void assertResourceExists(TestResource e, boolean expected, boolean omitIndexCheck) {
-        String verb = expected ? "doesn't" : "does";
-        if(!omitIndexCheck) {
-            // Check index exists
-            assertEquals(
-                expected,
-                exists(ChunksIndexETY.class, e.getIndex().getId()),
-                String.format("Expected index %s exists", verb)
-            );
-        }
-        // Check chunks exists
-        for (ChunkETY chunk : e.getChunks()) {
-            assertEquals(
-                expected,
-                exists(ChunkETY.class, chunk.getId()),
-                String.format("Expected chunk %s exists", verb)
-            );
-        }
-    }
-
-    boolean exists(Class<?> clazz, ObjectId id) {
-        return mongo.exists(new Query(where("_id").is(id)), clazz);
-    }
-
-    int insert(boolean omitIndex, TestResource res) {
-        if (!omitIndex) mongo.insert(res.getIndex());
-        mongo.insertAll(res.getChunks());
-        return 1;
-    }
-
-    int insert(TestSetting ...res) {
-        int size = 0;
-        for (TestSetting r : res) {
-            size += insert(r.isOmitIndex(), r.getResource());
-        }
-        return size;
     }
 
     @AfterAll
