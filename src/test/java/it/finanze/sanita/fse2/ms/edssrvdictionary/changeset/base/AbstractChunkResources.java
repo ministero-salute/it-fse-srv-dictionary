@@ -54,6 +54,7 @@ public abstract class AbstractChunkResources {
                 generateOid(),
                 generateVersion(),
                 type,
+                new Date(),
                 false
             ),
             new ArrayList<>(),
