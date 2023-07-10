@@ -1,9 +1,17 @@
 package it.finanze.sanita.fse2.ms.edssrvdictionary.changeset;
 
-import it.finanze.sanita.fse2.ms.edssrvdictionary.changeset.base.AbstractChunkResources;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.IChunksRepo;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.resources.ChunkETY;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.resources.ChunksIndexETY;
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.changeset.base.ResourceTypeTest.CODESYSTEM;
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.changeset.base.ResourceTypeTest.VALUESET;
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Profile.TEST;
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.repository.impl.ChunksRepo.REMOVE_AFTER_X_HOURS;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
+import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
+
+import java.util.List;
+
 import org.bson.types.ObjectId;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,13 +22,10 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
-import java.util.List;
-
-import static it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Profile.TEST;
-import static it.finanze.sanita.fse2.ms.edssrvdictionary.repository.impl.ChunksRepo.REMOVE_AFTER_X_HOURS;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
-import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.changeset.base.AbstractChunkResources;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.IChunksRepo;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.resources.ChunkETY;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.resources.ChunksIndexETY;
 
 @AutoConfigureMockMvc
 @SpringBootTest(webEnvironment = RANDOM_PORT)
@@ -43,8 +48,8 @@ public class ChunksRepositoryTest extends AbstractChunkResources {
     void shouldRemoveNoIndex() {
         // Args
         TestResource[] res = new TestResource[] {
-            createResource("codesystem", null),
-            createResource("valueset", null)
+            createResource(CODESYSTEM, null),
+            createResource(VALUESET, null)
         };
         // Generate active chunks
         insert(
@@ -67,8 +72,8 @@ public class ChunksRepositoryTest extends AbstractChunkResources {
     void shouldRemoveAllIndexes() {
         // Args
         TestResource[] res = new TestResource[] {
-            createResource("codesystem", getDateBeforeHours(REMOVE_AFTER_X_HOURS + 1)),
-            createResource("valueset", getDateBeforeHours(REMOVE_AFTER_X_HOURS + 3))
+            createResource(CODESYSTEM, getDateBeforeHours(REMOVE_AFTER_X_HOURS + 1)),
+            createResource(VALUESET, getDateBeforeHours(REMOVE_AFTER_X_HOURS + 3))
         };
         // Generate active chunks
         int size = insert(
@@ -91,8 +96,8 @@ public class ChunksRepositoryTest extends AbstractChunkResources {
     void shouldRemoveOneIndex() {
         // Args
         TestResource[] res = new TestResource[] {
-            createResource("codesystem", getDateBeforeHours(REMOVE_AFTER_X_HOURS + 1)),
-            createResource("valueset", getDateBeforeHours(REMOVE_AFTER_X_HOURS - 3))
+            createResource(CODESYSTEM, getDateBeforeHours(REMOVE_AFTER_X_HOURS + 1)),
+            createResource(VALUESET, getDateBeforeHours(REMOVE_AFTER_X_HOURS - 3))
         };
         // Generate active chunks
         int size = insert(
@@ -117,8 +122,8 @@ public class ChunksRepositoryTest extends AbstractChunkResources {
     void shouldRemoveNoChunk() {
         // Args
         TestResource[] res = new TestResource[] {
-            createResource("codesystem", null),
-            createResource("valueset", null)
+            createResource(CODESYSTEM, null),
+            createResource(VALUESET, null)
         };
         // Generate active chunks
         insert(
@@ -141,8 +146,8 @@ public class ChunksRepositoryTest extends AbstractChunkResources {
     void shouldRemoveNoChunkDespiteMissingIndex() {
         // Args
         TestResource[] res = new TestResource[] {
-            createResource("codesystem", null),
-            createResource("valueset", null)
+            createResource(CODESYSTEM, null),
+            createResource(VALUESET, null)
         };
         // Generate active chunks
         insert(
@@ -165,8 +170,8 @@ public class ChunksRepositoryTest extends AbstractChunkResources {
     void shouldRemoveOneChunk() {
         // Args
         TestResource[] res = new TestResource[] {
-            createResource("codesystem", null),
-            createResource("valueset", null, getDateBeforeHours(REMOVE_AFTER_X_HOURS + 3))
+            createResource(CODESYSTEM, null),
+            createResource(VALUESET, null, getDateBeforeHours(REMOVE_AFTER_X_HOURS + 3))
         };
         // Generate chunks
         int size = insert(
@@ -189,8 +194,8 @@ public class ChunksRepositoryTest extends AbstractChunkResources {
     void shouldRemoveAllChunks() {
         // Args
         TestResource[] res = new TestResource[] {
-            createResource("codesystem", null, getDateBeforeHours(REMOVE_AFTER_X_HOURS + 1)),
-            createResource("valueset", null, getDateBeforeHours(REMOVE_AFTER_X_HOURS + 3))
+            createResource(CODESYSTEM, null, getDateBeforeHours(REMOVE_AFTER_X_HOURS + 1)),
+            createResource(VALUESET, null, getDateBeforeHours(REMOVE_AFTER_X_HOURS + 3))
         };
         // Generate chunks
         int size = insert(
