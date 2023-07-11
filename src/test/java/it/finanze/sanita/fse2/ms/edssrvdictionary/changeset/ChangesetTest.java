@@ -3,6 +3,7 @@ package it.finanze.sanita.fse2.ms.edssrvdictionary.changeset;
 import static it.finanze.sanita.fse2.ms.edssrvdictionary.changeset.base.ResourceTypeTest.CODESYSTEM;
 import static it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Profile.TEST;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 import static org.mockito.ArgumentMatchers.any;
@@ -25,6 +26,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 import it.finanze.sanita.fse2.ms.edssrvdictionary.changeset.base.AbstractChangeset;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.client.IQueryClient;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes.ResourceDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes.query.HistoryDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes.query.HistoryDTO.HistoryDeleteDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes.query.HistoryDTO.HistoryInsertDTO;
@@ -32,7 +34,9 @@ import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes.query.His
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes.query.HistoryResourceDTO.ResourceItemDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes.query.HistorySnapshotDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes.query.HistorySnapshotDTO.Resources;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DocumentNotFoundException;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.OperationException;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.OutOfRangeException;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.IChunksRepo;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.resources.ChunkETY;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.resources.ChunksIndexETY;
@@ -151,5 +155,31 @@ class ChangesetTest extends AbstractChangeset {
         assertEquals(expectedRes.get(0).getSize(), actualRes.get(0).getSize(), "Size of resource "+actualRes.get(0).getId()+" doesn't match");
         assertEquals(null, actualRes.get(1).getSize(), "Size of resource "+actualRes.get(1).getId()+" is not null");
     } 
+
+    @Test
+    void getResourceByIdVersionTest() throws DocumentNotFoundException, OutOfRangeException {
+        // Build TestResource
+        TestResource resource = createResource(CODESYSTEM, null, new Date());
+        String resourceId = resource.getIndex().getResource();
+        String versionId = resource.getIndex().getVersion();
+        // Insert resources on mongodb
+        insert(false, resource);
+        int resourceSize = resource.getChunks().size();
+        for(int i=0; i < resourceSize; i++) {
+            ResourceDTO current = service.resource(resourceId, versionId, null, i);
+            long resChunkSize = resource.getChunks().get(i).getChunk().getSize();
+            long currentSize = current.getItems().size();
+            assertEquals(resChunkSize, currentSize, "Size of actual resource "+i+ "doesn't match with expected");
+            assertEquals(i == resourceSize-1, current.getLinks().getNext() == null);
+        }
+    }
+
+    @Test
+    void getResourceByIdVersionExceptionTest() throws DocumentNotFoundException, OutOfRangeException {
+        String resourceId = generateResourceId();
+        String versionId = generateVersion();
+        // Search not existing document
+        assertThrows(DocumentNotFoundException.class, () -> service.resource(resourceId, versionId, null, 0));
+    }
 
 }
