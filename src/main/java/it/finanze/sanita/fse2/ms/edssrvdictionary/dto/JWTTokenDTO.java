@@ -43,14 +43,17 @@ public class JWTTokenDTO {
 		try {
 //			String hash =  StringUtility.encodeSHA256(multipartFile.getBytes());
 			if(StringUtility.isNullOrEmpty(jwtToken.getFile_hash())) {
+				log.info("L'hash del valido risulta essere non valido ");
 				throw new TokenException("L'hash del valido risulta essere non valido ");
 			}
 			
 			if(!jwtToken.getOid().equals(creationInfo.getOid())) {
+				log.info("Oid del token diverso dalla request");
 				throw new TokenException("Oid del token diverso dalla request");
 			}
 			
 			if(!jwtToken.getVersion().equals(creationInfo.getVersion())) {
+				log.info("Version del token diverso dalla request");
 				throw new TokenException("Version del token diverso dalla request");
 			}
 		} catch(Exception ex) {

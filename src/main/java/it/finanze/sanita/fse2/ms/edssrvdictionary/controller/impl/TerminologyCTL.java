@@ -38,6 +38,8 @@ import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.OperationException;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.service.ITerminologySRV;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.utility.ProfileUtility;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.utility.ValidationUtility;
+import lombok.extern.java.Log;
+import lombok.extern.slf4j.Slf4j;
 
 
 /**
@@ -45,6 +47,7 @@ import it.finanze.sanita.fse2.ms.edssrvdictionary.utility.ValidationUtility;
  */
 @RestController
 @Validated
+@Slf4j
 public class TerminologyCTL extends AbstractCTL implements ITerminologyCTL {
 
 	@Autowired
@@ -57,6 +60,11 @@ public class TerminologyCTL extends AbstractCTL implements ITerminologyCTL {
 	public PostDocsResDTO uploadTerminology(FormatEnum format, @Valid RequestDTO creationInfo, MultipartFile file,HttpServletRequest request) throws OperationException, DocumentAlreadyPresentException,DataProcessingException, InvalidContentException, IOException {
 		if(!profileUtility.isDevProfile() && !profileUtility.isTestProfile()) {
 			JWTTokenDTO jwt = JWTTokenDTO.extractPayload(request , profileUtility.isDockerProfile());
+			boolean present = jwt != null;
+			log.info("Jwt present:" + present);
+			log.info("Upload terminology oid jwt:" + jwt.getOid());
+			log.info("Upload terminology version jwt:" + jwt.getVersion());
+			log.info("Upload terminology version hash:" + jwt.getFile_hash());
 			JWTTokenDTO.uploadTerminologyValidatePayload(jwt,creationInfo);
 		}
 
