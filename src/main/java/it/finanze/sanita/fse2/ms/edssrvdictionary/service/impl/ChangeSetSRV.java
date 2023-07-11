@@ -37,7 +37,7 @@ import static it.finanze.sanita.fse2.ms.edssrvdictionary.utility.RoutesUtility.A
 @Slf4j
 public class ChangeSetSRV implements IChangeSetSRV {
 
-    private static final int CHUNK_SIZE = 1;
+    public static final int CHUNK_SIZE = 1;
 
     @Autowired
     private IQueryClient client;

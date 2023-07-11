@@ -1,5 +1,7 @@
 package it.finanze.sanita.fse2.ms.edssrvdictionary.changeset.base;
 
+import com.google.common.collect.Lists;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes.query.HistoryResourceDTO.ResourceItemDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.resources.ChunkETY;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.resources.ChunksIndexETY;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.resources.base.ChunkMetaETY;
@@ -18,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.service.impl.ChangeSetSRV.CHUNK_SIZE;
 import static java.time.temporal.ChronoUnit.HOURS;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.data.mongodb.core.query.Criteria.where;
@@ -29,22 +32,20 @@ public abstract class AbstractChunkResources {
 
     private static final SecureRandom generator = new SecureRandom();
 
-    protected TestResource createResource(ResourceTypeTest type, @Nullable Date deleted) {
-        return createResource(type, deleted, new Date());
-    }
-
-    protected TestResource createResource(ResourceTypeTest type, @Nullable Date deleted, Date insertionDate) {
+    protected TestResource createResource(ResourceTypeTest type, @Nullable Date deleted, Date insertion, int size) {
         List<ChunkETY> chunks = new ArrayList<>();
-        // Generate fake index
-        ChunksIndexETY index = generateIndex(type, deleted);
-        // Generate fake size
-        int size = generateNumber(5);
         // Check for zero
         if(size == 0) size = 1;
+        // Generate fake index
+        ChunksIndexETY index = generateIndex(type, deleted, size);
+        // Create items
+        List<ResourceItemDTO> items = generateItems(size);
+        // Split by chunk
+        List<List<ResourceItemDTO>> parts = Lists.partition(items, CHUNK_SIZE);
         // Iterate
-        for(int i = 0; i < size; ++i) {
+        for(int i = 0; i < parts.size(); ++i) {
             // Generate fake chunk
-            ChunkETY e = generateChunk(index, i, insertionDate);
+            ChunkETY e = generateChunk(index, i, insertion, parts.get(i));
             // Add id to index
             index.getChunks().add(e.getId());
             // Save chunk
@@ -53,7 +54,15 @@ public abstract class AbstractChunkResources {
         return new TestResource(index, chunks);
     }
 
-    private ChunksIndexETY generateIndex(ResourceTypeTest type, @Nullable Date deleted) {
+    protected TestResource createResource(ResourceTypeTest type, @Nullable Date deleted) {
+        return createResource(type, deleted, new Date(), generateNumber(CHUNK_SIZE * 4));
+    }
+
+    protected TestResource createResource(ResourceTypeTest type, @Nullable Date deleted, Date insertion) {
+        return createResource(type, deleted, insertion, 0);
+    }
+
+    private ChunksIndexETY generateIndex(ResourceTypeTest type, @Nullable Date deleted, int size) {
         return new ChunksIndexETY(
             new ObjectId(),
             String.valueOf(generateNumber(9999)),
@@ -66,24 +75,32 @@ public abstract class AbstractChunkResources {
                 false
             ),
             new ArrayList<>(),
-            0,
+            size,
             deleted
         );
     }
 
-    private ChunkETY generateChunk(ChunksIndexETY index, int idx, Date insertedAt) {
+    private ChunkETY generateChunk(ChunksIndexETY index, int idx, Date insertedAt, List<ResourceItemDTO> items) {
         ChunkETY chunk = new ChunkETY(
             ChunkMetaETY.from(index.getMeta()),
             new ResChunkETY(
                 index.getId(),
                 idx,
-                new ArrayList<>(),
-                0
+                items,
+                items.size()
             )
         );
         chunk.setId(new ObjectId());
         chunk.setInsertedAt(insertedAt);
         return chunk;
+    }
+
+    private List<ResourceItemDTO> generateItems(int size) {
+        List<ResourceItemDTO> items = new ArrayList<>();
+        for(int i = 0; i < size; ++i) {
+            items.add(new ResourceItemDTO("code#" + i, "display#" + i));
+        }
+        return items;
     }
 
     protected String generateOid() {
