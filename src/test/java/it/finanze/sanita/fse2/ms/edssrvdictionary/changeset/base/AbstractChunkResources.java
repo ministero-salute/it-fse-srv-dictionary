@@ -1,29 +1,33 @@
 package it.finanze.sanita.fse2.ms.edssrvdictionary.changeset.base;
 
-import com.google.common.collect.Lists;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes.query.HistoryResourceDTO.ResourceItemDTO;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.resources.ChunkETY;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.resources.ChunksIndexETY;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.resources.base.ChunkMetaETY;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.resources.base.IndexMetaETY;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.resources.base.ResChunkETY;
-import lombok.Value;
-import org.bson.types.ObjectId;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Query;
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.service.impl.ChangeSetSRV.CHUNK_SIZE;
+import static java.time.temporal.ChronoUnit.HOURS;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.springframework.data.mongodb.core.query.Criteria.where;
 
-import javax.annotation.Nullable;
 import java.security.SecureRandom;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import static it.finanze.sanita.fse2.ms.edssrvdictionary.service.impl.ChangeSetSRV.CHUNK_SIZE;
-import static java.time.temporal.ChronoUnit.HOURS;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.springframework.data.mongodb.core.query.Criteria.where;
+import javax.annotation.Nullable;
+
+import org.bson.types.ObjectId;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Query;
+
+import com.google.common.collect.Lists;
+
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes.query.HistoryResourceDTO.ResourceItemDTO;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes.query.HistorySnapshotDTO.Resources;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.resources.ChunkETY;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.resources.ChunksIndexETY;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.resources.base.ChunkMetaETY;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.resources.base.IndexMetaETY;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.resources.base.ResChunkETY;
+import lombok.Value;
 
 public abstract class AbstractChunkResources {
 
@@ -136,6 +140,10 @@ public abstract class AbstractChunkResources {
     public static class TestResource {
         ChunksIndexETY index;
         List<ChunkETY> chunks;
+
+        public Resources asResource() {
+            return new Resources();
+        }
     }
 
     @Value

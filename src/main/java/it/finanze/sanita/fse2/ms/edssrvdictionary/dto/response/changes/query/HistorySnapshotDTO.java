@@ -1,14 +1,17 @@
 package it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes.query;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.log.LogTraceInfoDTO;
-import lombok.Data;
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
 
 import java.util.Date;
 import java.util.List;
 
-import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.log.LogTraceInfoDTO;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @JsonInclude(NON_NULL)
@@ -25,6 +28,8 @@ public class HistorySnapshotDTO {
     private List<Resources> resources;
 
     @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
     @JsonInclude(NON_NULL)
     public static class Resources {
         String id;
