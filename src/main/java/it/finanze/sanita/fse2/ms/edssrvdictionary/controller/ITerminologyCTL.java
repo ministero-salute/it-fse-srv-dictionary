@@ -12,6 +12,7 @@
 package it.finanze.sanita.fse2.ms.edssrvdictionary.controller;
 
 
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Headers.JWT_BUSINESS_HEADER;
 import static it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Logs.ERR_VAL_SYSTEM_BLANK;
 import static it.finanze.sanita.fse2.ms.edssrvdictionary.utility.RoutesUtility.API_DOCUMENTS_TAG;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -53,9 +54,6 @@ import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DocumentAlreadyPres
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DocumentNotFoundException;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.InvalidContentException;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.OperationException;
-import it.finanze.sanita.fse2.ms.gtw.dispatcher.dto.response.ValidationResDTO;
-
-import static it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Headers.JWT_BUSINESS_HEADER;
 
 /**
  * Terminology controller
