@@ -53,6 +53,8 @@ import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DocumentAlreadyPres
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.DocumentNotFoundException;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.InvalidContentException;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.OperationException;
+import it.finanze.sanita.fse2.ms.gtw.dispatcher.dto.response.ValidationResDTO;
+
 import static it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Headers.JWT_BUSINESS_HEADER;
 
 /**
@@ -67,7 +69,7 @@ public interface ITerminologyCTL {
 	@SecurityRequirements({
 		@SecurityRequirement(name = "bearerAuth"),
 		@SecurityRequirement(name = JWT_BUSINESS_HEADER)})
-	@ApiResponse(content = @Content(mediaType = MediaType.APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = ErrorResponseDTO.class)))
+	@ApiResponse(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = PostDocsResDTO.class)))
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "201", description = "Documenti caricati correttamente", content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = PostDocsResDTO.class))),
 			@ApiResponse(responseCode = "400", description = "I parametri forniti non sono validi", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = ErrorResponseDTO.class))),
