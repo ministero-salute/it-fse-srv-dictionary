@@ -23,12 +23,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.multipart.MultipartFile;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -72,6 +74,7 @@ public interface ITerminologyCTL {
 			@ApiResponse(responseCode = "409", description = "System già presente sul database", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = ErrorResponseDTO.class))),
 			@ApiResponse(responseCode = "500", description = "Errore interno del server", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = ErrorResponseDTO.class)))
 	}) 
+	@ResponseStatus(HttpStatus.CREATED)
 	PostDocsResDTO uploadTerminology(@PathVariable FormatEnum format, 
 			@Valid@RequestPart(required = false) RequestDTO creationInfo,
 			@RequestPart(name = "file")@Schema(format = "binary") MultipartFile file,HttpServletRequest request) throws OperationException, DocumentAlreadyPresentException, DataProcessingException, InvalidContentException,IOException ;
@@ -87,6 +90,7 @@ public interface ITerminologyCTL {
 			@ApiResponse(responseCode = "404", description = "System non presente sul database", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = ErrorResponseDTO.class))),
 			@ApiResponse(responseCode = "500", description = "Errore interno del server", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = ErrorResponseDTO.class)))
 	})
+	@ResponseStatus(HttpStatus.OK)
 	DelDocsResDTO deleteTerminologies(
 			@PathVariable@Parameter(description = "Identificatore del dizionario")@NotBlank(message = ERR_VAL_SYSTEM_BLANK)
 			@Schema(description = "oid",  minLength = 0, maxLength = 1000)String oid,
