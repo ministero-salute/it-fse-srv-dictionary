@@ -7,6 +7,8 @@ import java.util.Base64;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.BusinessException;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.exceptions.TokenException;
@@ -32,37 +34,34 @@ public class JWTTokenDTO {
 	private String version;
 
 
-	public static void deleteTerminologyValidatePayload(final JWTTokenDTO jwtToken) {
-		genericValidatePayload(jwtToken);
+	public static void deleteTerminologyValidatePayload(final JWTTokenDTO jwtToken, final String oid, final String version) {
+		genericValidatePayload(jwtToken,oid,version);
 	}
-	
-	public static void uploadTerminologyValidatePayload(final JWTTokenDTO jwtToken, RequestDTO creationInfo) {
 
-		genericValidatePayload(jwtToken);
+	public static void uploadTerminologyValidatePayload(final JWTTokenDTO jwtToken, RequestDTO creationInfo, MultipartFile multipartFile) {
+
+		String oid = creationInfo!=null ? creationInfo.getOid() : "";
+		String version = creationInfo!=null ? creationInfo.getVersion() : ""; 
+		genericValidatePayload(jwtToken,oid, version);
 
 		try {
-//			String hash =  StringUtility.encodeSHA256(multipartFile.getBytes());
 			if(StringUtility.isNullOrEmpty(jwtToken.getFile_hash())) {
-				log.info("L'hash del valido risulta essere non valido ");
-				throw new TokenException("L'hash del valido risulta essere non valido ");
+				log.info("L'hash del file risulta essere non valorizzato nel jwt");
+				throw new TokenException("L'hash del file risulta essere non valorizzato nel jwt");
 			}
-			
-			if(!jwtToken.getOid().equals(creationInfo.getOid())) {
-				log.info("Oid del token diverso dalla request");
-				throw new TokenException("Oid del token diverso dalla request");
+
+			if(!jwtToken.getFile_hash().equals(StringUtility.encodeSHA256(multipartFile.getBytes()))) {
+				log.info("L'hash dichiarato nel jwt risulta essere differente rispetto al file in input");
+				throw new TokenException("L'hash dichiarato nel jwt risulta essere differente rispetto al file in input");
 			}
-			
-			if(!jwtToken.getVersion().equals(creationInfo.getVersion())) {
-				log.info("Version del token diverso dalla request");
-				throw new TokenException("Version del token diverso dalla request");
-			}
+
 		} catch(Exception ex) {
 			throw new BusinessException("Generic error upload");
 		}
 	}
 
 
-	public static void genericValidatePayload(final JWTTokenDTO jwtToken) {
+	public static void genericValidatePayload(final JWTTokenDTO jwtToken, String oid, String version) {
 
 		if(StringUtility.isNullOrEmpty(jwtToken.getSub())) {
 			throw new TokenException("Il sub nel jwt non può essere null");
@@ -71,17 +70,27 @@ public class JWTTokenDTO {
 		if(!CfUtility.isValidCf(jwtToken.getSub())) {
 			throw new TokenException("Il cf nel jwt risulta essere non valido");
 		}
-		
+
 		if(StringUtility.isNullOrEmpty(jwtToken.getOid())) {
 			throw new TokenException("L'oid nel jwt non può essere null");
 		}
-		
+
 		if(StringUtility.isNullOrEmpty(jwtToken.getVersion())) {
 			throw new TokenException("La version nel jwt non può essere null");
 		}
+
+		if(!StringUtility.isNullOrEmpty(oid) && !jwtToken.getOid().equals(oid)) {
+			log.info("Oid del token diverso dalla request");
+			throw new TokenException("Oid del token diverso dalla request");
+		}
+
+		if(!StringUtility.isNullOrEmpty(version) && !jwtToken.getOid().equals(version)) {
+			log.info("Version del token diverso dalla request");
+			throw new TokenException("Version del token diverso dalla request");
+		}
 	}
 
-	
+
 	public static JWTTokenDTO extractPayload(final Object httpRequest,boolean fromDockerEnvironment) {
 
 		HttpServletRequest req = (HttpServletRequest)httpRequest;

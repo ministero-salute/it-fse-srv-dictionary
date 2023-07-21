@@ -49,5 +49,12 @@ public class ValidationUtility {
 				throw new RequestValidationException("Se si è scelto come format fhir la request deve essere null");
 			}
 		} 
+		
+		if(FormatEnum.CUSTOM_CSV.equals(format) || FormatEnum.CUSTOM_JSON.equals(format)) {
+			if(request==null) {
+				throw new RequestValidationException("Se si è scelto come format custom csv o custom json la request deve essere valorizzata");
+			}
+		}
+		
 	}
 }
