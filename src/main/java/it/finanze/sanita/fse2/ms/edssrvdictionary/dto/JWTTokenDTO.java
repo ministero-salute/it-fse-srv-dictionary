@@ -84,7 +84,7 @@ public class JWTTokenDTO {
 			throw new TokenException("Oid del token diverso dalla request");
 		}
 
-		if(!StringUtility.isNullOrEmpty(version) && !jwtToken.getOid().equals(version)) {
+		if(!StringUtility.isNullOrEmpty(version) && !jwtToken.getVersion().equals(version)) {
 			log.info("Version del token diverso dalla request");
 			throw new TokenException("Version del token diverso dalla request");
 		}
