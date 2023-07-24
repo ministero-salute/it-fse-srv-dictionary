@@ -11,15 +11,14 @@
  */
 package it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes;
 
-import java.util.Date;
-
 import com.fasterxml.jackson.annotation.JsonFormat;
-
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes.data.snapshot.ChunksDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.Date;
 
 /**
  * DTO for Change Set status endpoint response.
@@ -31,7 +30,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class ChangeSetChunkDTO {
 	
-	private static final String PTT_ISO_8601 = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
+	public static final String PTT_ISO_8601 = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
 
     /**
      * Trace id log.

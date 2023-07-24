@@ -11,6 +11,7 @@
  */
 package it.finanze.sanita.fse2.ms.edssrvdictionary.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.TerminologyETY;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.utility.MiscUtility;
@@ -21,6 +22,7 @@ import lombok.NoArgsConstructor;
 import java.io.Serializable;
 import java.time.OffsetDateTime;
 
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes.ChangeSetChunkDTO.PTT_ISO_8601;
 import static it.finanze.sanita.fse2.ms.edssrvdictionary.utility.ValidationUtility.DEFAULT_STRING_MAX_SIZE;
 
 @Data
@@ -44,8 +46,11 @@ public class TerminologyDocumentDTO implements Serializable {
 	private String code;
 	@Schema(maxLength = DEFAULT_STRING_MAX_SIZE)
 	private String description;
+	@JsonFormat(pattern = PTT_ISO_8601)
 	private OffsetDateTime releaseDate;
+	@JsonFormat(pattern = PTT_ISO_8601)
 	private OffsetDateTime insertionDate;
+	@JsonFormat(pattern = PTT_ISO_8601)
 	private OffsetDateTime lastUpdateDate;
 
 	public static TerminologyDocumentDTO fromEntity(TerminologyETY e) {
