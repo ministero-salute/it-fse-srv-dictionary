@@ -268,6 +268,7 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
 	@Override
 	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders hheaders, HttpStatus status, WebRequest request) {
 		ErrorResponseDTO out = createArgumentMismatchError(getLogTraceInfo(), ex);
+		out.setStatus(HttpStatus.BAD_REQUEST.value());
 		// Set HTTP headers
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_PROBLEM_JSON);
@@ -308,6 +309,7 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
 
 		LogTraceInfoDTO traceInfo = getLogTraceInfo();
 		ErrorResponseDTO response = new ErrorResponseDTO(traceInfo, ex.getError());
+		response.setStatus(HttpStatus.BAD_REQUEST.value());
 
 		return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
 	}
@@ -323,6 +325,7 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
 		log.error("HANDLER handleGenericException()", ex);
 		// Create error DTO
 		ErrorResponseDTO out = createGenericError(getLogTraceInfo(), ex);
+		out.setStatus(out.getStatus());
 		// Set HTTP headers
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_PROBLEM_JSON);
