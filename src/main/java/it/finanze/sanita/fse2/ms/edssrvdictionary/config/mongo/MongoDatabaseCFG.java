@@ -27,6 +27,10 @@ import org.springframework.data.mongodb.core.convert.MappingMongoConverter;
 import org.springframework.data.mongodb.core.mapping.MongoMappingContext;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
+import com.mongodb.ConnectionString;
+import com.mongodb.MongoClientSettings;
+import com.mongodb.client.MongoClients;
+
 
 /**
  * Factory to create database instances
@@ -47,7 +51,11 @@ public class MongoDatabaseCFG {
      */
     @Bean
     public MongoDatabaseFactory createFactory(MongoPropertiesCFG props) {
-        return new SimpleMongoClientDatabaseFactory(props.getUri());
+    	  ConnectionString connectionString = new ConnectionString(props.getUri());
+          MongoClientSettings mongoClientSettings = MongoClientSettings.builder()
+              .applyConnectionString(connectionString)
+              .build();
+          return new SimpleMongoClientDatabaseFactory(MongoClients.create(mongoClientSettings), props.getSchemaName());
     }
 
     /**
