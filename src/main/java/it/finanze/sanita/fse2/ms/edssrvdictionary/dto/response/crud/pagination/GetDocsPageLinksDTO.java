@@ -11,6 +11,7 @@
  */
 package it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.crud.pagination;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.TerminologyETY;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,13 +19,16 @@ import org.apache.http.client.utils.URIBuilder;
 import org.springframework.data.domain.Page;
 
 import static it.finanze.sanita.fse2.ms.edssrvdictionary.utility.RoutesUtility.*;
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.utility.ValidationUtility.DEFAULT_STRING_MAX_SIZE;
 import static org.springframework.web.servlet.support.ServletUriComponentsBuilder.fromCurrentContextPath;
 
 @Data
 @AllArgsConstructor
 public class GetDocsPageLinksDTO {
 
+    @Schema(minLength = 0, maxLength = DEFAULT_STRING_MAX_SIZE)
     private String next;
+    @Schema(minLength = 0, maxLength = DEFAULT_STRING_MAX_SIZE)
     private String prev;
 
     public static GetDocsPageLinksDTO fromPage(String system, Page<TerminologyETY> page) {

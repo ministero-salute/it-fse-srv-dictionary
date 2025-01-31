@@ -11,31 +11,40 @@
  */
 package it.finanze.sanita.fse2.ms.edssrvdictionary.dto.csv;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.apache.commons.lang3.StringUtils;
 
 import com.opencsv.bean.CsvBindByName;
 
 import lombok.Data;
 
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.utility.ValidationUtility.DEFAULT_STRING_MAX_SIZE;
+
 @Data
 public class TerminologyBuilderDTO {
 
 	@CsvBindByName(column = "Code")
+	@Schema(minLength = 0, maxLength = DEFAULT_STRING_MAX_SIZE)
 	private String code;
 
 	@CsvBindByName(column = "Display")
+	@Schema(minLength = 0, maxLength = DEFAULT_STRING_MAX_SIZE)
 	private String display;
 
 	@CsvBindByName(column = "CodeSystem")
+	@Schema(minLength = 0, maxLength = DEFAULT_STRING_MAX_SIZE)
 	private String codeSystem;
 	
 	@CsvBindByName(column = "DisplayName")
+	@Schema(minLength = 0, maxLength = DEFAULT_STRING_MAX_SIZE)
 	private String displayName;
 	
 	@CsvBindByName(column = "status")
+	@Schema(minLength = 0, maxLength = DEFAULT_STRING_MAX_SIZE)
 	private String status;
 
 	@CsvBindByName(column = "Not Selectable")
+	@Schema(minLength = 0, maxLength = DEFAULT_STRING_MAX_SIZE)
 	private boolean notSelectable;
 	
 	public String getDescription() {

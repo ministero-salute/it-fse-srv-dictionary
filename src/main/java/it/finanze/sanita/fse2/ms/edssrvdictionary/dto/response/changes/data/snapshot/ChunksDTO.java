@@ -11,11 +11,15 @@
  */
 package it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes.data.snapshot;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.repository.entity.snapshot.ChunksETY;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.Value;
+
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 
 /**
  * The changeset chunk DTO
@@ -27,6 +31,7 @@ public class ChunksDTO {
 
     public static final String EMPTY_ID = null;
 
+    @Schema(maxLength = 1000)
     String snapshotID;
     Chunk insertions;
     Chunk deletions;
@@ -40,14 +45,23 @@ public class ChunksDTO {
         /**
          * The chunks available from the snapshot
          */
+        @Schema(format = "int32")
+        @Min(0)
+        @Max(Integer.MAX_VALUE)
         int chunksCount;
         /**
          * The number of entries each chunk is made of
          */
+        @Schema(format = "int32")
+        @Min(0)
+        @Max(Integer.MAX_VALUE)
         int chunksAvgSize;
         /**
          * The amount of items to elaborate
          */
+        @Schema(format = "int32")
+        @Min(0)
+        @Max(Integer.MAX_VALUE)
         int chunksItems;
 
         public Chunk(ChunksETY chunk) {

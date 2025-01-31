@@ -21,6 +21,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.Size;
 import java.util.List;
 
 /**
@@ -31,7 +32,7 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 public class GetTermsInsDTO extends ResponseDTO {
 
-    @ArraySchema(schema = @Schema(implementation = TerminologyDocumentDTO.class))
+    @ArraySchema(minItems = 0, maxItems = 1000000, schema = @Schema(implementation = TerminologyDocumentDTO.class))
     private List<TerminologyDocumentDTO> documents;
 
     public GetTermsInsDTO(LogTraceInfoDTO traceInfo, List<TerminologyDocumentDTO> data) {

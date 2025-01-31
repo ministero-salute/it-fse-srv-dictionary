@@ -11,12 +11,16 @@
  */
 package it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.base.ResponseDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.changes.data.snapshot.ChunksDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import java.util.Date;
 
 /**
@@ -27,25 +31,17 @@ import java.util.Date;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ChangeSetChunkDTO {
-
-    /**
-     * Trace id log.
-     */
-    private String traceID;
-
-    /**
-     * Span id log.
-     */
-    private String spanID;
+public class ChangeSetChunkDTO extends ResponseDTO {
 
     /**
      * Last update date to consider while retrieving the change set items
      */
+    @Schema(format = "date-time", maxLength = 50)
     private Date lastUpdate;
     /**
      * The response date-time (usually used as the next lastUpdate)
      */
+    @Schema(format = "date-time", maxLength = 50)
     private Date timestamp;
 
     /**
@@ -56,10 +52,16 @@ public class ChangeSetChunkDTO {
     /**
      * The total number of items returned (inserted/modified/deleted)
      */
+    @Schema(format = "int64")
+    @Min(0)
+    @Max(Integer.MAX_VALUE)
     private long totalNumberOfElements;
 
     /**
      * The current active collection items
      */
+    @Schema(format = "int64")
+    @Min(0)
+    @Max(Integer.MAX_VALUE)
     private long collectionSize;
 }

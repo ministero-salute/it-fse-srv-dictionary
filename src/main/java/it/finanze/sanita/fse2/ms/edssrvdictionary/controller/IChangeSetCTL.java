@@ -39,6 +39,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.util.Date;
 
 import static it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Logs.*;
@@ -58,6 +59,7 @@ public interface IChangeSetCTL {
 		@RequestParam(value=API_QP_LAST_UPDATE, required = false)
 		@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
 		@NoFutureDate(message = ERR_VAL_FUTURE_DATE)
+		@Schema(maxLength = 50)
 		Date lastUpdate
 	) throws OperationException;
 
@@ -68,7 +70,8 @@ public interface IChangeSetCTL {
 	@Tag(name = API_CHANGESET_CHUNKS_TAG)
 	@Operation(
 		summary = "Restituisce un chunk dato indice e identificativo snapshot (solo-inserimenti)",
-		description = "Servizio che consente di restituire le terminologie presenti nel chunk di un dato snapshot."
+		description = "Servizio che consente di restituire le terminologie presenti nel chunk di un dato snapshot.",
+			operationId = "listTerminologyFromSnapshotIns"
 	)
 	@ApiResponses(value = {
 		@ApiResponse(responseCode = "200", description = "Richiesta terminologie avvenuta con successo", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = GetTermsInsDTO.class))),
@@ -81,9 +84,11 @@ public interface IChangeSetCTL {
 		@Parameter(description = "Identificatore documento (snapshot)")
 		@NotBlank(message = ERR_VAL_ID_BLANK)
 		@ValidObjectId(message = ERR_VAL_ID_NOT_VALID)
+		@Size(max = 10000)
 		String id,
 		@PathVariable
 		@Parameter(description = "Indice chunk richiesto (eg. 0, 1, 2...)")
+		@Size(min = 0, max = 10000000)
 		int idx
 	) throws OutOfRangeException, DocumentNotFoundException, DataIntegrityException, OperationException;
 
@@ -94,7 +99,8 @@ public interface IChangeSetCTL {
 	@Tag(name = API_CHANGESET_CHUNKS_TAG)
 	@Operation(
 		summary = "Restituisce un chunk dato indice e identificativo snapshot (solo-cancellazioni)",
-		description = "Servizio che consente di restituire le terminologie presenti nel chunk di un dato snapshot."
+		description = "Servizio che consente di restituire le terminologie presenti nel chunk di un dato snapshot.",
+			operationId = "listTerminologyFromSnapshotDel"
 	)
 	@ApiResponses(value = {
 		@ApiResponse(responseCode = "200", description = "Richiesta terminologie avvenuta con successo", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = GetTermsDelDTO.class))),
@@ -107,9 +113,11 @@ public interface IChangeSetCTL {
 		@Parameter(description = "Identificatore documento (snapshot)")
 		@NotBlank(message = ERR_VAL_ID_BLANK)
 		@ValidObjectId(message = ERR_VAL_ID_NOT_VALID)
+		@Size(max = 10000)
 		String id,
 		@PathVariable
 		@Parameter(description = "Indice chunk richiesto (eg. 0, 1, 2...)")
+		@Size(min = 0, max = 100000000)
 		int idx
 	) throws OutOfRangeException, DocumentNotFoundException, DataIntegrityException, OperationException;
 

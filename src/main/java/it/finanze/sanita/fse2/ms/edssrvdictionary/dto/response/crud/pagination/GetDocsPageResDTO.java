@@ -22,6 +22,9 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.data.domain.Page;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.Size;
 import java.util.List;
 
 /**
@@ -31,9 +34,13 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 public class GetDocsPageResDTO extends ResponseDTO {
 
-    @ArraySchema(schema = @Schema(implementation = TerminologyDocumentDTO.class))
+    @ArraySchema(minItems = 0, maxItems = 1000000, schema = @Schema(implementation = TerminologyDocumentDTO.class))
     private List<TerminologyDocumentDTO> items;
+    @Schema(implementation = GetDocsPageLinksDTO.class, minLength = 0, maxLength = 10000)
     private GetDocsPageLinksDTO links;
+    @Schema(format = "int64")
+    @Min(0)
+    @Max(Integer.MAX_VALUE)
     private long numberOfItems;
     
     public GetDocsPageResDTO(

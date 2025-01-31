@@ -14,15 +14,19 @@ package it.finanze.sanita.fse2.ms.edssrvdictionary.dto.csv.vocabulary;
 
 import java.util.List;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Data;
 import lombok.Setter;
+
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.utility.ValidationUtility.DEFAULT_STRING_MAX_SIZE;
 
 @Data
 @Builder
 @Setter
 public class VocabularyDTO {
 
+	@Schema(minLength = 0, maxLength = DEFAULT_STRING_MAX_SIZE)
 	private String system;
 
 	List<TerminologyFileEntryDTO> entryDTO;

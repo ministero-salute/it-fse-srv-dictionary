@@ -11,12 +11,17 @@
  */
 package it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.base;
 
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.AbstractDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.log.LogTraceInfoDTO;
 import lombok.Getter;
 import lombok.Setter;
+
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.utility.ValidationUtility.DEFAULT_STRING_MAX_SIZE;
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.utility.ValidationUtility.DEFAULT_STRING_MIN_SIZE;
 
 /**
  * 
@@ -30,13 +35,13 @@ public class ResponseDTO implements AbstractDTO {
 	/**
 	 * Trace id log.
 	 */
-	@Size(min = 0, max = 100)
+	@Schema(minLength = DEFAULT_STRING_MIN_SIZE, maxLength = DEFAULT_STRING_MAX_SIZE)
 	private String traceID;
 
 	/**
 	 * Span id log.
 	 */
-	@Size(min = 0, max = 100)
+	@Schema(minLength = DEFAULT_STRING_MIN_SIZE, maxLength = DEFAULT_STRING_MAX_SIZE)
 	private String spanID;
 
 	/**

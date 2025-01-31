@@ -34,7 +34,10 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.util.Date;
 
 import static it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants.Logs.*;
@@ -56,7 +59,8 @@ public interface ITerminologyCTL {
     )
     @Operation(
         summary = "Restituisce un terminology dato il suo identificativo",
-        description = "Servizio che consente di ritornare una terminologia dato il suo identificativo."
+        description = "Servizio che consente di ritornare una terminologia dato il suo identificativo.",
+        operationId = "listTerminologiesById"
     )
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Documento presente sul database", content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = GetDocsResDTO.class))),
@@ -69,6 +73,7 @@ public interface ITerminologyCTL {
         @Parameter(description = "Identificatore documento")
         @NotBlank(message = ERR_VAL_ID_BLANK)
         @ValidObjectId(message = ERR_VAL_ID_NOT_VALID)
+        @Size(max = 255)
         String id
     ) throws OperationException, DocumentNotFoundException;
 
@@ -78,7 +83,8 @@ public interface ITerminologyCTL {
     )
     @Operation(
         summary = "Aggiunge terminologie attraverso un file CSV",
-        description = "Servizio che consente di aggiungere terminologie sulla base dati caricando un file csv."
+        description = "Servizio che consente di aggiungere terminologie sulla base dati caricando un file csv.",
+        operationId = "addTerminologiesFromCsv"
     )
     @ApiResponses(value = {
         @ApiResponse(responseCode = "201", description = "Documenti caricati correttamente", content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = PostDocsResDTO.class))),
@@ -89,9 +95,11 @@ public interface ITerminologyCTL {
     @ResponseStatus(HttpStatus.CREATED)
     PostDocsResDTO uploadTerminologies(
         @RequestPart
-        @Parameter(description = "CSV contenente le terminologie da inserire (e.g 2.16.840.1.113883.1.11.1.csv)")
+        @Parameter(description = "CSV contenente le terminologie da inserire (e.g 2.16.840.1.113883.1.11.1.csv)",
+        schema =  @Schema(type = "string", format = "binary", maxLength =  30000000)) //30MB file max
         MultipartFile file,
         @Parameter(description = "Versione del dizionario")
+        @Size(max = 255)
         String version,
         @Parameter(description = "Data di rilascio del dizionario")
         @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
@@ -105,7 +113,8 @@ public interface ITerminologyCTL {
     )
     @Operation(
         summary = "Restituisce le terminologie appartenenti al system richiesto con paginazione",
-        description = "Servizio che restituisce tutte le terminologie appartenenti ad un certo system con paginazione"
+        description = "Servizio che restituisce tutte le terminologie appartenenti ad un certo system con paginazione",
+        operationId = "listTerminologiesFromSystem"
     )
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Documenti restituite correttamente", content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = GetDocsPageResDTO.class))),
@@ -117,12 +126,17 @@ public interface ITerminologyCTL {
         @PathVariable
         @Parameter(description = "Identificatore del dizionario")
         @NotBlank(message = ERR_VAL_SYSTEM_BLANK)
+        @Size(max = 10000)
         String system,
         @RequestParam(API_QP_PAGE)
         @Parameter(description = "Indice pagina richiesto (eg. 0, 1, 2...)")
+        @Min(0)
+        @Max(Integer.MAX_VALUE)
         int page,
         @RequestParam(API_QP_LIMIT)
         @Parameter(description = "Limite documenti per pagina (eg. 10, 20 ...)")
+        @Min(0)
+        @Max(Integer.MAX_VALUE)
         int limit
     ) throws OperationException, DocumentNotFoundException, OutOfRangeException;
 
@@ -132,7 +146,8 @@ public interface ITerminologyCTL {
     )
     @Operation(
         summary = "Modifica terminologie attraverso un file CSV",
-        description = "Servizio che consente di aggiungere una nuova versione per terminologie già presenti sulla base dati caricando un file csv."
+        description = "Servizio che consente di aggiungere una nuova versione per terminologie già presenti sulla base dati caricando un file csv.",
+        operationId = "addVersioneFromCsv"
     )
     @ApiResponses(value = {
         @ApiResponse(responseCode = "201", description = "Documenti caricati correttamente", content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = PutDocsResDTO.class))),
@@ -144,9 +159,11 @@ public interface ITerminologyCTL {
     @ResponseStatus(HttpStatus.CREATED)
     PutDocsResDTO updateTerminologies(
         @RequestPart
-        @Parameter(description = "CSV contenente le terminologie da inserire (e.g 2.16.840.1.113883.1.11.1.csv)")
+        @Parameter(description = "CSV contenente le terminologie da inserire (e.g 2.16.840.1.113883.1.11.1.csv)",
+                schema =  @Schema(type = "string", format = "binary", maxLength =  30000000)) //30MB file max
         MultipartFile file,
         @Parameter(description = "Versione del dizionario incrementata rispetto alla precedente")
+        @Size(max = 10000)
         String version,
         @Parameter(description = "Data di rilascio del dizionario incrementata rispetto alla precedente")
         @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
@@ -160,7 +177,8 @@ public interface ITerminologyCTL {
     )
     @Operation(
         summary = "Cancellazione terminologie attraverso il system",
-        description = "Servizio che consente di cancellare un certo system dalla base dati"
+        description = "Servizio che consente di cancellare un certo system dalla base dati",
+            operationId = "removeTerminologyBySystem"
     )
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Documenti cancellati correttamente", content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = DelDocsResDTO.class))),
@@ -172,6 +190,7 @@ public interface ITerminologyCTL {
         @PathVariable
         @Parameter(description = "Identificatore del dizionario")
         @NotBlank(message = ERR_VAL_SYSTEM_BLANK)
+        @Size(max = 10000)
         String system
     ) throws OperationException, DocumentNotFoundException, DataIntegrityException;
 

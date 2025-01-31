@@ -21,6 +21,8 @@ import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.log.LogTraceInfoD
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.utility.ValidationUtility.DEFAULT_STRING_MAX_SIZE;
+
 /**
  * The Class ErrorResponseDTO.
  *
@@ -34,27 +36,23 @@ public class ErrorResponseDTO extends ResponseDTO {
 	/**
 	 * Trace id log.
 	 */
-	@Schema(description = "Indentificativo univoco della richiesta dell'utente")
-	@Size(min = 0, max = 100)
+
+	@Schema(description = "Indentificativo univoco della richiesta dell'utente", minLength = 0, maxLength = DEFAULT_STRING_MAX_SIZE)
 	private String traceID;
 	
 	/**
 	 * Span id log.
 	 */
-	@Schema(description = "Indentificativo univoco di un task della richiesta dell'utente (differisce dal traceID solo in caso di chiamate sincrone in cascata)")
-	@Size(min = 0, max = 100)
+	@Schema(minLength = 0, maxLength = DEFAULT_STRING_MAX_SIZE, description = "Indentificativo univoco di un task della richiesta dell'utente (differisce dal traceID solo in caso di chiamate sincrone in cascata)")
 	private String spanID;
 
-	@Schema(description = "Identificativo del problema verificatosi")
-	@Size(min = 0, max = 100)
+	@Schema(description = "Identificativo del problema verificatosi", minLength = 0, maxLength = DEFAULT_STRING_MAX_SIZE)
 	private String type;
 	
-	@Schema(description = "Sintesi del problema (invariante per occorrenze diverse dello stesso problema)")
-	@Size(min = 0, max = 1000)
+	@Schema(description = "Sintesi del problema (invariante per occorrenze diverse dello stesso problema)", minLength = 0, maxLength = 10000)
 	private String title;
 
-	@Schema(description = "Descrizione del problema")
-	@Size(min = 0, max = 1000)
+	@Schema(description = "Descrizione del problema", minLength = 0, maxLength = 10000)
 	private String detail;
 
 	@Schema(description = "Stato http")

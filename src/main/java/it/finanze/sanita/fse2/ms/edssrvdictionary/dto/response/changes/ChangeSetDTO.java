@@ -15,6 +15,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 
@@ -28,10 +29,11 @@ public class ChangeSetDTO implements Serializable {
     /**
 	 * Serial Version UID 
 	 */
-	private static final long serialVersionUID = 8943366877983853446L; 
-	
+	private static final long serialVersionUID = 8943366877983853446L;
 
-	@Size(min = DEFAULT_STRING_MIN_SIZE, max = DEFAULT_STRING_MAX_SIZE)
+
+    @Size(min = 0, max = DEFAULT_STRING_MAX_SIZE)
+    @Pattern(regexp = "^[a-zA-Z0-9-_]+$")
 	private String id; 
 
 	Payload description;
@@ -45,11 +47,11 @@ public class ChangeSetDTO implements Serializable {
         /**
 		 * Serial Version UID 
 		 */
-		private static final long serialVersionUID = -525579157952607584L; 
-		
-		@Size(max = DEFAULT_STRING_MAX_SIZE)
+		private static final long serialVersionUID = -525579157952607584L;
+
+		@Size(min = 0, max = DEFAULT_STRING_MAX_SIZE)
         String system;
-        @Size(max = DEFAULT_STRING_MAX_SIZE)
+        @Size(min = 0, max = DEFAULT_STRING_MAX_SIZE)
         String code;
     }
 

@@ -11,14 +11,19 @@
  */
 package it.finanze.sanita.fse2.ms.edssrvdictionary.dto.csv.vocabulary;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Data;
+
+import static it.finanze.sanita.fse2.ms.edssrvdictionary.utility.ValidationUtility.DEFAULT_STRING_MAX_SIZE;
 
 @Data
 @Builder
 public class TerminologyFileEntryDTO {
 
+	@Schema(minLength = 0, maxLength = DEFAULT_STRING_MAX_SIZE)
 	private String code;
-	
+
+	@Schema(minLength = 0, maxLength = DEFAULT_STRING_MAX_SIZE)
 	private String description;
 }

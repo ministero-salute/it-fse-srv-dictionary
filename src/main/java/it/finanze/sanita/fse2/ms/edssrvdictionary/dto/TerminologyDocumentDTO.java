@@ -34,18 +34,21 @@ public class TerminologyDocumentDTO implements Serializable {
 	private static final long serialVersionUID = -7764465063914528589L; 
 	
 	
-	@Schema(maxLength = DEFAULT_STRING_MAX_SIZE)
+	@Schema(minLength = 0, maxLength = DEFAULT_STRING_MAX_SIZE)
 	private String id;
-	@Schema(maxLength = DEFAULT_STRING_MAX_SIZE)
+	@Schema(minLength = 0, maxLength = DEFAULT_STRING_MAX_SIZE)
 	private String system;
-	@Schema(maxLength = DEFAULT_STRING_MAX_SIZE)
+	@Schema(minLength = 0, maxLength = DEFAULT_STRING_MAX_SIZE)
 	private String version;
-	@Schema(maxLength = DEFAULT_STRING_MAX_SIZE)
+	@Schema(minLength = 0, maxLength = DEFAULT_STRING_MAX_SIZE)
 	private String code;
-	@Schema(maxLength = DEFAULT_STRING_MAX_SIZE)
+	@Schema(minLength = 0, maxLength = DEFAULT_STRING_MAX_SIZE)
 	private String description;
+	@Schema(format = "date-time", maxLength = 50)
 	private OffsetDateTime releaseDate;
+	@Schema(format = "date-time", maxLength = 50)
 	private OffsetDateTime insertionDate;
+	@Schema(format = "date-time", maxLength = 50)
 	private OffsetDateTime lastUpdateDate;
 
 	public static TerminologyDocumentDTO fromEntity(TerminologyETY e) {
