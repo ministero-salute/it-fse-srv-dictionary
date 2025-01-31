@@ -38,6 +38,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.util.Date;
@@ -117,7 +119,8 @@ public interface IChangeSetCTL {
 		String id,
 		@PathVariable
 		@Parameter(description = "Indice chunk richiesto (eg. 0, 1, 2...)")
-		@Size(min = 0, max = 100000000)
+		@Min(0)
+		@Max(Integer.MAX_VALUE)
 		int idx
 	) throws OutOfRangeException, DocumentNotFoundException, DataIntegrityException, OperationException;
 
