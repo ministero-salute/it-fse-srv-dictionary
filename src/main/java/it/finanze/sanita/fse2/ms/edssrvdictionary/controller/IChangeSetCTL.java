@@ -90,7 +90,8 @@ public interface IChangeSetCTL {
 		String id,
 		@PathVariable
 		@Parameter(description = "Indice chunk richiesto (eg. 0, 1, 2...)")
-		@Size(min = 0, max = 10000000)
+		@Min(0)
+		@Max(Integer.MAX_VALUE)
 		int idx
 	) throws OutOfRangeException, DocumentNotFoundException, DataIntegrityException, OperationException;
 
