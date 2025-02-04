@@ -102,8 +102,7 @@ public interface IChangeSetCTL {
 	@Tag(name = API_CHANGESET_CHUNKS_TAG)
 	@Operation(
 		summary = "Restituisce un chunk dato indice e identificativo snapshot (solo-cancellazioni)",
-		description = "Servizio che consente di restituire le terminologie presenti nel chunk di un dato snapshot.",
-			operationId = "listTerminologyFromSnapshotDel"
+		description = "Servizio che consente di restituire le terminologie presenti nel chunk di un dato snapshot."
 	)
 	@ApiResponses(value = {
 		@ApiResponse(responseCode = "200", description = "Richiesta terminologie avvenuta con successo", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = GetTermsDelDTO.class))),
@@ -116,7 +115,7 @@ public interface IChangeSetCTL {
 		@Parameter(description = "Identificatore documento (snapshot)")
 		@NotBlank(message = ERR_VAL_ID_BLANK)
 		@ValidObjectId(message = ERR_VAL_ID_NOT_VALID)
-		@Size(max = 10000)
+		@Size(max = Integer.MAX_VALUE)
 		String id,
 		@PathVariable
 		@Parameter(description = "Indice chunk richiesto (eg. 0, 1, 2...)")

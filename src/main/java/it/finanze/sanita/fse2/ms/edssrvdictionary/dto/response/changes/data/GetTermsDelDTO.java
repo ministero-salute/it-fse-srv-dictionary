@@ -18,6 +18,7 @@ import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.base.ResponseDTO;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.log.LogTraceInfoDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 import org.bson.types.ObjectId;
 
 import java.util.List;
@@ -30,25 +31,14 @@ public class GetTermsDelDTO extends ResponseDTO {
 
     @ArraySchema(
             minItems = 0,
-            maxItems = 1000000,
-            schema = @Schema(implementation = DocStrings.class)
+            maxItems = Integer.MAX_VALUE,
+            schema = @Schema(type = "string", maxLength = 100000)
     )
-    private List<DocStrings> documents;
+    @Getter
+    private List<String> documents;
 
     public GetTermsDelDTO(LogTraceInfoDTO traceInfo, List<ObjectId> data) {
         super(traceInfo);
-        this.documents = data.stream()
-                .map(ObjectId::toHexString)
-                .map(DocStrings::new)
-                .collect(Collectors.toList());
-    }
-
-    @Data
-    @AllArgsConstructor
-    public static class DocStrings {
-
-        @Schema(maxLength = 100000)
-        private String document;
-
+        this.documents = data.stream().map(ObjectId::toHexString).collect(Collectors.toList());
     }
 }
