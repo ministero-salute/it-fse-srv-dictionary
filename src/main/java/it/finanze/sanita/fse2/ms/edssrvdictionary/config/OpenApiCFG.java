@@ -103,37 +103,22 @@ public class OpenApiCFG {
 			// Adding servers
 			final List<Server> servers = new ArrayList<>();
 			final Server devServer = new Server();
-			devServer.setDescription("Gateway Dispatcher Development URL");
+			devServer.setDescription("Servizio terminologie");
 			devServer.setUrl("http://localhost:" + customOpenapi.getPort());
 			devServer.addExtension("x-sandbox", true);
 
 			servers.add(devServer);
 			openApi.setServers(servers);
 
-			//openApi.getComponents().getSchemas().values().forEach(this::setAdditionalProperties);
-
-
 			openApi.getPaths().values().stream().filter(item -> item.getPost() != null).forEach(item -> {
-
 				final Schema<MediaType> schema = item.getPost().getRequestBody().getContent().get(org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE).getSchema();
-
 				schema.additionalProperties(false);
-				if(schema.getProperties().get("content_schematron") != null){
-					schema.getProperties().get("content_schematron").setMaxLength(customOpenapi.getFileMaxLength());
-				}
-				
 
 			});
 
 			openApi.getPaths().values().stream().filter(item -> item.getPut() != null).forEach(item -> {
-
 				final Schema<MediaType> schema = item.getPut().getRequestBody().getContent().get(org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE).getSchema();
-
 				schema.additionalProperties(false);
-				if(schema.getProperties().get("content_schematron") != null){
-					schema.getProperties().get("content_schematron").setMaxLength(customOpenapi.getFileMaxLength());
-				}
-
 			});
 
 
