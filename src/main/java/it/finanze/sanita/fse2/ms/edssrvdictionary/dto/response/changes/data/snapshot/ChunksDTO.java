@@ -18,8 +18,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.Value;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 
 /**
  * The changeset chunk DTO

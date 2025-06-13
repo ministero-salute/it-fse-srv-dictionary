@@ -16,6 +16,12 @@ package it.finanze.sanita.fse2.ms.edssrvdictionary.config;
  */
 public final class Constants {
 
+	public static class Microservice{
+		public static final String MS_NAME =  "it-fse-srv-dictionary";
+
+		private Microservice(){}
+	}
+
 	/**
 	 * Path scan.
 	 */

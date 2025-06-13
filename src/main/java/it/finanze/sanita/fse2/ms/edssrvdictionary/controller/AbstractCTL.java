@@ -13,9 +13,11 @@ package it.finanze.sanita.fse2.ms.edssrvdictionary.controller;
 
 import java.io.Serializable;
 
+import io.opentelemetry.api.trace.SpanBuilder;
+import io.opentelemetry.api.trace.Tracer;
+import it.finanze.sanita.fse2.ms.edssrvdictionary.config.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import brave.Tracer;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.dto.response.log.LogTraceInfoDTO;
 
 /**
@@ -38,10 +40,11 @@ public abstract class AbstractCTL implements Serializable {
 
 	protected LogTraceInfoDTO getLogTraceInfo() {
 		LogTraceInfoDTO out = new LogTraceInfoDTO(null, null);
-		if (tracer.currentSpan() != null) {
+		SpanBuilder spanbuilder = tracer.spanBuilder(Constants.Microservice.MS_NAME);
+		if (spanbuilder != null) {
 			out = new LogTraceInfoDTO(
-					tracer.currentSpan().context().spanIdString(), 
-					tracer.currentSpan().context().traceIdString());
+					spanbuilder.startSpan().getSpanContext().getSpanId(),
+					spanbuilder.startSpan().getSpanContext().getTraceId());
 		}
 		return out;
 	}

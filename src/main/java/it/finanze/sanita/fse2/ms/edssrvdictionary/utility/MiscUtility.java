@@ -11,7 +11,7 @@
  */
 package it.finanze.sanita.fse2.ms.edssrvdictionary.utility;
 
-import javax.validation.Path;
+import jakarta.validation.Path;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.Date;

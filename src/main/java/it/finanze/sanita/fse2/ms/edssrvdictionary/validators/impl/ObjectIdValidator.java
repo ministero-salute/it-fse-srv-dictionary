@@ -15,8 +15,8 @@ package it.finanze.sanita.fse2.ms.edssrvdictionary.validators.impl;
 import it.finanze.sanita.fse2.ms.edssrvdictionary.validators.ValidObjectId;
 import org.bson.types.ObjectId;
 
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
 
 public class ObjectIdValidator implements ConstraintValidator<ValidObjectId, String> {
     /**
